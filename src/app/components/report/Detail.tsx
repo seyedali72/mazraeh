@@ -38,8 +38,9 @@ export default function DetailReport() {
     }
 
     const handleCreateProduct = async (data: any) => {
+        data.week = selectedDate
         try {
-            const res = await createProduct(data); setJsonData(null);
+            const res = await createProduct(data,selectedDate); setJsonData(null);
 
             if (res.success) { toast.success(res.success); console.log(convertToPersianDate(Date.now(), 'YYMDHMSS')); setLoading(false); setFinalData(null); } else { toast.error('خطا در افزودن جزئیات'); }
         } catch (error) { console.error('Error creating product:', error); toast.error('خطا در ایجاد محصول'); }
@@ -63,24 +64,8 @@ export default function DetailReport() {
             <div className='p-5 text-center'>
                 <h4 className="text-center">برای بارگذاری گزارش کالایی باید شعبه و روز تعریف شده رو انتخاب کنید</h4>
                 <div className="d-flex gap-3 col-12 col-md-6 mx-auto justify-content-center">
-                    <select className="form-control form-control-sm" onChange={(e: any) => { setSelectedBranch(e.target.value), setSelectedDate(null) }}>
-                        <option hidden value=''>فروشگاه را انتخاب کنید</option>
-                        <option value="فروشگاه کهنز">فروشگاه کهنز</option>
-                        <option value="فروشگاه رباط کریم">فروشگاه رباط کریم</option>
-                        <option value="فروشگاه کلهر">فروشگاه کلهر</option>
-                        <option value="فروشگاه معلم">فروشگاه معلم</option>
-                    </select>
-                    <select className="form-control form-control-sm" onChange={(e: any) => setSelectedDate(e.target.value)}>
-                        {selectedDate ? <option hidden value=''>{convertToPersianDate(selectedDate, 'YMD')}</option> : <option hidden value=''>تاریخ مورد نظر را انتخاب کنید</option>}
-                        {data?.map((el: any) => {
-                            if (el?.branch == selectedBranch) {
-                                return (
-                                    <option key={nanoid()} value={el?.date}>{convertToPersianDate(el?.date, 'YMD')}</option>
-                                )
-                            }
-                        })}
-
-                    </select>
+                   
+                    <input type="number" className="form-control form-control-sm" onChange={(e: any) => setSelectedDate(e.target.value)} />
                 </div>
                 <label htmlFor="attach">
                     <input type="file" name="attach" id="attach" hidden onChange={async (e: any) => { setFile(e.target.files[0]); }} />

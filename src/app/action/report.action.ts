@@ -2,7 +2,7 @@
 import moment from 'jalali-moment'
 
 import connect from '../lib/db'
-import { buildQuery } from '../utils/helpers'
+import { buildQuery, onlyUnique } from '../utils/helpers'
 import DBS from '@/models/DBS'
 
 /* ----- DBS ----- */
@@ -17,6 +17,19 @@ export const getDBSs = async (search?: any) => {
             .lean()
 
         return JSON.parse(JSON.stringify(allDBSs))
+    } catch (error) {
+        console.log(error)
+        return { error: 'خطا در دریافت پرسنل' }
+    }
+}
+export const getDate = async (search?: any) => {
+    await connect()
+
+    try {
+        const data = await DBS.find(buildQuery(search)).sort({ createdAt: -1 }).select('date').sort({ date: -1 }).lean()
+        let final = data.map((item: any) => Date.parse(item.date)).filter(onlyUnique)
+      
+        return JSON.parse(JSON.stringify(final))
     } catch (error) {
         console.log(error)
         return { error: 'خطا در دریافت پرسنل' }
@@ -50,7 +63,7 @@ export const createsellerReport = async (body: any) => {
     await connect()
     body.map(async (data: any) => {
         let miladiDate = moment.from(data.date, 'fa', 'YYYY/MM/DD').format('YYYY/MM/DD');
-        console.log(data.date,typeof(miladiDate),miladiDate)
+        console.log(data.date, typeof (miladiDate), miladiDate)
         data.date = Date.parse(miladiDate)
         let find = await DBS.findOne({ branch: data.branch, date: data.date, isDeleted: false })
         if (find == undefined) {
@@ -74,7 +87,7 @@ export const createDailyReport = async (body: any) => {
     await connect()
     body.map(async (data: any) => {
         let miladiDate = moment.from(data.date, 'fa', 'YYYY/MM/DD').format('YYYY/MM/DD');
-        console.log(data.date,typeof(miladiDate),miladiDate)
+        console.log(data.date, typeof (miladiDate), miladiDate)
         data.date = Date.parse(miladiDate)
         let find = await DBS.findOne({ branch: data.branch, date: data.date, isDeleted: false })
         if (find == undefined) {

@@ -2,7 +2,7 @@
 
 import Products from '@/models/Products'
 import connect from '../lib/db'
-import { convertToPersianDate, onlyUnique, sumArray } from '../utils/helpers'
+import { convertNumbersToEnglish, convertToPersianDate, onlyUnique, sumArray } from '../utils/helpers'
 
 export const getChartBranchCategory = async (body: any) => {
 
@@ -12,8 +12,8 @@ export const getChartBranchCategory = async (body: any) => {
 	const parsedStartDate = Date.parse(startDate);
 	const parsedEndDate = Date.parse(endDate);
 	try {
-		const productsInStartMonth = await Products.find({ year: startYear, month: startMonth })
-		const productsInEndMonth = await Products.find({ year: endYear, month: endMonth })
+		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
+		const productsInEndMonth = await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) })
 		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
 
 		// محصولاتی که توی این گروه کالایی قراردارند رو میکشیم بیرون
@@ -25,9 +25,10 @@ export const getChartBranchCategory = async (body: any) => {
 		const sortDate = allDates.sort((a: any, b: any) => a - b)
 		const salesByDate = sortDate.map((date) => {
 			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => el.sell);
-			const totalSales = sumArray(salesForCurrentDate);
+			const dayCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => el.day);
+			const totalSales = sumArray(salesForCurrentDate) / 2;
 
-			return { branch: convertToPersianDate(date, 'YMD'), dataset: { name: convertToPersianDate(date, 'YMD'), totalSell: totalSales } };
+			return { branch: `${convertToPersianDate(date, 'YMD')}-${dayCurrentDate[0]}`, dataset: { name: convertToPersianDate(date, 'YMD'), totalSell: totalSales } };
 		});
 
 		const lineChart = { labels: sortDate.map(date => convertToPersianDate(date, 'YMD')), data: salesByDate, title: `نمودار فروش دسته بندی ${category} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')}`, header: `جدول فروش دسته بندی ${category} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')}`, branch: branch };
@@ -58,7 +59,7 @@ export const getGiveCategoryData = async (body: any, combinedProducts: any) => {
 				return accumulator + sumArray(filteredSales.map((sale: any) => sale.sell));
 			}, 0);
 
-			return totalSalesByGroup;
+			return totalSalesByGroup / 2;
 		});
 
 		// اماده سازی ابجکت خروجی

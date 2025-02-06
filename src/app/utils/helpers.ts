@@ -502,7 +502,7 @@ export const sumArray = (numbers: []) => {
 		return accumulator + currentValue;
 	}, 0);
 }
- 
+
 export const sortingList = (data: any, sort: any) => {
 	data?.sort((a: any, b: any) => sort === 'dateUptoBottom' ? Date.parse(b.date) - Date.parse(a.date) :
 		sort === 'sellUptoBottom' ? b.totalSell - a.totalSell :
@@ -515,4 +515,10 @@ export const sortingList = (data: any, sort: any) => {
 									sort === 'basketBottomToUp' ? (a.totalSell / a.totalInvoice) - (b.totalSell / b.totalInvoice) :
 										sort === 'invoiceBottomToUp' && a.totalInvoice - b.totalInvoice)
 	return data
+}
+
+export function convertNumbersToEnglish(input: any) {
+	const arabicToEnglishMap: any = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9' };
+	const englishNumbers = input.replace(/[۰-۹]/g, (match: any) => arabicToEnglishMap[match] || match);
+	return englishNumbers;
 }

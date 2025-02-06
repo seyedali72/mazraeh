@@ -1,8 +1,8 @@
- 'use server'
+'use server'
 
 import Products from '@/models/Products'
 import connect from '../lib/db'
-import { buildQuery, convertToPersianDate, onlyUnique, sumArray } from '../utils/helpers'
+import { buildQuery, convertNumbersToEnglish, convertToPersianDate, onlyUnique, sumArray } from '../utils/helpers'
 import moment from 'jalali-moment'
 
 /* ----- Product ----- */
@@ -35,9 +35,9 @@ export const getSingleProduct = async (id: string) => {
 	}
 }
 
-export const createProduct = async (body: any) => {
+export const createProduct = async (body: any, week: any) => {
 	await connect()
-
+	
 	const results = await Promise.all(body.map(async (data: any) => {
 		try {
 			let miladiDate = moment.from(data.date, 'fa', 'YYYY/MM/DD').format('YYYY/MM/DD');
@@ -45,7 +45,7 @@ export const createProduct = async (body: any) => {
 			let month = convertToPersianDate(miladiDate, 'M');
 			data.date = Date.parse(miladiDate);
 
-			let newProduct = { name: data.product, group: data.group, subGroup: data.subGroup, category: data.category, year: year, month: month, totalSell: [{ branch: data.branch, sell: data.sell, return: data.return, date: data.date }] };
+			let newProduct = { name: data.product, group: data.group, subGroup: data.subGroup, category: data.category, year: convertNumbersToEnglish(year), month: convertNumbersToEnglish(month), week: convertNumbersToEnglish(week), totalSell: [{ branch: data.branch, sell: data.sell, return: data.return, date: data.date, day: data.day }] };
 
 			let find = await Products.findOne({ name: data.product, year: year, month: month, isDeleted: false });
 
@@ -96,4 +96,3 @@ export const deleteProduct = async (Id: string) => {
 	}
 }
 
- 

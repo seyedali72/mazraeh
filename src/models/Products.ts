@@ -8,7 +8,7 @@ const baseProductsSchema = new Schema<IProducts, Model<IProducts, any, any>, any
 		name: { type: String, required: [true, 'نام الزامی است'] },
 		year: { type: String },
 		month: { type: String },
-		// week: { type: String },
+		week: { type: String },
 		group: { type: String },
 		subGroup: { type: String },
 		category: { type: String },

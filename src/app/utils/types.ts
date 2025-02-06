@@ -13,6 +13,7 @@ interface IProducts {
 	name: String 
 	year: String 
 	month: String 
+	week: String 
 	group: String 
 	subGroup: String 
 	category: String 
