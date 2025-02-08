@@ -42,6 +42,6 @@ export function middleware(request: NextRequest) {
 export const config = {
 	matcher: [
 		/* all paths except those starting with: api | _next/static | ... */
-		'/((?!api|uploads|_next/static|_next/image|icons|favicon.ico|manifest.json|sw.js).*)(.+)',
+		'/((?!api|uploads|_next/static|_next/image|icons|favicon.ico|manifest.json).*)(.+)',
 	]
 };

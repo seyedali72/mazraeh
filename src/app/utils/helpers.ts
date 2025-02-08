@@ -522,3 +522,28 @@ export function convertNumbersToEnglish(input: any) {
 	const englishNumbers = input.replace(/[۰-۹]/g, (match: any) => arabicToEnglishMap[match] || match);
 	return englishNumbers;
 }
+
+export function sumMultipleArrays(arrays:any) {
+	if (!arrays || arrays.length === 0) {
+	  return []; // اگر هیچ آرایه ای وجود نداشت، یک آرایه خالی برگردان
+	}
+  
+	// بررسی می کنیم که همه آرایه ها طول یکسانی داشته باشند
+	const firstArrayLength = arrays[0].length;
+	const allArraysHaveSameLength = arrays.every((arr:any) => arr.length === firstArrayLength);
+  
+	if (!allArraysHaveSameLength) {
+	  throw new Error("همه آرایه ها باید طول یکسانی داشته باشند.");
+	}
+  
+	// از reduce برای جمع کردن مقادیر متناظر استفاده می کنیم
+	return arrays.reduce((accumulator:any, currentArray:any) => {
+	  if (!accumulator.length) {
+		// اگر accumulator خالی بود (اولین آرایه)، آن را کپی می کنیم
+		return currentArray;
+	  } else {
+		// در غیر این صورت، مقادیر متناظر را جمع می کنیم
+		return accumulator.map((num:any, index:number) => num + currentArray[index]);
+	  }
+	}, []); // مقدار اولیه reduce یک آرایه خالی است
+  }

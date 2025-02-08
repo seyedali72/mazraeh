@@ -36,35 +36,63 @@ export const getSingleProduct = async (id: string) => {
 }
 
 export const createProduct = async (body: any, week: any) => {
-	await connect()
-	
-	const results = await Promise.all(body.map(async (data: any) => {
-		try {
-			let miladiDate = moment.from(data.date, 'fa', 'YYYY/MM/DD').format('YYYY/MM/DD');
-			let year = convertToPersianDate(miladiDate, 'Y');
-			let month = convertToPersianDate(miladiDate, 'M');
-			data.date = Date.parse(miladiDate);
+	await connect();
 
-			let newProduct = { name: data.product, group: data.group, subGroup: data.subGroup, category: data.category, year: convertNumbersToEnglish(year), month: convertNumbersToEnglish(month), week: convertNumbersToEnglish(week), totalSell: [{ branch: data.branch, sell: data.sell, return: data.return, date: data.date, day: data.day }] };
+	try {
+		const operations = body.map((data: any) => {
+			try {
+				let miladiDate = moment.from(data.date, 'fa', 'YYYY/MM/DD').format('YYYY/MM/DD');
+				let year = convertToPersianDate(miladiDate, 'Y');
+				let month = convertToPersianDate(miladiDate, 'M');
+				data.date = Date.parse(miladiDate);
 
-			let find = await Products.findOne({ name: data.product, year: year, month: month, isDeleted: false });
+				const englishWeek = convertNumbersToEnglish(week);
+				const englishYear = convertNumbersToEnglish(year);
+				const englishMonth = convertNumbersToEnglish(month);
+				const newProduct = {
+					name: data.product,
+					group: data.group,
+					subGroup: data.subGroup,
+					category: data.category,
+					year: englishYear,
+					month: englishMonth,
+					week: englishWeek,
+					totalSell: [{ branch: data.branch, sell: data.sell, return: data.return, date: data.date, day: data.day }],
+				};
 
-			if (!find) {
-				let res = await Products.create(newProduct);
-				return JSON.parse(JSON.stringify(res));
-			} else {
-				find.totalSell.push({ branch: data.branch, sell: data.sell, return: data.return, date: data.date });
-				await find.save();
-				return { success: 'بارگذاری موفقیت امیز بود' };
+				return {
+					updateOne: {
+						filter: {
+							name: data.product,
+							year: englishYear,
+							month: englishMonth,
+							week: englishWeek,
+							group: data.group,
+							subGroup: data.subGroup,
+							category: data.category,
+							isDeleted: false,
+						},
+						update: { $push: { totalSell: newProduct.totalSell[0] } },
+						upsert: true,
+					},
+				};
+			} catch (error) {
+				console.error("Error processing product:", error);
+				return null; // Handle error appropriately
 			}
-		} catch (error) {
-			console.log(error);
-			return { error: 'خطا در پردازش محصول' };
-		}
-	}));
+		}).filter(Boolean); // Remove any null operations
 
-	return { success: 'بارگذاری موفقیت امیز بود' };
-}
+		if (operations.length > 0) {
+			await Products.bulkWrite(operations, { ordered: false });
+		}
+
+		return { success: 'بارگذاری موفقیت امیز بود' };
+	} catch (error) {
+		console.error("Error in createProduct:", error);
+		return { error: 'خطا در پردازش کلی محصولات' };
+	}
+};
+
 
 export const editProduct = async (id: string, body: any) => {
 	await connect()

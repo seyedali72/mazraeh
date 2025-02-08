@@ -19,15 +19,15 @@ export const getChartProducts = async (body: any) => {
 	let allGroups: any = (uniqueGroup).filter(onlyUnique)
 	// حلقه زدن برروی اطلاعات دریافتی جهت اماده سازی اطلاعات در نمایش نمودار رادار
 	const datasets = dataArray.map((data: any, index: number) => ({
-		label: data.radarChart.branch,
-		data: data.radarChart.data,
-		fill: true,
-		backgroundColor: colors[index].backgroundColor,
-		borderColor: colors[index].borderColor,
-		pointBackgroundColor: colors[index].backgroundColor,
-		pointBorderColor: '#fff',
-		pointHoverBackgroundColor: '#fff',
-		pointHoverBorderColor: colors[index].borderColor,
+			label: data.radarChart.branch,
+			data: data.radarChart.data,
+			fill: true,
+			backgroundColor: colors[index].backgroundColor,
+			borderColor: colors[index].borderColor,
+			pointBackgroundColor: colors[index].backgroundColor,
+			pointBorderColor: '#fff',
+			pointHoverBackgroundColor: '#fff',
+			pointHoverBorderColor: colors[index].borderColor,
 	}));
 	// درست کردن لیبل های مقایسه ای
 	let labels = dataArray[0].radarChart.newName.map((name: any) => name[0]);
@@ -54,10 +54,10 @@ export const getChartProducts = async (body: any) => {
 export const getChartProduct = async (body: any) => {
 	await connect()
 	const { branch, startDate, endDate, startYear, startMonth, endYear, endMonth, type } = body
- 
+
 	try {
 		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
-		const productsInEndMonth = await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) })
+		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
 		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
 		const filteredSales = combinedProducts.flatMap((item: any) =>
 			item.totalSell.filter((el: any) => el.branch === branch && el.date >= startDate && el.date <= endDate)
@@ -71,7 +71,7 @@ export const getChartProduct = async (body: any) => {
 		const salesByDate = sortDate.map((date) => {
 			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((item: any) => type == 'sell' ? item.sell : item.return);
 			const totalSales = sumArray(salesForCurrentDate);
-			return totalSales/2
+			return totalSales
 		});
 		const dayByDate = sortDate.map((date) => {
 			const dayCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => `${convertToPersianDate(date, 'YMD')}-${el.day}`).filter(onlyUnique);
@@ -92,7 +92,7 @@ export const getChartProduct = async (body: any) => {
 export const getGiveGroupData = async (body: any, combinedProducts: any) => {
 	await connect()
 	const { branch, startDate, endDate, type } = body
-	 
+
 	try {
 		const allGroups = combinedProducts.map((el: any) => el.group).filter(onlyUnique);
 
@@ -105,7 +105,7 @@ export const getGiveGroupData = async (body: any, combinedProducts: any) => {
 				return accumulator + sumArray(filteredSales.map((item: any) => type == 'sell' ? item.sell : item.return));
 			}, 0);
 
-			return totalSalesByGroup / 2
+			return totalSalesByGroup
 		});
 
 		// اماده سازی ابجکت خروجی

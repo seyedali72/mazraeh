@@ -59,7 +59,7 @@ export const getChartBranchCategory = async (body: any) => {
 	
 	try {
 		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
-		const productsInEndMonth = await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) })
+		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
 		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
 		// محصولاتی که توی این گروه کالایی قراردارند رو میکشیم بیرون
 		const allProOnCategory = combinedProducts.filter((el: any) => el.category === category);
@@ -72,7 +72,7 @@ export const getChartBranchCategory = async (body: any) => {
 		const salesByDate = sortDate.map((date) => {
 			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((item: any) => type == 'sell' ? item.sell : item.return);
 			const totalSales = sumArray(salesForCurrentDate);
-			return totalSales / 2
+			return totalSales  
 		});
 		const dayByDate = sortDate.map((date) => {
 			const dayCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => `${convertToPersianDate(date, 'YMD')}-${el.day}`).filter(onlyUnique);
@@ -104,7 +104,7 @@ export const getGiveCategoryData = async (body: any, combinedProducts: any) => {
 				return accumulator + sumArray(filteredSales.map((item: any) => type == 'sell' ? item.sell : item.return));
 			}, 0);
 
-			return totalSalesByGroup/2
+			return totalSalesByGroup 
 		});
 
 		// اماده سازی ابجکت خروجی

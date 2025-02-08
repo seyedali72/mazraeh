@@ -14,7 +14,7 @@ export const getChartBranchGroup = async (body: any) => {
 	const parsedEndDate = Date.parse(endDate);
 	try {
 		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
-		const productsInEndMonth = await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) })
+		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
 		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
 		const findGroup = combinedProducts.filter((el: any) => el.group == group)
 		const allSubGroups = findGroup.map((el: any) => el.subGroup).filter(onlyUnique);
@@ -29,7 +29,7 @@ export const getChartBranchGroup = async (body: any) => {
 		const salesByDate = sortDate.map((date) => {
 			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => el.sell);
 			const dayCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => el.day);
-			const totalSales = sumArray(salesForCurrentDate) / 2;
+			const totalSales = sumArray(salesForCurrentDate)  ;
 
 			return { branch: `${convertToPersianDate(date, 'YMD')}-${dayCurrentDate[0]}`, dataset: { name: convertToPersianDate(date, 'YMD'), totalSell: totalSales } };
 		});
@@ -62,7 +62,7 @@ export const getGiveSubGroupData = async (body: any, combinedProducts: any) => {
 				return accumulator + sumArray(filteredSales.map((sale: any) => sale.sell));
 			}, 0);
 
-			return totalSalesByGroup / 2;
+			return totalSalesByGroup  ;
 		});
 
 		// اماده سازی ابجکت خروجی

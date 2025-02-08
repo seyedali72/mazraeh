@@ -121,8 +121,8 @@ export default function ComparePage() {
                             })}
                         </select>
                         <button type="button" onClick={() => { setSelectedBranch(null), setSelectedDate(null), setSelectedEndDate(null) }} className="btn btn-sm bg-custom-1 text-nowrap">ریست فیلتر </button>
-                        <button type="button" onClick={() => { handleGroupOnList() }} className="btn btn-sm bg-custom-4 text-nowrap">انجام مقایسه</button>
-                        <button type="button" onClick={() => { setCompareBtn(false), setSelectedCategory([]), setSelectedGroup([]), setSelectedSubGroup([]) }} className="btn btn-sm bg-custom-3 text-nowrap">ریست مقایسه </button>
+                        <button type="button" onClick={() => { handleGroupOnList() }} className="btn btn-sm bg-custom-4 text-nowrap">نمایش آمار</button>
+                        <button type="button" onClick={() => { setCompareBtn(false), setSelectedCategory([]), setSelectedGroup([]), setSelectedSubGroup([]) }} className="btn btn-sm bg-custom-3 text-nowrap">ریست آمار </button>
                     </div>
                 </section>
                 {selectedGroup?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
@@ -171,7 +171,7 @@ export default function ComparePage() {
                     <>
                       <CompareLineChartBranch compareData={lineChartData} />
                       <CompareBarChartBranch compareData={barChartData} />
-                     <section className="table-responsive">
+                     {/* <section className="table-responsive">
                         <table className="table table-striped">
                             <thead className="fs70">
                                 <tr><th colSpan={5}>{lineChartData.header} </th></tr>
@@ -198,7 +198,7 @@ export default function ComparePage() {
 
                             </tbody>
                         </table>
-                    </section>
+                    </section> */}
                       </>}
             </section >
 

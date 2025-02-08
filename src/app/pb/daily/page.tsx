@@ -85,7 +85,7 @@ export default function DaliyListPage() {
                                         تعداد فاکتور {invoiceTop ? <i className="fa fa-angle-down" /> : <i className="fa fa-angle-up" />} </th>
                                     <th className="cursorPointer" onClick={() => { setSort(basketTop ? 'basketUptoBottom' : 'basketBottomToUp'), setBasketTop(!basketTop) }}>
                                         میانگین سبد خرید {basketTop ? <i className="fa fa-angle-down" /> : <i className="fa fa-angle-up" />} </th>
-                                    <th className=" text-center"> <i className="fa fa-cogs px-1"></i>تنظیمات </th>
+                                    {/* <th className=" text-center"> <i className="fa fa-cogs px-1"></i>تنظیمات </th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -100,13 +100,13 @@ export default function DaliyListPage() {
                                             <td>{spliteNumber(el?.totalReturn)} ريال</td>
                                             <td>{spliteNumber(el?.totalInvoice)}</td>
                                             <td>{spliteNumber(basket)}</td>
-                                            <td className="  text-center">
+                                            {/* <td className="  text-center">
                                                 <Link href={`/pb/report/${el?._id}`} className="btn btn-sm bg-custom-4 ms-1" >
                                                     <i className="fa fa-edit px-1"></i>جزئیات</Link>
                                                 <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(el?._id)} />, { autoClose: false, })}>
                                                     <i className="fa fa-trash px-1"></i>حذف
                                                 </button>
-                                            </td>
+                                            </td> */}
                                         </tr>)
                                     }
                                 })}
