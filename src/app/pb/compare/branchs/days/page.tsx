@@ -1,11 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { convertToPersianDate } from "@/app/utils/helpers";
 import { nanoid } from "nanoid";
-import { getDBSs } from "@/app/action/report.action";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import DDDatePicker from "@/app/components/DropDownDatePicker";
 import CategoryAndProductDayCmp from "@/app/components/dayChart/CategoryAndProduct";
 import SubGroupAndCategoryDayCmp from "@/app/components/dayChart/SubGroupAndCategory";
@@ -28,12 +27,6 @@ export default function ComparePage() {
     const [selectedBranchs, setSelectedBranchs] = useState<any>([]);
     const [selectedBranch, setSelectedBranch] = useState<any>(null);
     const [selectedDates, setSelectedDates] = useState<any>([]);
-    // const [data, setData] = useState<any>(null);
-    // const fetchData = useCallback(async () => {
-    //     let table = await getDBSs({ isDeleted: false })
-    //     setData(table)
-    // }, [])
-    // useEffect(() => { fetchData() }, [fetchData])
 
     const requestData = { branchs: selectedBranchs, group: selectedGroup, subGroup: selectedSubGroup, category: selectedCategory, days: selectedDates }
 

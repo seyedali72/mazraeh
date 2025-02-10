@@ -79,15 +79,14 @@ export default function ComparePage() {
         setBarChartData(res?.barChart)
         setCompareBtn(true)
     }
-    let tableRow = (barChartData?.data.length > lineChartData?.data.length ? barChartData?.data.length : lineChartData?.data.length)
-    const rowLength = new Array(tableRow).fill(0)
+    
 
     return (
         <>
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item "><Link href={`/pb/dashboard`}>داشبورد</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page"> مقایسه نمودار فروش </li>
+                    <li className="breadcrumb-item active" aria-current="page">  نمودار فروش شعبه </li>
                 </ol>
             </nav>
             <section className="main-body-container rounded">

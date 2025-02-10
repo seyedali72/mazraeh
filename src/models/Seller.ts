@@ -7,6 +7,7 @@ const baseSellerSchema = new Schema<ISeller, Model<ISeller, any, any>, any>(
 	{
 		name: { type: String, required: [true, 'نام الزامی است'] },
 		branch: { type: String  },
+		day: { type: String  },
 		date: { type: Date },
 		totalSell: { type: Number, trim: true }, 
 		isDeleted: { type: Boolean, required: true, default: false },

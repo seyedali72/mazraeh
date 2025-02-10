@@ -8,17 +8,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineEleme
 
 export default function CompareBarChartBranchs({ compareData }: any) {
   // ,plugins:{ legend: { labels:{font:{size:19,family:'Arial'}}},} 
-  const colors = [{ borderColor: '#0aa04e', backgroundColor: '#0aa04eaa' }, { borderColor: '#a93b53', backgroundColor: '#ff6384' },
-  { borderColor: '#0044ee', backgroundColor: '#0044eeaa' }, { borderColor: '#aa55c0', backgroundColor: '#aa55c0cc' },
-  { borderColor: '#cc12ec', backgroundColor: '#cc12ecaa' }, { borderColor: '#0aa04e', backgroundColor: '#0aa04eaa' },
-  { borderColor: '#a93b53', backgroundColor: '#ff6384' }, { borderColor: '#0044ee', backgroundColor: '#0044eeaa' },
-  { borderColor: '#cc12ec', backgroundColor: '#cc12ecaa' }, { borderColor: '#0aa04e', backgroundColor: '#0aa04eaa' },
-  { borderColor: '#a93b53', backgroundColor: '#ff6384' }, { borderColor: '#0044ee', backgroundColor: '#0044eeaa' },
-  { borderColor: '#aa55c0', backgroundColor: '#aa55c0cc' }, { borderColor: '#cc12ec', backgroundColor: '#cc12ecaa' }]
+
   const options = { responsive: true, plugins: { title: { display: true, text: compareData?.title } } };
   const labels = compareData?.labels;
   const check = compareData?.datasets?.map((item: any, idx: number) => {
-    return ({ label: item?.label, data: item?.data, backgroundColor: colors[idx].backgroundColor, minBarLength: 5 })
+    return ({ label: item?.label, data: item?.data, backgroundColor: item?.backgroundColor, minBarLength: 5 })
   });
 
   const data = { labels, datasets: check };
@@ -34,5 +28,5 @@ export default function CompareBarChartBranchs({ compareData }: any) {
         </table>
       </div>
       <Bar options={options} data={data} /></section>);
-  }
+  } else { return (<div className='p-3 text-center'>هیچ داده‌ای برای نمایش وجود ندارد.</div>) }
 }

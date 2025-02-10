@@ -9,7 +9,7 @@ import SideBar from "./components/SideBar";
 import HeaderPanel from "./components/Header_Panel";
 import NextTopLoader from "nextjs-toploader";
 import { ToastContainer, Zoom } from "react-toastify";
- 
+
 const Light = localFont({
   src: '../../public/assets/fonts/Sans/IRANSansWeb_Light.woff',
   variable: '--font-light',
@@ -28,8 +28,8 @@ const fanum = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "Mini ERP",
-  description: "سیستم مدیریت روابط سازمان",
+  title: "مزرعه",
+  description: "سیستم گزارش سازی",
 };
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {

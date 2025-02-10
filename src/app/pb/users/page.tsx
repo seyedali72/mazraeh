@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { Confirmation } from "../../components/Confirmation";
-import { convertToPersianDate, spliteNumber } from "@/app/utils/helpers";
+import { convertToPersianDate, sortingList, spliteNumber } from "@/app/utils/helpers";
 import { nanoid } from "nanoid";
 import { deleteDBS, getDBSs } from "@/app/action/report.action";
 import DailyReport from "@/app/components/report/Daily";
@@ -17,6 +17,9 @@ export default function DaliyListPage() {
     const [selectedSeller, setSelectedSeller] = useState<any>(null);
     const [selectedBranch, setSelectedBranch] = useState<any>(null);
     const [selectedDate, setSelectedDate] = useState<any>(null);
+    const [sort, setSort] = useState<any>('');
+    const [dateTop, setDateTop] = useState(false)
+    const [sellTop, setSellTop] = useState(false)
     const [data, setData] = useState<any>(null);
     const fetchData = useCallback(async () => {
         let table = await getSellers({ isDeleted: false })
@@ -29,6 +32,8 @@ export default function DaliyListPage() {
         let res = await deleteDBS(id)
         if (!res.error) { setMutated(!mutated) }
     }
+
+    const sortList = sortingList(data, sort)
 
     return (
         <>
@@ -72,8 +77,10 @@ export default function DaliyListPage() {
                                 <th className="text-center">#</th>
                                 <th>نام فروشنده</th>
                                 <th>نام فروشگاه</th>
-                                <th>تاریخ</th>
-                                <th>مبلغ فروش</th>
+                                <th className="cursorPointer" onClick={() => { setSort(dateTop ? 'dateUptoBottom' : 'dateBottomToUp'), setDateTop(!dateTop) }}>
+                                تاریخ {dateTop ? <i className="fa fa-angle-down" /> : <i className="fa fa-angle-up" />} </th>
+                                <th className="cursorPointer" onClick={() => { setSort(sellTop ? 'sellUptoBottom' : 'sellBottomToUp'), setSellTop(!sellTop) }}>
+                                        مبلغ فروش {sellTop ? <i className="fa fa-angle-down" /> : <i className="fa fa-angle-up" />} </th>
                                 <th className=" text-center"> <i className="fa fa-cogs px-1"></i>تنظیمات </th>
                             </tr>
                         </thead>
@@ -92,12 +99,10 @@ export default function DaliyListPage() {
                                         <td>{convertToPersianDate(el?.date,'YMD')}</td>
                                     <td>{spliteNumber(el.totalSell)} ریال</td>
                                     <td className="text-center">
-                                        <Link href={`/pb/report/${el._id}`} className="btn btn-sm bg-custom-4 ms-1">
-                                            <i className="fa fa-edit px-1"></i>جزئیات
+                                        <Link href={`/pb/users/statistics`} className="btn btn-sm bg-custom-4 ms-1">
+                                            <i className="fa fa-edit px-1"></i>آمار کلی فروشنده
                                         </Link>
-                                        <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(el._id)} />, { autoClose: false })}>
-                                            <i className="fa fa-trash px-1"></i>حذف
-                                        </button>
+                                 
                                     </td>
                                 </tr>
                             ))}

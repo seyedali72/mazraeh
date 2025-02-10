@@ -1,16 +1,16 @@
 'use client'
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { convertToPersianDate } from "@/app/utils/helpers";
 import { nanoid } from "nanoid";
-import { getDBSs } from "@/app/action/report.action";
 import { toast } from "react-toastify";
 import TotalAndGroupCmp from "@/app/components/charts/TotalAndGroup";
 import GroupAndSubGroupCmp from "@/app/components/charts/GroupAndSubGroup";
 import SubGroupAndCategoryCmp from "@/app/components/charts/SubGroupAndCategory";
 import CategoryAndProductCmp from "@/app/components/charts/CategoryAndProduct";
 import DDDatePicker from "@/app/components/DropDownDatePicker";
+
 
 export default function ComparePage() {
     const [allGroup, setAllGroup] = useState<any>([]);
@@ -29,12 +29,7 @@ export default function ComparePage() {
     const [selectedBranch, setSelectedBranch] = useState<any>(null);
     const [selectedDate, setSelectedDate] = useState<any>(null);
     const [selectedEndDate, setSelectedEndDate] = useState<any>(null);
-    // const [data, setData] = useState<any>(null);
-    // const fetchData = useCallback(async () => {
-    //     let table = await getDBSs({ isDeleted: false })
-    //     setData(table)
-    // }, [])
-    // useEffect(() => { fetchData() }, [fetchData])
+
     let startYear = convertToPersianDate(selectedDate, 'Y')
     let startMonth = convertToPersianDate(selectedDate, 'M')
     let endYear = convertToPersianDate(selectedEndDate, 'Y')
@@ -67,7 +62,6 @@ export default function ComparePage() {
                             {selectedBranch ? <option hidden value=''>{selectedBranch}</option> : <option hidden value=''>فروشگاه رو انتخاب کنید</option>}
                             {branches?.map((branch: any) => { return (<option key={nanoid()} value={branch}>{branch}</option>) })}
                         </select>
-
 
                         <button type="button" onClick={() => { !selectedBranchs?.includes(selectedBranch) ? setSelectedBranchs([...selectedBranchs, selectedBranch]) : toast.error('این شعبه قبلا انتخاب شده است'), setSelectedBranch(null) }} className="btn btn-sm bg-custom-2 text-nowrap">افزودن شعبه </button>
                         <button type="button" onClick={() => { setSelectedBranch(null), setSelectedBranchs([]), setSelectedDate(null), setSelectedEndDate(null) }} className="btn btn-sm bg-custom-1 text-nowrap">ریست فیلتر </button>

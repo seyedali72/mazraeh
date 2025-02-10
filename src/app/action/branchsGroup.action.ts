@@ -5,10 +5,10 @@ import connect from '../lib/db'
 import { convertNumbersToEnglish, convertToPersianDate, onlyUnique, sumArray } from '../utils/helpers'
 
 export const getChartBranchsGroup = async (body: any) => {
-	const colors = [{ borderColor: '#0aa04e', backgroundColor: '#0aa04e32' }, { borderColor: '#a93b53', backgroundColor: '#ff638432' },
-	{ borderColor: '#0044ee', backgroundColor: '#0044ee32' }, { borderColor: '#aa55c0', backgroundColor: '#aa55c032' },
-	{ borderColor: '#cc12ec', backgroundColor: '#cc12ec32' }, { borderColor: '#0aa04e', backgroundColor: '#0aa04e32' },]
-	const { branchs } = body
+	body.colors = [{ borderColor: '#2d7c4f', backgroundColor: '#2d7c4f55' }, { borderColor: '#078191', backgroundColor: '#07819155' },
+	{ borderColor: '#cc1220', backgroundColor: '#cc122055' }, { borderColor: '#e05212', backgroundColor: '#e0521255' },
+	{ borderColor: '#d31184', backgroundColor: '#d3118455' }, { borderColor: '#2d7c4f', backgroundColor: '#2d7c4f55' },]
+	const { branchs,colors } = body
 	// ارسال اطلاعات و دریافت اطلاعات مقایسه ای و تفکیکی
 	let dataArray: any[] = [];
 	for (const branch of branchs) { body.branch = branch; const res = await getChartBranchGroup(body); dataArray.push(res); }
@@ -21,8 +21,8 @@ export const getChartBranchsGroup = async (body: any) => {
 	const datasets = dataArray.map((data: any, index: number) => ({
 		label: data.radarChart.branch,
 		data: data.radarChart.data,
-		fill: true,
-		backgroundColor: colors[index].backgroundColor,
+		fill:false,   tension: 0.1,
+		 backgroundColor: colors[index].backgroundColor,
 		borderColor: colors[index].borderColor,
 		pointBackgroundColor: colors[index].backgroundColor,
 		pointBorderColor: '#fff',
@@ -37,8 +37,8 @@ export const getChartBranchsGroup = async (body: any) => {
 	const barDatasets = dataArray.map((data: any, index: number) => ({
 		label: data.barChart.branch,
 		data: data.barChart.data,
-		fill: true,
-		backgroundColor: colors[index].backgroundColor,
+		fill:false,   tension: 0.1,
+		 backgroundColor: colors[index].backgroundColor,
 		borderColor: colors[index].borderColor,
 		pointBackgroundColor: colors[index].backgroundColor,
 		pointBorderColor: '#fff',

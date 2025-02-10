@@ -3,6 +3,7 @@ import { Types } from 'mongoose'
 interface ISeller {
 	date: Date
 	branch: String
+	day: String
 	name: String
 	totalSell: Number
 	isDeleted?: boolean

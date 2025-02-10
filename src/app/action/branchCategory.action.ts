@@ -5,9 +5,11 @@ import connect from '../lib/db'
 import { convertNumbersToEnglish, convertToPersianDate, onlyUnique, sumArray } from '../utils/helpers'
 
 export const getChartBranchCategory = async (body: any) => {
-
+	body.colors = [{ borderColor: '#2d7c4f', backgroundColor: '#2d7c4f55' }, { borderColor: '#078191', backgroundColor: '#07819155' },
+	{ borderColor: '#cc1220', backgroundColor: '#cc122055' }, { borderColor: '#e05212', backgroundColor: '#e0521255' },
+	{ borderColor: '#d31184', backgroundColor: '#d3118455' }, { borderColor: '#2d7c4f', backgroundColor: '#2d7c4f55' },]
 	await connect()
-	const { branch, startDate, endDate, startYear, startMonth, endYear, endMonth, category } = body
+	const { branch, startDate, endDate, startYear, startMonth, endYear, endMonth, category, colors } = body
 
 	const parsedStartDate = Date.parse(startDate);
 	const parsedEndDate = Date.parse(endDate);
@@ -15,9 +17,9 @@ export const getChartBranchCategory = async (body: any) => {
 		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
 		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
 		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
-
-		// محصولاتی که توی این گروه کالایی قراردارند رو میکشیم بیرون
 		const allProOnCategory = combinedProducts.filter((el: any) => el.category === category);
+		const allCategory = allProOnCategory.map((el: any) => el.category).filter(onlyUnique);
+		// محصولاتی که توی این گروه کالایی قراردارند رو میکشیم بیرون
 		const filteredSales = allProOnCategory.flatMap((item: any) =>
 			item.totalSell.filter((el: any) => el.branch === branch && el.date >= parsedStartDate && el.date <= parsedEndDate)
 		);
@@ -26,14 +28,24 @@ export const getChartBranchCategory = async (body: any) => {
 		const salesByDate = sortDate.map((date) => {
 			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => el.sell);
 			const dayCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => el.day);
-			const totalSales = sumArray(salesForCurrentDate)  ;
+			const totalSales = sumArray(salesForCurrentDate);
 
-			return { branch: `${convertToPersianDate(date, 'YMD')}-${dayCurrentDate[0]}`, dataset: { name: convertToPersianDate(date, 'YMD'), totalSell: totalSales } };
+			return totalSales
 		});
 
-		const lineChart = { labels: sortDate.map(date => convertToPersianDate(date, 'YMD')), data: salesByDate, title: `نمودار فروش دسته بندی ${category} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')}`, header: `جدول فروش دسته بندی ${category} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')}`, branch: branch };
+		const lineChart = {
+			labels: sortDate.map(date => convertToPersianDate(date, 'YMD')), datasets: [{
+				data: salesByDate, backgroundColor: colors[0].backgroundColor,
+				fill:false,   tension: 0.1,
+				borderColor: colors[0].borderColor,
+				pointBackgroundColor: colors[0].backgroundColor,
+				pointBorderColor: '#fff',
+				pointHoverBackgroundColor: '#fff',
+				pointHoverBorderColor: colors[0].borderColor,
+			}], title: `نمودار فروش دسته بندی ${category} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')}`, header: `جدول فروش دسته بندی ${category} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')}`, branch: branch
+		};
 		const barChart = await getGiveCategoryData(body, combinedProducts)
-		return JSON.parse(JSON.stringify({ lineChart, barChart }));
+		return JSON.parse(JSON.stringify({ lineChart, barChart, allCategory }));
 
 	} catch (error) {
 		console.log(error)
@@ -43,7 +55,7 @@ export const getChartBranchCategory = async (body: any) => {
 
 export const getGiveCategoryData = async (body: any, combinedProducts: any) => {
 	await connect()
-	const { branch, startDate, endDate, category } = body
+	const { branch, startDate, endDate, category, colors } = body
 	// تبدیل تاریخ ها
 	const parsedStartDate = Date.parse(startDate);
 	const parsedEndDate = Date.parse(endDate);
@@ -59,12 +71,21 @@ export const getGiveCategoryData = async (body: any, combinedProducts: any) => {
 				return accumulator + sumArray(filteredSales.map((sale: any) => sale.sell));
 			}, 0);
 
-			return totalSalesByGroup  ;
+			return totalSalesByGroup;
 		});
 
 		// اماده سازی ابجکت خروجی
-		const result = { labels: uniProduct, data: salesByCategory, title: `نمودار مبلغ کل فروش محصولات ${category} ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول مبلغ کل فروش محصولات ${category} ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, branch: branch };
-
+		const result = {
+			labels: uniProduct, datasets: [{
+				data: salesByCategory, backgroundColor: colors[0].backgroundColor,
+				fill:false,   tension: 0.1,
+				borderColor: colors[0].borderColor,
+				pointBackgroundColor: colors[0].backgroundColor,
+				pointBorderColor: '#fff',
+				pointHoverBackgroundColor: '#fff',
+				pointHoverBorderColor: colors[0].borderColor,
+			}], title: `نمودار مبلغ کل فروش محصولات ${category} ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول مبلغ کل فروش محصولات ${category} ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, branch: branch
+		};
 		return JSON.parse(JSON.stringify(result));
 
 	} catch (error) {

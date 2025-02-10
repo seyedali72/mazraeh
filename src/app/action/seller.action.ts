@@ -42,7 +42,7 @@ export const createSinglesellerReport = async (body: any) => {
         data.date = Date.parse(miladiDate)
         let find = await Seller.findOne({ name: data.seller, date: data.date, isDeleted: false })
         if (find == undefined) {
-            let pack = { branch: data.branch, date: data.date, name: data.seller, totalSell: data.totalSell }
+            let pack = { branch: data.branch, date: data.date, name: data.seller, totalSell: data.totalSell, day: data.day }
             try {
                 let res = await Seller.create(pack)
                 return JSON.parse(JSON.stringify(res))

@@ -529,12 +529,12 @@ export function sumMultipleArrays(arrays:any) {
 	}
   
 	// بررسی می کنیم که همه آرایه ها طول یکسانی داشته باشند
-	const firstArrayLength = arrays[0].length;
-	const allArraysHaveSameLength = arrays.every((arr:any) => arr.length === firstArrayLength);
+	// const firstArrayLength = arrays[0].length;
+	// const allArraysHaveSameLength = arrays.every((arr:any) => arr.length === firstArrayLength);
   
-	if (!allArraysHaveSameLength) {
-	  throw new Error("همه آرایه ها باید طول یکسانی داشته باشند.");
-	}
+	// if (!allArraysHaveSameLength) {
+	//   throw new Error("همه آرایه ها باید طول یکسانی داشته باشند.");
+	// }
   
 	// از reduce برای جمع کردن مقادیر متناظر استفاده می کنیم
 	return arrays.reduce((accumulator:any, currentArray:any) => {

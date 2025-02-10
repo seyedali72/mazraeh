@@ -5,10 +5,10 @@ import connect from '../lib/db'
 import { convertNumbersToEnglish, convertToPersianDate, onlyUnique, sumArray, sumMultipleArrays } from '../utils/helpers'
 
 export const getChartBranchsGroupForDay = async (body: any) => {
-	const colors = [{ borderColor: '#0aa04e', backgroundColor: '#0aa04e32' }, { borderColor: '#a93b53', backgroundColor: '#ff638432' },
-	{ borderColor: '#0044ee', backgroundColor: '#0044ee32' }, { borderColor: '#aa55c0', backgroundColor: '#aa55c032' },
-	{ borderColor: '#cc12ec', backgroundColor: '#cc12ec32' }, { borderColor: '#0aa04e', backgroundColor: '#0aa04e32' },]
-	const { branchs, type, days } = body
+	body.colors = [{ borderColor: '#2d7c4f', backgroundColor: '#2d7c4f55' }, { borderColor: '#078191', backgroundColor: '#07819155' },
+	{ borderColor: '#cc1220', backgroundColor: '#cc122055' }, { borderColor: '#e05212', backgroundColor: '#e0521255' },
+	{ borderColor: '#d31184', backgroundColor: '#d3118455' }, { borderColor: '#2d7c4f', backgroundColor: '#2d7c4f55' },]
+	const { branchs, type, days ,colors} = body
 	// ارسال اطلاعات و دریافت اطلاعات مقایسه ای و تفکیکی
 	let dataArray: any[] = [];
 	for (const branch of branchs) {
@@ -35,7 +35,7 @@ export const getChartBranchsGroupForDay = async (body: any) => {
 			label: branchData[0]?.branch,
 			data,
 			backgroundColor: colors[i].backgroundColor,
-			fill: true,
+			fill:false,   tension: 0.1,
 			borderColor: colors[i].borderColor,
 			pointBackgroundColor: colors[i].backgroundColor,
 			pointBorderColor: '#fff',
@@ -53,7 +53,7 @@ export const getChartBranchsGroupForDay = async (body: any) => {
 			label: branchData[0]?.branch,
 			data,
 			backgroundColor: colors[i].backgroundColor,
-			fill: true,
+			fill:false,   tension: 0.1,
 			borderColor: colors[i].borderColor,
 			pointBackgroundColor: colors[i].backgroundColor,
 			pointBorderColor: '#fff',
