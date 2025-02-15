@@ -11,7 +11,7 @@ export default function CompareBarChartBranch({ compareData }: any) {
   const options = { responsive: true, plugins: { title: { display: true, text: compareData?.title } } };
   const labels = compareData?.labels;
   const check = compareData?.datasets?.map((item: any, idx: number) => {
-    return ({ label: 'مبلغ به ريال', data: item?.data, backgroundColor: item?.backgroundColor, minBarLength: 5 })
+    return ({ label: item?.label, data: item?.data, backgroundColor: item?.backgroundColor,borderColor: item?.borderColor, minBarLength: 5 })
   });
 
   const data = { labels, datasets: check };

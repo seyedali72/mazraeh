@@ -24,8 +24,8 @@ export default function UserInDuration({ requestData }: any) {
         return (
             <>
                 <div className="py-3 border-bottom">
-                    {totalChartToggle ? <button className="btn btn-sm bg-custom-2" onClick={() => setTotalChartToggle(!totalChartToggle)} type="button">تبدیل به نمایش بصورت نمودار میله ای</button> :
-                        <button className="btn btn-sm bg-custom-4" onClick={() => setTotalChartToggle(!totalChartToggle)} type="button">تبدیل به نمایش بصورت نمودار راداری</button>}
+                    {totalChartToggle ? <button className="btn btn-sm bg-custom-2" onClick={() => {setTotalChartToggle(!totalChartToggle),setChartToggle(false)}} type="button">تبدیل به نمایش بصورت نمودار میله ای</button> :
+                        <button className="btn btn-sm bg-custom-4" onClick={() => {setTotalChartToggle(!totalChartToggle),setChartToggle(false)}} type="button">تبدیل به نمایش بصورت نمودار راداری</button>}
               <button className="btn btn-sm bg-custom-3 mx-2" onClick={() => setChartToggle(!ChartToggle)} type="button">تبدیل به نمایش بصورت نمودار خطی</button>
                 </div>
                 {ChartToggle ? <CompareLineChartBranch compareData={radarChartData} /> : totalChartToggle ? <CompareRadarChartBranch compareData={radarChartData} /> :

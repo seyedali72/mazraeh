@@ -523,27 +523,23 @@ export function convertNumbersToEnglish(input: any) {
 	return englishNumbers;
 }
 
-export function sumMultipleArrays(arrays:any) {
+export function sumMultipleArrays(arrays: any) {
 	if (!arrays || arrays.length === 0) {
-	  return []; // اگر هیچ آرایه ای وجود نداشت، یک آرایه خالی برگردان
+		return [];
 	}
-  
-	// بررسی می کنیم که همه آرایه ها طول یکسانی داشته باشند
-	// const firstArrayLength = arrays[0].length;
-	// const allArraysHaveSameLength = arrays.every((arr:any) => arr.length === firstArrayLength);
-  
-	// if (!allArraysHaveSameLength) {
-	//   throw new Error("همه آرایه ها باید طول یکسانی داشته باشند.");
-	// }
-  
-	// از reduce برای جمع کردن مقادیر متناظر استفاده می کنیم
-	return arrays.reduce((accumulator:any, currentArray:any) => {
-	  if (!accumulator.length) {
-		// اگر accumulator خالی بود (اولین آرایه)، آن را کپی می کنیم
-		return currentArray;
-	  } else {
-		// در غیر این صورت، مقادیر متناظر را جمع می کنیم
-		return accumulator.map((num:any, index:number) => num + currentArray[index]);
-	  }
-	}, []); // مقدار اولیه reduce یک آرایه خالی است
-  }
+	return arrays.reduce((accumulator: any, currentArray: any) => {
+		if (!accumulator.length) {
+			return currentArray;
+		} else {
+			return accumulator.map((num: any, index: number) => num + currentArray[index]);
+		}
+	}, []);
+}
+export function adjustOpacity(color: string, opacity: any) {
+	let hex = color.replace('#', '');
+	let r = parseInt(hex.substring(0, 2), 16);
+	let g = parseInt(hex.substring(2, 4), 16);
+	let b = parseInt(hex.substring(4, 6), 16);
+
+	return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}

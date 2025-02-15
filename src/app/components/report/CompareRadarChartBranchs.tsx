@@ -1,7 +1,7 @@
 import React from 'react';
 import { Chart as ChartJS, PointElement, LineElement, Title, Tooltip, Legend, RadialLinearScale, Filler, } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
-import { spliteNumber } from '@/app/utils/helpers';
+import { adjustOpacity, spliteNumber } from '@/app/utils/helpers';
 import { nanoid } from 'nanoid';
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend);
@@ -12,7 +12,8 @@ export default function CompareRadarChartBranch({ compareData }: any) {
   const options = { responsive: true, plugins: { title: { display: true, text: compareData?.title } }, };
   const labels = compareData?.labels;
   const check = compareData?.datasets?.map((item: any, idx: number) => {
-    return ({ label: item?.label, data: item?.data, backgroundColor: item?.backgroundColor, minBarLength: 5 })
+    let newColor = adjustOpacity(item?.backgroundColor, 0.2);
+    return ({ label: item?.label, data: item?.data, backgroundColor: newColor,borderColor: item?.borderColor, minBarLength: 5 })
   });
 
   const data = { labels, datasets: check };

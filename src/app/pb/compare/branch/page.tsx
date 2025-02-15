@@ -11,6 +11,7 @@ import { getChartProduct } from "@/app/action/branch.action";
 import { getChartBranchGroup } from "@/app/action/branchGroup.action";
 import { getChartBranchSubGroup } from "@/app/action/branchSubGroup.action";
 import { getChartBranchCategory } from "@/app/action/branchCategory.action";
+import DDDatePicker from "@/app/components/DropDownDatePicker";
 
 export default function ComparePage() {
     const [selectedGroup, setSelectedGroup] = useState<any>([]);
@@ -28,13 +29,14 @@ export default function ComparePage() {
         setData(table)
     }, [])
     useEffect(() => { fetchData() }, [fetchData])
+    let startYear = convertToPersianDate(selectedDate, 'Y')
+    let startMonth = convertToPersianDate(selectedDate, 'M')
+    let endYear = convertToPersianDate(selectedEndDate, 'Y')
+    let endMonth = convertToPersianDate(selectedEndDate, 'M')
+    let requestData: any = { branch: selectedBranch, startDate: selectedDate, endDate: selectedEndDate, startYear, startMonth, endYear, endMonth }
+
     const handleGroupOnList = async () => {
         setCompareBtn(false)
-        let startYear = convertToPersianDate(selectedDate, 'Y')
-        let startMonth = convertToPersianDate(selectedDate, 'M')
-        let endYear = convertToPersianDate(selectedEndDate, 'Y')
-        let endMonth = convertToPersianDate(selectedEndDate, 'M')
-        const requestData = { branch: selectedBranch, startDate: selectedDate, endDate: selectedEndDate, startYear, startMonth, endYear, endMonth }
         let res = await getChartProduct(requestData)
         setLineChartData(res?.lineChart)
         setBarChartData(res?.barChart)
@@ -43,11 +45,7 @@ export default function ComparePage() {
     }
     const handleSubGroupOnGroup = async (group: any) => {
         setCompareBtn(false)
-        let startYear = convertToPersianDate(selectedDate, 'Y')
-        let startMonth = convertToPersianDate(selectedDate, 'M')
-        let endYear = convertToPersianDate(selectedEndDate, 'Y')
-        let endMonth = convertToPersianDate(selectedEndDate, 'M')
-        const requestData = { branch: selectedBranch, startDate: selectedDate, endDate: selectedEndDate, startYear, startMonth, endYear, endMonth, group }
+        requestData.group = group
         let res = await getChartBranchGroup(requestData)
         setLineChartData(res?.lineChart)
         setBarChartData(res?.barChart)
@@ -56,11 +54,7 @@ export default function ComparePage() {
     }
     const handleCategoryOnSubGroup = async (subGroup: any) => {
         setCompareBtn(false)
-        let startYear = convertToPersianDate(selectedDate, 'Y')
-        let startMonth = convertToPersianDate(selectedDate, 'M')
-        let endYear = convertToPersianDate(selectedEndDate, 'Y')
-        let endMonth = convertToPersianDate(selectedEndDate, 'M')
-        const requestData = { branch: selectedBranch, startDate: selectedDate, endDate: selectedEndDate, startYear, startMonth, endYear, endMonth, subGroup }
+        requestData.subGroup = subGroup
         let res = await getChartBranchSubGroup(requestData)
         setLineChartData(res?.lineChart)
         setBarChartData(res?.barChart)
@@ -69,17 +63,13 @@ export default function ComparePage() {
     }
     const handleProductsOnCategory = async (category: any) => {
         setCompareBtn(false)
-        let startYear = convertToPersianDate(selectedDate, 'Y')
-        let startMonth = convertToPersianDate(selectedDate, 'M')
-        let endYear = convertToPersianDate(selectedEndDate, 'Y')
-        let endMonth = convertToPersianDate(selectedEndDate, 'M')
-        const requestData = { branch: selectedBranch, startDate: selectedDate, endDate: selectedEndDate, startYear, startMonth, endYear, endMonth, category }
+        requestData.category = category
         let res = await getChartBranchCategory(requestData)
         setLineChartData(res?.lineChart)
         setBarChartData(res?.barChart)
         setCompareBtn(true)
     }
-    
+
 
     return (
         <>
@@ -99,26 +89,9 @@ export default function ComparePage() {
                             <option value="فروشگاه کلهر">فروشگاه کلهر</option>
                             <option value="فروشگاه معلم">فروشگاه معلم</option>
                         </select>
-                        <select className="form-control form-control-sm" onChange={(e: any) => setSelectedDate(e.target.value)}>
-                            {selectedDate ? <option hidden value=''>{convertToPersianDate(selectedDate, 'YMD')}</option> : <option hidden value=''>از تاریخ ...</option>}
-                            {data?.map((el: any) => {
-                                if (el?.branch == selectedBranch) {
-                                    return (
-                                        <option key={nanoid()} value={el?.date}>{convertToPersianDate(el?.date, 'YMD')}</option>
-                                    )
-                                }
-                            })}
-                        </select>
-                        <select className="form-control form-control-sm" onChange={(e: any) => setSelectedEndDate(e.target.value)}>
-                            {selectedEndDate ? <option hidden value=''>{convertToPersianDate(selectedEndDate, 'YMD')}</option> : <option hidden value=''>الی تاریخ ....</option>}
-                            {data?.map((el: any) => {
-                                if (el?.branch == selectedBranch && el?.date >= selectedDate) {
-                                    return (
-                                        <option key={nanoid()} value={el?.date}>{convertToPersianDate(el?.date, 'YMD')}</option>
-                                    )
-                                }
-                            })}
-                        </select>
+
+                        <DDDatePicker selectDate={(e: any) => setSelectedDate(e)} type='از تاریخ ....' date={selectedDate} />
+                        <DDDatePicker selectDate={(e: any) => setSelectedEndDate(e)} type='تا تاریخ ....' date={selectedEndDate} />
                         <button type="button" onClick={() => { setSelectedBranch(null), setSelectedDate(null), setSelectedEndDate(null) }} className="btn btn-sm bg-custom-1 text-nowrap">ریست فیلتر </button>
                         <button type="button" onClick={() => { handleGroupOnList() }} className="btn btn-sm bg-custom-4 text-nowrap">نمایش آمار</button>
                         <button type="button" onClick={() => { setCompareBtn(false), setSelectedCategory([]), setSelectedGroup([]), setSelectedSubGroup([]) }} className="btn btn-sm bg-custom-3 text-nowrap">ریست آمار </button>
@@ -150,8 +123,8 @@ export default function ComparePage() {
                             <tbody>
                                 {data?.filter((el: any) => {
                                     const isBranchMatch = selectedBranch ? el.branch === selectedBranch : true;
-                                    const isDateMatch = selectedDate ? el.date >= selectedDate : true;
-                                    const isDateEndMatch = selectedDate ? el.date <= selectedEndDate : true;
+                                    const isDateMatch = selectedDate ? Date.parse(el.date) >= selectedDate : true;
+                                    const isDateEndMatch = selectedDate ? Date.parse(el.date) <= selectedEndDate : true;
                                     return isBranchMatch && isDateMatch && isDateEndMatch;
                                 }).map((el: any, idx: number) => (
                                     <tr key={idx} className='fs80'>
@@ -168,37 +141,9 @@ export default function ComparePage() {
                         </table>
                     </section> :
                     <>
-                      <CompareLineChartBranch compareData={lineChartData} />
-                      <CompareBarChartBranch compareData={barChartData} />
-                     {/* <section className="table-responsive">
-                        <table className="table table-striped">
-                            <thead className="fs70">
-                                <tr><th colSpan={5}>{lineChartData.header} </th></tr>
-                                <tr>
-                                    <th>تاریخ</th>
-                                    <th>مبلغ کل فروش (ريال)</th>
-                                    <th>{''}</th>
-                                    <th className="text-end">عنوان</th>
-                                    <th>مبلغ کل فروش (ريال)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rowLength?.map((el: any, idx: number) => {
-                                    return (
-                                        <tr key={idx} className='fs80'>
-                                            <td>{lineChartData?.data[idx]?.dataset?.name}</td>
-                                            <td>{lineChartData?.data[idx]?.dataset?.totalSell !== undefined ? spliteNumber(lineChartData?.data[idx]?.dataset?.totalSell) : ''}</td>
-                                            <td>{" "}</td>
-                                            <td className="text-end">{barChartData?.labels[idx]}</td>
-                                            <td>{barChartData?.data[idx] !== undefined ? spliteNumber(barChartData?.data[idx]) : ''}</td>
-                                        </tr>
-                                    )
-                                })}
-
-                            </tbody>
-                        </table>
-                    </section> */}
-                      </>}
+                        <CompareLineChartBranch compareData={lineChartData} />
+                        <CompareBarChartBranch compareData={barChartData} />
+                    </>}
             </section >
 
         </>

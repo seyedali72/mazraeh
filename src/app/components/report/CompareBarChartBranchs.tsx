@@ -7,12 +7,12 @@ import { spliteNumber } from '@/app/utils/helpers';
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function CompareBarChartBranchs({ compareData }: any) {
-  // ,plugins:{ legend: { labels:{font:{size:19,family:'Arial'}}},} 
+  // ,plugins:{ legend: { labels:{font:{size:19,family:'sans-serif'}}},} 
 
   const options = { responsive: true, plugins: { title: { display: true, text: compareData?.title } } };
   const labels = compareData?.labels;
   const check = compareData?.datasets?.map((item: any, idx: number) => {
-    return ({ label: item?.label, data: item?.data, backgroundColor: item?.backgroundColor, minBarLength: 5 })
+    return ({ label: item?.label, data: item?.data, backgroundColor: item?.backgroundColor, borderColor: item?.borderColor, minBarLength: 5 })
   });
 
   const data = { labels, datasets: check };

@@ -28,7 +28,7 @@ export default function HeaderPanel() {
             <section className="d-flex justify-content-md-center justify-content-between flex1 px-2 align-item-center">
               {!sidebarToggle ? <span onClick={() => setSidebarToggle(!sidebarToggle)} id="sidebar-toggle-show" className="d-md-none py-2 px-1 d-inline"><i className="fa fa-align-justify pointer"></i></span>
                 : <span onClick={() => setSidebarToggle(!sidebarToggle)} id="sidebar-toggle-hide" className="d-md-none py-2 px-1 d-inline"><i className="fa fa-align-right pointer"></i></span>}
-              {user?._id !== undefined ? <span className="px-md-2">شرکت: {user?.clientName}</span> : <span><Image src={logo} alt="logo" width={150} height={50} className="h-auto" priority /></span>}
+              { <span><Image src={logo} alt="logo" width={150} height={50} className="h-auto" priority /></span>}
               {/* <span id="menu-toggle" className="d-md-none"><i className="fa fa-ellipsis-h"></i></span> */}
             </section>
           </section>
