@@ -58,7 +58,7 @@ export const createProduct = async (body: any, week: any) => {
 					year: englishYear,
 					month: englishMonth,
 					week: englishWeek,
-					totalSell: [{ seller: data.seller, sell: data.sell, return: data.return, date: data.date, day: data.day }],
+					totalSell: [{   branch: data.branch, sell: data.sell, return: data.return, date: data.date, day: data.day }],
 				};
 
 				return {
