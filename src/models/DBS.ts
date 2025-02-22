@@ -6,14 +6,11 @@ import { Schema, model, Model, models } from 'mongoose'
 const baseDBSSchema = new Schema<IDBS, Model<IDBS, any, any>, any>(
 	{
 		branch: { type: String, required: [true, 'نام الزامی است']  },
+		day: { type: String  },
 		date: { type: Date },
 		totalSell: { type: Number, trim: true  },
 		totalReturn: { type: Number, trim: true  },
-		totalInvoice: { type: Number, trim: true  },
-		products: [{ type: Object }], 
-		category: [{ type: Object }],  
-		group: [{ type: Object }],  
-		sellers: [{ type: Object }],  
+		totalInvoice: { type: Number, trim: true  }, 
  		isDeleted: { type: Boolean, required: true, default: false },
 		deletedAt: { type: Date },
 	},

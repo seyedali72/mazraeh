@@ -10,8 +10,13 @@ export const getChartProduct = async (body: any) => {
 	{ borderColor: '#d31184', backgroundColor: '#d31184' }, { borderColor: '#2d7c4f', backgroundColor: '#0aa04b' },]
 	await connect()
 	const { branch, startDate, endDate, startYear, startMonth, endYear, endMonth, colors } = body
+	let loop = (endDate - startDate) / 86400000
+	let spliteDateArray: any = []
+	for (let i = 0; i <= loop; i++) {
+		let value = startDate + (86400000 * i)
+		spliteDateArray.push(value)
+	}
 
-	 
 	try {
 		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
 		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
@@ -20,20 +25,18 @@ export const getChartProduct = async (body: any) => {
 		const filteredSales = combinedProducts.flatMap((item: any) =>
 			item.totalSell.filter((el: any) => el.branch === branch && el.date >= startDate && el.date <= endDate)
 		);
-		const allDates = filteredSales.map((el: any) => el.date).filter(onlyUnique);
-		const sortDate = allDates.sort((a: any, b: any) => a - b)
-		const salesByDate = sortDate.map((date) => {
+
+		const salesByDate = spliteDateArray.map((date: any) => {
 			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => el.sell);
 			const totalSales = sumArray(salesForCurrentDate);
-
 			return totalSales
 		});
-		const dayName = sortDate.map((date) => {
+		const dayName = spliteDateArray.map((date: any) => {
 			const dayCurrentDate: any = filteredSales.map((el: any) => el.date === date && el.day).filter(Boolean).filter(onlyUnique)
 			let name = `${convertToPersianDate(date, 'YMD')}-${dayCurrentDate[0]}`
-			return name
+			return name.length > 0 ? name : [`${convertToPersianDate(date, 'YMD')}`]
 		});
-	 
+
 		const lineChart = {
 			labels: dayName, datasets: [{
 				label: branch,
@@ -44,7 +47,7 @@ export const getChartProduct = async (body: any) => {
 				pointBorderColor: '#fff',
 				pointHoverBackgroundColor: '#fff',
 				pointHoverBorderColor: colors[0].borderColor,
-			}], title: `نمودار فروش ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول فروش ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} ` 
+			}], title: `نمودار فروش ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول فروش ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `
 		};
 		const barChart = await getGiveGroupData(body, combinedProducts)
 		return JSON.parse(JSON.stringify({ lineChart, barChart, allGroups }));
@@ -58,7 +61,7 @@ export const getChartProduct = async (body: any) => {
 export const getGiveGroupData = async (body: any, combinedProducts: any) => {
 	await connect()
 	const { branch, startDate, endDate, colors } = body
- 
+
 	try {
 		const allGroups = combinedProducts.map((el: any) => el.group).filter(onlyUnique);
 
@@ -85,7 +88,7 @@ export const getGiveGroupData = async (body: any, combinedProducts: any) => {
 				pointBorderColor: '#fff',
 				pointHoverBackgroundColor: '#fff',
 				pointHoverBorderColor: colors[0].borderColor,
-			}], title: `نمودار مبلغ کل فروش گروه کالایی  ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول مبلغ کل فروش گروه کالایی  ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, branch: branch
+			}], title: `نمودار مبلغ کل فروش گروه کالا  ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول مبلغ کل فروش گروه کالا  ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, branch: branch
 		};
 		return JSON.parse(JSON.stringify(result));
 

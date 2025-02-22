@@ -276,11 +276,11 @@ th {
   background-color: #000a;
   z-index: 10;
 }
- 
+
 .dropdownBox {
   display: flex;
   align-items: center;
-   font-size: 0.9rem;
+  font-size: 0.9rem;
   text-wrap: nowrap;
 }
 .dropdownBox .sub {
@@ -366,6 +366,24 @@ th {
   justify-content: space-around;
   z-index: 200;
   align-items: stretch;
+}
+@media print {
+  
+  body * {
+    direction: rtl;
+    text-align: right; 
+  }
+ 
+ 
+  #componentToPrint,
+  #componentToPrint * {
+    visibility: visible;
+  }
+  #componentToPrint {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 }
 
 .logo {

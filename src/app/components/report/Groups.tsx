@@ -8,7 +8,7 @@ export default function GroupList({ singleReport }: any) {
         <section className="main-body-container rounded">
             <section className="d-flex justify-content-between align-items-center mt-1mb-3 border-bottom pb-3" >
                 <section className="main-body-title">
-                    <h5 className="mb-0">لیست گروه کالایی ها</h5>
+                    <h5 className="mb-0">لیست گروه کالا ها</h5>
                 </section>
                 <div className="col-md-6">
                     <input type="text" onChange={(e: any) => setFilter(e.target.value)} placeholder='فیلتر براساس نام تیم ' className="form-control form-control-sm" />

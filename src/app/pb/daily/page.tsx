@@ -29,10 +29,6 @@ export default function DaliyListPage() {
     const sortList = sortingList(data, sort)
 
     useEffect(() => { fetchData() }, [mutated, fetchData])
-    const handleDelete = async (id: any) => {
-        let res = await deleteDBS(id)
-        if (!res.error) { setMutated(!mutated) }
-    }
 
     return (
         <>
@@ -77,6 +73,7 @@ export default function DaliyListPage() {
                                     <th>نام فروشگاه</th>
                                     <th className="cursorPointer" onClick={() => { setSort(dateTop ? 'dateUptoBottom' : 'dateBottomToUp'), setDateTop(!dateTop) }}>
                                         تاریخ {dateTop ? <i className="fa fa-angle-down" /> : <i className="fa fa-angle-up" />} </th>
+                                    <th>روز</th>
                                     <th className="cursorPointer" onClick={() => { setSort(sellTop ? 'sellUptoBottom' : 'sellBottomToUp'), setSellTop(!sellTop) }}>
                                         مبلغ فروش {sellTop ? <i className="fa fa-angle-down" /> : <i className="fa fa-angle-up" />} </th>
                                     <th className="cursorPointer" onClick={() => { setSort(returnTop ? 'returnUptoBottom' : 'returnBottomToUp'), setReturnTop(!returnTop) }}>
@@ -96,17 +93,12 @@ export default function DaliyListPage() {
                                             <td className='text-center'>{idx + 1}</td>
                                             <td>{el?.branch} </td>
                                             <td>{convertToPersianDate(el?.date, 'YMD')}</td>
+                                            <td>{el?.day} </td>
                                             <td>{spliteNumber(el?.totalSell)} ريال</td>
                                             <td>{spliteNumber(el?.totalReturn)} ريال</td>
                                             <td>{spliteNumber(el?.totalInvoice)}</td>
                                             <td>{spliteNumber(basket)}</td>
-                                            {/* <td className="  text-center">
-                                                <Link href={`/pb/report/${el?._id}`} className="btn btn-sm bg-custom-4 ms-1" >
-                                                    <i className="fa fa-edit px-1"></i>جزئیات</Link>
-                                                <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(el?._id)} />, { autoClose: false, })}>
-                                                    <i className="fa fa-trash px-1"></i>حذف
-                                                </button>
-                                            </td> */}
+                                         
                                         </tr>)
                                     }
                                 })}

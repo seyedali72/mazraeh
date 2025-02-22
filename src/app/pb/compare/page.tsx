@@ -5,9 +5,8 @@ import Link from "next/link";
 import { convertToPersianDate, spliteNumber } from "@/app/utils/helpers";
 import { nanoid } from "nanoid";
 import { getDBSs } from "@/app/action/report.action";
-import CompareLineChart from "@/app/components/report/CompareLineChart";
-import { getCompare } from "@/app/action/convert.action";
-import CompareBarChart from "@/app/components/report/CompareBarChart";
+ import { getCompare } from "@/app/action/convert.action";
+import CompareBarChartBranch from "@/app/components/report/CompareBarChartBranch";
 
 export default function ComparePage() {
     const [groupList, setGroupList] = useState(true)
@@ -77,7 +76,7 @@ export default function ComparePage() {
                                 <th>مبلغ مرجوعی</th>
                                 <th>تعداد فاکتور</th>
                                 <th >مقایسه براساس
-                                    <button type="button" onClick={() => { setGroupList(true), setCategoryList(false), setProductList(false), setCompareList([]), setCompareIdList([]) }} className="btn btn-sm bg-gray text-nowrap">گروه کالایی </button>
+                                    <button type="button" onClick={() => { setGroupList(true), setCategoryList(false), setProductList(false), setCompareList([]), setCompareIdList([]) }} className="btn btn-sm bg-gray text-nowrap">گروه کالا </button>
                                     <button type="button" onClick={() => { setCategoryList(true), setGroupList(false), setProductList(false), setCompareList([]), setCompareIdList([]) }} className="btn btn-sm bg-gray text-nowrap">دسته بندی</button>
                                     <button type="button" onClick={() => { setGroupList(false), setCategoryList(false), setProductList(true), setCompareList([]), setCompareIdList([]) }} className="btn btn-sm bg-gray text-nowrap">محصول </button></th>
                             </tr>
@@ -116,7 +115,7 @@ export default function ComparePage() {
                         </tbody>
                     </table>
                 </section> :
-                    <CompareBarChart compareData={compareData} />}
+                    <CompareBarChartBranch compareData={compareData} />}
             </section >
 
         </>

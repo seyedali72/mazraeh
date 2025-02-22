@@ -25,13 +25,10 @@ interface IProducts {
 interface IDBS {
 	date: Date
 	branch: String
+	day: String
 	totalSell: Number
 	totalReturn: Number
-	totalInvoice: Number
-	products: []
-	category: []
-	group: []
-	sellers: []
+	totalInvoice: Number 
 	isDeleted?: boolean
 	deletedAt?: Date
 }

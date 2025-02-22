@@ -8,7 +8,7 @@ export const getChartBranchsGroup = async (body: any) => {
 	body.colors = [{ borderColor: '#2d7c4f', backgroundColor: '#2d7c4f' }, { borderColor: '#078191', backgroundColor: '#078191' },
 	{ borderColor: '#cc1220', backgroundColor: '#cc1220' }, { borderColor: '#e05212', backgroundColor: '#e05212' },
 	{ borderColor: '#d31184', backgroundColor: '#d31184' }, { borderColor: '#2d7c4f', backgroundColor: '#2d7c4f' },]
-	const { branchs,colors } = body
+	const { branchs, colors } = body
 	// ارسال اطلاعات و دریافت اطلاعات مقایسه ای و تفکیکی
 	let dataArray: any[] = [];
 	for (const branch of branchs) { body.branch = branch; const res = await getChartBranchGroup(body); dataArray.push(res); }
@@ -21,8 +21,8 @@ export const getChartBranchsGroup = async (body: any) => {
 	const datasets = dataArray.map((data: any, index: number) => ({
 		label: data.radarChart.branch,
 		data: data.radarChart.data,
-		fill:false,   tension: 0.1,
-		 backgroundColor: colors[index].backgroundColor,
+		fill: false, tension: 0.1,
+		backgroundColor: colors[index].backgroundColor,
 		borderColor: colors[index].borderColor,
 		pointBackgroundColor: colors[index].backgroundColor,
 		pointBorderColor: '#fff',
@@ -37,8 +37,8 @@ export const getChartBranchsGroup = async (body: any) => {
 	const barDatasets = dataArray.map((data: any, index: number) => ({
 		label: data.barChart.branch,
 		data: data.barChart.data,
-		fill:false,   tension: 0.1,
-		 backgroundColor: colors[index].backgroundColor,
+		fill: false, tension: 0.1,
+		backgroundColor: colors[index].backgroundColor,
 		borderColor: colors[index].borderColor,
 		pointBackgroundColor: colors[index].backgroundColor,
 		pointBorderColor: '#fff',
@@ -54,8 +54,13 @@ export const getChartBranchGroup = async (body: any) => {
 
 	await connect()
 	const { branch, startDate, endDate, startYear, startMonth, endYear, endMonth, group, type } = body
+	let loop = (endDate - startDate) / 86400000
+	let spliteDateArray: any = []
+	for (let i = 0; i <= loop; i++) {
+		let value = startDate + (86400000 * i)
+		spliteDateArray.push(value)
+	}
 
-	
 	try {
 		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
 		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
@@ -63,24 +68,23 @@ export const getChartBranchGroup = async (body: any) => {
 		const findGroup = combinedProducts.filter((el: any) => el.group == group)
 		const allSubGroups = findGroup.map((el: any) => el.subGroup).filter(onlyUnique);
 
-		// محصولاتی که توی این گروه کالایی قراردارند رو میکشیم بیرون
+		// محصولاتی که توی این گروه کالا قراردارند رو میکشیم بیرون
 		const allProGroup = combinedProducts.filter((el: any) => el.group === group);
 		const filteredSales = allProGroup.flatMap((item: any) =>
 			item.totalSell.filter((el: any) => el.branch === branch && el.date >= startDate && el.date <= endDate)
 		);
-		const allDates = filteredSales.map((el: any) => el.date).filter(onlyUnique);
-		const sortDate = allDates.sort((a: any, b: any) => a - b)
-		const salesByDate = sortDate.map((date) => {
+
+		const salesByDate = spliteDateArray.map((date: any) => {
 			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((item: any) => type == 'sell' ? item.sell : item.return);
 			const totalSales = sumArray(salesForCurrentDate);
-			return totalSales  
+			return totalSales
 		});
-		const dayByDate = sortDate.map((date) => {
+		const dayByDate = spliteDateArray.map((date: any) => {
 			const dayCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => `${convertToPersianDate(date, 'YMD')}-${el.day}`).filter(onlyUnique);
-			return dayCurrentDate
+			return dayCurrentDate.length > 0 ? dayCurrentDate : [`${convertToPersianDate(date, 'YMD')}`]
 		});
 
-		const radarChart = { labels: sortDate.map(date => convertToPersianDate(date, 'YMD')), data: salesByDate, title: `نمودار ${type == 'sell' ? 'فروش' : 'مرجوعی'} گروه ${group} در شعب زیر از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول ${type == 'sell' ? 'فروش' : 'مرجوعی'} گروه ${group} در شعب زیر از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, branch: branch, newName: dayByDate };
+		const radarChart = { labels: spliteDateArray.map((date: any) => convertToPersianDate(date, 'YMD')), data: salesByDate, title: `نمودار ${type == 'sell' ? 'فروش' : 'مرجوعی'} گروه ${group} در شعب زیر از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول ${type == 'sell' ? 'فروش' : 'مرجوعی'} گروه ${group} در شعب زیر از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, branch: branch, newName: dayByDate };
 		const barChart = await getGiveSubGroupData(body, combinedProducts)
 		return JSON.parse(JSON.stringify({ radarChart, barChart, allSubGroups }));
 
@@ -93,12 +97,11 @@ export const getChartBranchGroup = async (body: any) => {
 export const getGiveSubGroupData = async (body: any, combinedProducts: any) => {
 	await connect()
 	const { branch, startDate, endDate, group, type } = body
-	// تبدیل تاریخ ها
-	
+
 	try {
 		const allGroups = combinedProducts.filter((el: any) => el.group == group);
 		let filtered = allGroups.map((el: any) => el.subGroup).filter(onlyUnique)
-		// محصولاتی که توی این گروه کالایی قراردارند رو میکشیم بیرون
+		// محصولاتی که توی این گروه کالا قراردارند رو میکشیم بیرون
 		const salesByGroup = filtered.map((subGroup: string) => {
 			const salesForCurrentGroup = combinedProducts.filter((el: any) => el.subGroup === subGroup);
 
@@ -107,7 +110,7 @@ export const getGiveSubGroupData = async (body: any, combinedProducts: any) => {
 				return accumulator + sumArray(filteredSales.map((item: any) => type == 'sell' ? item.sell : item.return));
 			}, 0);
 
-			return totalSalesByGroup  
+			return totalSalesByGroup
 		});
 
 		// اماده سازی ابجکت خروجی

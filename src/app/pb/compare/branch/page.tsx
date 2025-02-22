@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { convertToPersianDate, spliteNumber } from "@/app/utils/helpers";
 import { nanoid } from "nanoid";
@@ -12,6 +12,7 @@ import { getChartBranchGroup } from "@/app/action/branchGroup.action";
 import { getChartBranchSubGroup } from "@/app/action/branchSubGroup.action";
 import { getChartBranchCategory } from "@/app/action/branchCategory.action";
 import DDDatePicker from "@/app/components/DropDownDatePicker";
+import { useReactToPrint } from "react-to-print";
 
 export default function ComparePage() {
     const [selectedGroup, setSelectedGroup] = useState<any>([]);
@@ -28,6 +29,7 @@ export default function ComparePage() {
         let table = await getDBSs({ isDeleted: false })
         setData(table)
     }, [])
+    const branches = ['فروشگاه کهنز', 'فروشگاه معلم', 'فروشگاه کلهر', 'فروشگاه رباط کریم']
     useEffect(() => { fetchData() }, [fetchData])
     let startYear = convertToPersianDate(selectedDate, 'Y')
     let startMonth = convertToPersianDate(selectedDate, 'M')
@@ -70,7 +72,8 @@ export default function ComparePage() {
         setCompareBtn(true)
     }
 
-
+     const contentRef = useRef<HTMLDivElement>(null);
+    const reactToPrintFn = useReactToPrint({ contentRef });
     return (
         <>
             <nav aria-label="breadcrumb">
@@ -79,17 +82,14 @@ export default function ComparePage() {
                     <li className="breadcrumb-item active" aria-current="page">  نمودار فروش شعبه </li>
                 </ol>
             </nav>
-            <section className="main-body-container rounded">
+            <section  ref={contentRef} className="main-body-container rounded">
                 <section className="d-flex justify-content-between align-items-center mt-1mb-3 border-bottom pb-3" >
                     <div className="d-flex gap-3 col-12 ">
-                        <select className="form-control form-control-sm" onChange={(e: any) => { setSelectedBranch(e.target.value), setSelectedDate(null) }}>
-                            <option hidden value=''>فروشگاه را انتخاب کنید</option>
-                            <option value="فروشگاه کهنز">فروشگاه کهنز</option>
-                            <option value="فروشگاه رباط کریم">فروشگاه رباط کریم</option>
-                            <option value="فروشگاه کلهر">فروشگاه کلهر</option>
-                            <option value="فروشگاه معلم">فروشگاه معلم</option>
+                    <button className="btn btn-sm bg-custom-2 text-nowrap" onClick={() => reactToPrintFn()}>پرینت</button>
+                        <select className="form-control form-control-sm" onChange={(e: any) => { setSelectedBranch(e.target.value), setSelectedDate(null)  }}>
+                            {selectedBranch ? <option hidden value=''>{selectedBranch}</option> : <option hidden value=''>فروشگاه رو انتخاب کنید</option>}
+                            {branches?.map((branch: any) => { return (<option key={nanoid()} value={branch}>{branch}</option>) })}
                         </select>
-
                         <DDDatePicker selectDate={(e: any) => setSelectedDate(e)} type='از تاریخ ....' date={selectedDate} />
                         <DDDatePicker selectDate={(e: any) => setSelectedEndDate(e)} type='تا تاریخ ....' date={selectedEndDate} />
                         <button type="button" onClick={() => { setSelectedBranch(null), setSelectedDate(null), setSelectedEndDate(null) }} className="btn btn-sm bg-custom-1 text-nowrap">ریست فیلتر </button>
@@ -98,13 +98,13 @@ export default function ComparePage() {
                     </div>
                 </section>
                 {selectedGroup?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
-                    <span className="fs80"> گروه های کالایی:</span> {selectedGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleSubGroupOnGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-2 btnStyle ">{' '}{item}{' '}</span>) })}
+                    <span className="fs80"> گروه کالا:</span> {selectedGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleSubGroupOnGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-2 btnStyle ">{' '}{item}{' '}</span>) })}
                 </div>}
                 {selectedSubGroup?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
-                    <span className="fs80"> زیرگروه های کالایی:</span> {selectedSubGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleCategoryOnSubGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-4 btnStyle">{item}</span>) })}
+                    <span className="fs80"> زیرگروه کالا:</span> {selectedSubGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleCategoryOnSubGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-4 btnStyle">{item}</span>) })}
                 </div>}
                 {selectedCategory?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
-                    <span className="fs80"> دسته بندی محصولات:</span> {selectedCategory?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleProductsOnCategory(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-1 btnStyle">{item}</span>) })}
+                    <span className="fs80"> دسته کالا:</span> {selectedCategory?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleProductsOnCategory(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-1 btnStyle">{item}</span>) })}
                 </div>}
 
                 {!compareBtn ?
@@ -141,7 +141,7 @@ export default function ComparePage() {
                         </table>
                     </section> :
                     <>
-                        <CompareLineChartBranch compareData={lineChartData} />
+                        <CompareLineChartBranch  compareData={lineChartData} />
                         <CompareBarChartBranch compareData={barChartData} />
                     </>}
             </section >

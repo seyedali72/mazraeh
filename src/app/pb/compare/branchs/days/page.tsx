@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { convertToPersianDate } from "@/app/utils/helpers";
 import { nanoid } from "nanoid";
@@ -10,6 +10,7 @@ import CategoryAndProductDayCmp from "@/app/components/dayChart/CategoryAndProdu
 import SubGroupAndCategoryDayCmp from "@/app/components/dayChart/SubGroupAndCategory";
 import TotalAndGroupDayCmp from "@/app/components/dayChart/TotalAndGroup";
 import GroupAndSubGroupDayCmp from "@/app/components/dayChart/GroupAndSubGroup";
+import { useReactToPrint } from "react-to-print";
 
 export default function ComparePage() {
     const [allGroup, setAllGroup] = useState<any>([]);
@@ -39,6 +40,8 @@ export default function ComparePage() {
             {items.map((item) => (<span key={nanoid()} onClick={() => onClick(item)} className={`p-1 fs75 cursorPointer rounded ${bgColor} btnStyle`} > {item} </span>))}
         </div>);
     };
+    const contentRef = useRef<HTMLDivElement>(null);
+    const reactToPrintFn = useReactToPrint({ contentRef });
     return (
         <>
             <nav aria-label="breadcrumb">
@@ -47,9 +50,10 @@ export default function ComparePage() {
                     <li className="breadcrumb-item active" aria-current="page"> مقایسه نمودار فروش چند شعبات در چند روز </li>
                 </ol>
             </nav>
-            <section className="main-body-container rounded">
+            <section ref={contentRef} className="main-body-container rounded">
                 <section className="d-flex justify-content-between align-items-center mt-1mb-3 border-bottom pb-3" >
                     <div className="d-flex gap-3 col-12 ">
+                        <button className="btn btn-sm bg-custom-2 text-nowrap" onClick={() => reactToPrintFn()}>پرینت</button>
                         <DDDatePicker selectDate={(e: any) => setSelectedDates([...selectedDates, e])} type='انتخاب تاریخ' date='' />
 
                         <select className="form-control form-control-sm" onChange={(e: any) => { setSelectedBranch(e.target.value) }}>
@@ -67,11 +71,11 @@ export default function ComparePage() {
                     مقایسه بین شعبات: {selectedBranchs?.map((branch: string) => (<span key={nanoid()}>{branch} , </span>))}{'  '}
                     در تاریخ های: {selectedDates?.map((day: string) => (<span key={nanoid()}>{convertToPersianDate(day, 'YMD')} - </span>))}
                 </div>
-                {renderItems(allGroup, "گروه های کالایی", (item) => { setViewCategoryCMP(false); setViewSubGroupCMP(false); setViewTotalCMP(false); setAllProduct([]); setAllCategory([]); setAllSubGroup([]); setSelectedGroup(item); setViewChart(!viewChart); setViewGroupCMP(true); }, "bg-custom-2")}
+                {renderItems(allGroup, "گروه کالا", (item) => { setViewCategoryCMP(false); setViewSubGroupCMP(false); setViewTotalCMP(false); setAllProduct([]); setAllCategory([]); setAllSubGroup([]); setSelectedGroup(item); setViewChart(!viewChart); setViewGroupCMP(true); }, "bg-custom-2")}
 
-                {renderItems(allSubGroup, "زیرگروه های کالایی", (item) => { setViewCategoryCMP(false); setViewGroupCMP(false); setViewTotalCMP(false); setAllProduct([]); setAllCategory([]); setSelectedSubGroup(item); setViewChart(!viewChart); setViewSubGroupCMP(true); }, "bg-custom-4")}
+                {renderItems(allSubGroup, "زیرگروه کالا", (item) => { setViewCategoryCMP(false); setViewGroupCMP(false); setViewTotalCMP(false); setAllProduct([]); setAllCategory([]); setSelectedSubGroup(item); setViewChart(!viewChart); setViewSubGroupCMP(true); }, "bg-custom-4")}
 
-                {renderItems(allCategory, "دسته بندی محصولات", (item) => { setViewGroupCMP(false); setViewSubGroupCMP(false); setViewTotalCMP(false); setSelectedCategory(item); setViewChart(!viewChart); setViewCategoryCMP(true); }, "bg-custom-1")}
+                {renderItems(allCategory, "دسته کالا", (item) => { setViewGroupCMP(false); setViewSubGroupCMP(false); setViewTotalCMP(false); setSelectedCategory(item); setViewChart(!viewChart); setViewCategoryCMP(true); }, "bg-custom-1")}
 
                 {renderItems(allProduct, "عنوان محصولات", () => { }, "bg-custom-3")}
 

@@ -10,41 +10,44 @@ export const getChartBranchGroup = async (body: any) => {
 	{ borderColor: '#d31184', backgroundColor: '#d31184' }, { borderColor: '#2d7c4f', backgroundColor: '#0aa0e' },]
 	await connect()
 	const { branch, startDate, endDate, startYear, startMonth, endYear, endMonth, group, colors } = body
- 
+	let loop = (endDate - startDate) / 86400000
+	let spliteDateArray: any = []
+	for (let i = 0; i <= loop; i++) {
+		let value = startDate + (86400000 * i)
+		spliteDateArray.push(value)
+	}
 	try {
 		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
 		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
 		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
 		const findGroup = combinedProducts.filter((el: any) => el.group == group)
 		const allSubGroups = findGroup.map((el: any) => el.subGroup).filter(onlyUnique);
-		// محصولاتی که توی این گروه کالایی قراردارند رو میکشیم بیرون
+		// محصولاتی که توی این گروه کالا قراردارند رو میکشیم بیرون
 		const filteredSales = findGroup.flatMap((item: any) =>
 			item.totalSell.filter((el: any) => el.branch === branch && el.date >= startDate && el.date <= endDate)
 		);
-		const allDates = filteredSales.map((el: any) => el.date).filter(onlyUnique);
-		const sortDate = allDates.sort((a: any, b: any) => a - b)
-		const salesByDate = sortDate.map((date) => {
+		const salesByDate = spliteDateArray.map((date: any) => {
 			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => el.sell);
- 			const totalSales = sumArray(salesForCurrentDate);
+			const totalSales = sumArray(salesForCurrentDate);
 
 			return totalSales
 		});
-		const dayName = sortDate.map((date) => {
+		const dayName = spliteDateArray.map((date: any) => {
 			const dayCurrentDate: any = filteredSales.map((el: any) => el.date === date && el.day).filter(Boolean).filter(onlyUnique)
 			let name = `${convertToPersianDate(date, 'YMD')}-${dayCurrentDate[0]}`
-			return name
+			return name.length > 0 ? name : [`${convertToPersianDate(date, 'YMD')}`]
 		});
 		const lineChart = {
 			labels: dayName, datasets: [{
-				 label:branch,
+				label: branch,
 				data: salesByDate, backgroundColor: colors[0].backgroundColor,
-				fill:false,   tension: 0.1,
+				fill: false, tension: 0.1,
 				borderColor: colors[0].borderColor,
 				pointBackgroundColor: colors[0].backgroundColor,
 				pointBorderColor: '#fff',
 				pointHoverBackgroundColor: '#fff',
 				pointHoverBorderColor: colors[0].borderColor,
-			}], title: `نمودار فروش گروه ${group} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول فروش گروه ${group} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} ` 
+			}], title: `نمودار فروش گروه ${group} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `, header: `جدول فروش گروه ${group} در ${branch} از تاریخ ${convertToPersianDate(startDate, 'YMD')} الی ${convertToPersianDate(endDate, 'YMD')} `
 		};
 		const barChart = await getGiveSubGroupData(body, combinedProducts)
 		return JSON.parse(JSON.stringify({ lineChart, barChart, allSubGroups }));
@@ -58,11 +61,11 @@ export const getChartBranchGroup = async (body: any) => {
 export const getGiveSubGroupData = async (body: any, combinedProducts: any) => {
 	await connect()
 	const { branch, startDate, endDate, group, colors } = body
-	 
+
 	try {
 		const allGroups = combinedProducts.filter((el: any) => el.group == group);
 		let filtered = allGroups.map((el: any) => el.subGroup).filter(onlyUnique)
-		// محصولاتی که توی این گروه کالایی قراردارند رو میکشیم بیرون
+		// محصولاتی که توی این گروه کالا قراردارند رو میکشیم بیرون
 		const salesByGroup = filtered.map((subGroup: string) => {
 			const salesForCurrentGroup = combinedProducts.filter((el: any) => el.subGroup === subGroup);
 
@@ -79,7 +82,7 @@ export const getGiveSubGroupData = async (body: any, combinedProducts: any) => {
 			labels: filtered, datasets: [{
 				label: branch,
 				data: salesByGroup, backgroundColor: colors[0].backgroundColor,
-				fill:false,   tension: 0.1,
+				fill: false, tension: 0.1,
 				borderColor: colors[0].borderColor,
 				pointBackgroundColor: colors[0].backgroundColor,
 				pointBorderColor: '#fff',

@@ -2,40 +2,51 @@
 
 import Products from '@/models/Products'
 import connect from '../lib/db'
-import { convertNumbersToEnglish, convertToPersianDate, onlyUnique, sumArray, sumMultipleArrays } from '../utils/helpers'
+import { onlyUnique, sumArray, sumMultipleArrays } from '../utils/helpers'
 
-export const getChartBranchsSubGroupForDay = async (body: any) => {
+export const getChartBranchsSubGroupForTotal = async (body: any) => {
+	await connect()
 	body.colors = [{ borderColor: '#2d7c4f', backgroundColor: '#2d7c4f' }, { borderColor: '#078191', backgroundColor: '#078191' },
 	{ borderColor: '#cc1220', backgroundColor: '#cc1220' }, { borderColor: '#e05212', backgroundColor: '#e05212' },
 	{ borderColor: '#d31184', backgroundColor: '#d31184' }, { borderColor: '#2d7c4f', backgroundColor: '#2d7c4f' },]
-	const { branchs, type, days,colors } = body
+	const { branchs, typeSearch, subGroup, colors, valueArray } = body
+	let allGroup: any = []
+	try {
+		let object = typeSearch == 'ماه' ? { month: valueArray[0] } : typeSearch == 'سال' ? { year: valueArray[0] } : { week: valueArray[0] }
+		const find = await Products.find(object).select('subGroup category')
+		const uniqueGroup = find.map((el: any) => (el.subGroup == subGroup) && el.category).filter(Boolean).filter(onlyUnique);
+		allGroup.push(uniqueGroup)
+
+	} catch (error) {
+		console.log(error)
+		return { error: 'خطا در دریافت کاربر' }
+	}
+	let allcategories = allGroup.flat()
+	body.allcategories = allcategories
 	// ارسال اطلاعات و دریافت اطلاعات مقایسه ای و تفکیکی
 	let dataArray: any[] = [];
 	for (const branch of branchs) {
 		let daysArray: any[] = [];
-		for (const day of days) {
+		for (const valueX of valueArray) {
 			body.branch = branch;
-			body.day = day;
+			body.valueX = valueX;
 			const res = await getChartBranchSubGroup(body);
 			if (res) { res.branch = branch; daysArray.push(res); }
 		}
 		dataArray.push(daysArray)
 	}
 	if (dataArray.length === 0) { throw new Error("No data received from branches."); }
-	// ترکیب ارایه های گروه های کالایی و یونیک سازی یک ارایه واحد
-	let uniqueCategory: any = []
-	for (const data of dataArray.flat()) { for (let i = 0; i < data.allcategories.length; i++) { uniqueCategory.push(data.allcategories[i]) } }
-	let allCategory: any = (uniqueCategory).filter(onlyUnique)
+
 	// درست کردن لیبل های مقایسه ای
-	let labels = dataArray.map((name: any, idx: number) => name[idx]?.newName[0]).filter(onlyUnique).filter((unique: any) => unique !== undefined)
+	let labels = valueArray
 	// حلقه زدن برروی اطلاعات دریافتی جهت اماده سازی اطلاعات در نمایش نمودار رادار
 	const datasets = dataArray.map((branchData, i) => {
 		const data = branchData.map((dayData: any) => dayData.radarChart.data[0]);
 		return {
-			label: branchData[0]?.branch,
+			label: branchs[i],
 			data,
 			backgroundColor: colors[i].backgroundColor,
-			fill:false,   tension: 0.1,
+			fill: false, tension: 0.1,
 			borderColor: colors[i].borderColor,
 			pointBackgroundColor: colors[i].backgroundColor,
 			pointBorderColor: '#fff',
@@ -46,14 +57,14 @@ export const getChartBranchsSubGroupForDay = async (body: any) => {
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
 	let subGroupChart = { labels, datasets }
 	// حلقه زدن برروی اطلاعات دریافتی جهت اماده سازی اطلاعات در نمایش نمودار رادار
-	const datasetBar = dataArray.map((branchData, i) => {
+	const datasetBar = dataArray.map((branchData, i: number) => {
 		const findData = branchData.map((dayData: any) => dayData.barChart.data);
 		let data = sumMultipleArrays(findData)
 		return {
-			label: branchData[0]?.branch,
+			label: branchData[i].barChart.label,
 			data,
 			backgroundColor: colors[i].backgroundColor,
-			fill:false,   tension: 0.1,
+			fill: false, tension: 0.1,
 			borderColor: colors[i].borderColor,
 			pointBackgroundColor: colors[i].backgroundColor,
 			pointBorderColor: '#fff',
@@ -62,43 +73,29 @@ export const getChartBranchsSubGroupForDay = async (body: any) => {
 		};
 	});
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let categoryChart = { labels: allCategory, datasets: datasetBar }
+	let categoryChart = { labels: allcategories, datasets: datasetBar }
 
-	return ({ subGroupChart, allCategory, categoryChart })
+	return ({ subGroupChart, allcategories, categoryChart })
 }
 export const getChartBranchSubGroup = async (body: any) => {
 
 	await connect()
-	const { branch, day, subGroup, type } = body
-
-	let startYear = convertToPersianDate(day, 'Y')
-	let startMonth = convertToPersianDate(day, 'M')
+	const { branch, subGroup, type, allcategories, typeSearch, valueX } = body
+	let object = typeSearch == 'ماه' ? { month: valueX } : typeSearch == 'سال' ? { year: valueX } : { week: valueX }
 	try {
-		const find = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
-
-		const allProSubGroup = find.filter((el: any) => el.subGroup === subGroup);
-		const allcategories = allProSubGroup.map((el: any) => el.category).filter(onlyUnique);
-
-		// محصولاتی که توی این گروه کالا قراردارند رو میکشیم بیرون
-		const filteredSales = allProSubGroup.flatMap((item: any) =>
-			item.totalSell.filter((el: any) => el.branch === branch && el.date == day)
+		const find = await Products.find(object)
+		const filtered = find.filter((product: any) => product.subGroup == subGroup)
+		const filteredSales = filtered.flatMap((item: any) =>
+			item.totalSell.filter((el: any) => el.branch === branch)
 		);
 
-		const allDates = filteredSales.map((el: any) => el.date).filter(onlyUnique);
-		const sortDate = allDates.sort((a: any, b: any) => a - b)
+		const salesForCurrentDate: any = filteredSales.map((item: any) => type == 'sell' ? item.sell : item.return);
+		const totalSales = sumArray(salesForCurrentDate);
 
-		const salesByDate = sortDate.map((date) => {
-			const salesForCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((item: any) => type == 'sell' ? item.sell : item.return);
-			const totalSales = sumArray(salesForCurrentDate);
-			return totalSales
-		});
-		const dayByDate = sortDate.map((date) => {
-			const dayCurrentDate: any = filteredSales.filter((el: any) => el.date === date).map((el: any) => `${convertToPersianDate(date, 'YMD')}-${el.day}`).filter(onlyUnique);
-			return dayCurrentDate
-		});
-		const radarChart = { data: salesByDate };
-		const barChart = await getGiveCategoryData(body, find, day)
-		return JSON.parse(JSON.stringify({ radarChart, barChart, allcategories, newName: dayByDate.flat() }));
+
+		const radarChart = { data: [totalSales] };
+		const barChart = await getGiveCategoryData(body, filtered)
+		return JSON.parse(JSON.stringify({ radarChart, barChart, allcategories }));
 
 	} catch (error) {
 		console.log(error)
@@ -106,19 +103,18 @@ export const getChartBranchSubGroup = async (body: any) => {
 	}
 }
 
-export const getGiveCategoryData = async (body: any, find: any, day: any) => {
+export const getGiveCategoryData = async (body: any, find: any) => {
 	await connect()
-	const { branch, subGroup, type } = body
+	const { branch, type, allcategories } = body
 
 	try {
-		const allSubGroups = find.filter((el: any) => el.subGroup == subGroup);
-		let uniCategory = allSubGroups.map((el: any) => el.category).filter(onlyUnique)
+
 		// محصولاتی که توی این گروه کالا قراردارند رو میکشیم بیرون
-		const salesByGroup = uniCategory.map((category: string) => {
+		const salesByGroup = allcategories.map((category: string) => {
 			const salesForCurrentGroup = find.filter((el: any) => el.category === category);
 
 			const totalSalesByGroup = salesForCurrentGroup.reduce((accumulator: any, current: any) => {
-				const filteredSales = current.totalSell.filter((sale: any) => sale.branch === branch && sale.date == day);
+				const filteredSales = current.totalSell.filter((sale: any) => sale.branch === branch);
 				return accumulator + sumArray(filteredSales.map((item: any) => type == 'sell' ? item.sell : item.return));
 			}, 0);
 
@@ -126,7 +122,7 @@ export const getGiveCategoryData = async (body: any, find: any, day: any) => {
 		});
 
 		// اماده سازی ابجکت خروجی
-		const result = { data: salesByGroup };
+		const result = { label: branch, data: salesByGroup };
 		return JSON.parse(JSON.stringify(result));
 
 	} catch (error) {

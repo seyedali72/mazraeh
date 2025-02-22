@@ -76,7 +76,7 @@ export default function DaliyListPage() {
                             <tr>
                                 <th className="text-center">#</th>
                                 <th>نام فروشنده</th>
-                                <th>نام فروشگاه</th>
+                                <th>روز هفته</th>
                                 <th className="cursorPointer" onClick={() => { setSort(dateTop ? 'dateUptoBottom' : 'dateBottomToUp'), setDateTop(!dateTop) }}>
                                 تاریخ {dateTop ? <i className="fa fa-angle-down" /> : <i className="fa fa-angle-up" />} </th>
                                 <th className="cursorPointer" onClick={() => { setSort(sellTop ? 'sellUptoBottom' : 'sellBottomToUp'), setSellTop(!sellTop) }}>
@@ -95,7 +95,7 @@ export default function DaliyListPage() {
                                 <tr key={el._id} className='fs80'>
                                     <td className='text-center'>{idx + 1}</td>
                                     <td>{el.name}</td>
-                                    <td>{el.branch}</td>
+                                    <td>{el.day}</td>
                                         <td>{convertToPersianDate(el?.date,'YMD')}</td>
                                     <td>{spliteNumber(el.totalSell)} ریال</td>
                                     <td className="text-center">

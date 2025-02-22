@@ -72,7 +72,7 @@ export default function ProductListPage() {
                                 <th>هفته</th>
                                 {/* <th>دسته بندی</th>
                                 <th>زیر گروه</th>
-                                <th>گروه کالایی</th> */}
+                                <th>گروه کالا</th> */}
                                 <th>تعداد فاکتور</th>
                                 {/* <th className=" text-center"> <i className="fa fa-cogs px-1"></i>تنظیمات </th> */}
                             </tr>

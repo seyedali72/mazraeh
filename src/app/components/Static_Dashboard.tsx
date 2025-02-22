@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 import { getAdminDashboard } from "../action/dashboard.action"
 import { spliteNumber } from "../utils/helpers"
 import Spinner from "./Spinner"
+import DashboardChart from "./report/DashboardChart"
 
 export default function StatisticsDashboard() {
   const [data, setData] = useState<any>()
@@ -22,15 +23,15 @@ export default function StatisticsDashboard() {
             <section className="card">
               <section className="card-body d-flex justify-content-between">
                 <section className="info-body-card w-100 ">
-                  <h5 className="card-title my-3 text-center">تعداد کل گزارشات روزانه</h5>
-                  <p className="card-description text-center mb-0">{data ? spliteNumber(data.ReportLength) : 0} عدد</p>
+                  <h5 className="card-title my-3 text-center">تعداد روزهای اطلاعات</h5>
+                  <p className="card-description text-center mb-0">{data ? spliteNumber(data.ReportLength) : 0} روز</p>
                 </section>
                 <section className="icon-body-card ">
                   <i className="fa fa-chart-bar"></i>
                 </section>
               </section>
               <section className="card-footer text-white info-footer-card bg-custom-1">
-                هفت روز گذشته: {data ? spliteNumber(data.ReportLastLength) : 0} عدد
+                هفت روز گذشته: {data ? spliteNumber(data.ReportLastLength) : 0} روز
               </section>
             </section>
           </div>
@@ -92,7 +93,23 @@ export default function StatisticsDashboard() {
             </section>
           </div>
         </section>
+
+        <section className=" px-2 col-12 col-lg-6">
+       <DashboardChart compareData={data?.totalSellChart} />
+        </section>
+        <section className=" px-2 col-12 col-lg-6">
+       <DashboardChart compareData={data?.avrageTotalSellChart} />
+        </section>
+        <section className=" px-2 col-12 col-lg-6">
+       <DashboardChart compareData={data?.totalReturnChart} />
+        </section>
+        <section className=" px-2 col-12 col-lg-6">
+       <DashboardChart compareData={data?.totalInvoiceChart} />
+        </section>
+        <section className=" px-2 col-12 col-lg-6">
+       <DashboardChart compareData={data?.bascketBranchChart} />
+        </section>
       </section>
     )
-  } else { <Spinner /> }
+  } else { <section className="row mx-0"><Spinner /></section> }
 } 
