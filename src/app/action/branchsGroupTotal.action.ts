@@ -61,7 +61,7 @@ export const getChartBranchsGroupForTotal = async (body: any) => {
 		const findData = branchData.map((dayData: any) => dayData.barChart.data);
 		let data = sumMultipleArrays(findData)
 		return {
-			label: branchData[i].barChart.label,
+			label: branchs[i],
 			data,
 			backgroundColor: colors[i].backgroundColor,
 			fill: false, tension: 0.1,

@@ -52,7 +52,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
           />
           <NextTopLoader color='#ffb602' height={5} />
 
-          <HeaderPanel />
+          {/* <HeaderPanel /> */}
           <section className="body-container">
            <SideBar size='pc' />
             <section id="main-body" className="main-body">

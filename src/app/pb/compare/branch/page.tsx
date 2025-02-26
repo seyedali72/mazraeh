@@ -11,13 +11,13 @@ import { getChartProduct } from "@/app/action/branch.action";
 import { getChartBranchGroup } from "@/app/action/branchGroup.action";
 import { getChartBranchSubGroup } from "@/app/action/branchSubGroup.action";
 import { getChartBranchCategory } from "@/app/action/branchCategory.action";
-import DDDatePicker from "@/app/components/DropDownDatePicker";
 import { useReactToPrint } from "react-to-print";
+import HeaderPage from "@/app/components/Header";
 
 export default function ComparePage() {
-    const [selectedGroup, setSelectedGroup] = useState<any>([]);
-    const [selectedSubGroup, setSelectedSubGroup] = useState<any>([]);
-    const [selectedCategory, setSelectedCategory] = useState<any>([]);
+    const [allGroup, setAllGroup] = useState<any>([]);
+    const [allSubGroup, setAllSubGroup] = useState<any>([]);
+    const [allCategory, setAllCategory] = useState<any>([]);
     const [compareBtn, setCompareBtn] = useState(false)
     const [selectedBranch, setSelectedBranch] = useState<any>(null);
     const [selectedDate, setSelectedDate] = useState<any>(null);
@@ -37,12 +37,13 @@ export default function ComparePage() {
     let endMonth = convertToPersianDate(selectedEndDate, 'M')
     let requestData: any = { branch: selectedBranch, startDate: selectedDate, endDate: selectedEndDate, startYear, startMonth, endYear, endMonth }
 
-    const handleGroupOnList = async () => {
+    const handleGroupOnList = async (branch: any) => {
+        requestData.branch = branch
         setCompareBtn(false)
         let res = await getChartProduct(requestData)
         setLineChartData(res?.lineChart)
         setBarChartData(res?.barChart)
-        setSelectedGroup(res?.allGroups)
+        setAllGroup(res?.allGroups)
         setCompareBtn(true)
     }
     const handleSubGroupOnGroup = async (group: any) => {
@@ -51,7 +52,7 @@ export default function ComparePage() {
         let res = await getChartBranchGroup(requestData)
         setLineChartData(res?.lineChart)
         setBarChartData(res?.barChart)
-        setSelectedSubGroup(res?.allSubGroups)
+        setAllSubGroup(res?.allSubGroups)
         setCompareBtn(true)
     }
     const handleCategoryOnSubGroup = async (subGroup: any) => {
@@ -60,7 +61,7 @@ export default function ComparePage() {
         let res = await getChartBranchSubGroup(requestData)
         setLineChartData(res?.lineChart)
         setBarChartData(res?.barChart)
-        setSelectedCategory(res?.allcategoies)
+        setAllCategory(res?.allcategoies)
         setCompareBtn(true)
     }
     const handleProductsOnCategory = async (category: any) => {
@@ -72,39 +73,36 @@ export default function ComparePage() {
         setCompareBtn(true)
     }
 
-     const contentRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
     const reactToPrintFn = useReactToPrint({ contentRef });
     return (
         <>
+            <HeaderPage type='singleBranch'
+                print={() => reactToPrintFn()} branchs={(e: any) => console.log(e)}
+                startDate={(e: any) => setSelectedDate(e)} endDate={(e: any) => setSelectedEndDate(e)}
+                viewBranchAnaltics={(e: any) => handleGroupOnList(e)}
+                dates={(e: any) => console.log(e)} viewTotalCMP={() => console.log(true)}
+                viewChart={() => setCompareBtn(true)} branch={(e: any) => setSelectedBranch(e)}
+                resetCompare={() => { setAllCategory([]), setAllGroup([]), setAllSubGroup([]), setCompareBtn(false) }}
+                selectSellers={(e: any) => console.log(e)}  
+                values={(e: any) => console.log(e)} searchType={(e: any) => console.log(e)}
+            />
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item "><Link href={`/pb/dashboard`}>داشبورد</Link></li>
                     <li className="breadcrumb-item active" aria-current="page">  نمودار فروش شعبه </li>
                 </ol>
             </nav>
-            <section  ref={contentRef} className="main-body-container rounded">
-                <section className="d-flex justify-content-between align-items-center mt-1mb-3 border-bottom pb-3" >
-                    <div className="d-flex gap-3 col-12 ">
-                    <button className="btn btn-sm bg-custom-2 text-nowrap" onClick={() => reactToPrintFn()}>پرینت</button>
-                        <select className="form-control form-control-sm" onChange={(e: any) => { setSelectedBranch(e.target.value), setSelectedDate(null)  }}>
-                            {selectedBranch ? <option hidden value=''>{selectedBranch}</option> : <option hidden value=''>فروشگاه رو انتخاب کنید</option>}
-                            {branches?.map((branch: any) => { return (<option key={nanoid()} value={branch}>{branch}</option>) })}
-                        </select>
-                        <DDDatePicker selectDate={(e: any) => setSelectedDate(e)} type='از تاریخ ....' date={selectedDate} />
-                        <DDDatePicker selectDate={(e: any) => setSelectedEndDate(e)} type='تا تاریخ ....' date={selectedEndDate} />
-                        <button type="button" onClick={() => { setSelectedBranch(null), setSelectedDate(null), setSelectedEndDate(null) }} className="btn btn-sm bg-custom-1 text-nowrap">ریست فیلتر </button>
-                        <button type="button" onClick={() => { handleGroupOnList() }} className="btn btn-sm bg-custom-4 text-nowrap">نمایش آمار</button>
-                        <button type="button" onClick={() => { setCompareBtn(false), setSelectedCategory([]), setSelectedGroup([]), setSelectedSubGroup([]) }} className="btn btn-sm bg-custom-3 text-nowrap">ریست آمار </button>
-                    </div>
-                </section>
-                {selectedGroup?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
-                    <span className="fs80"> گروه کالا:</span> {selectedGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleSubGroupOnGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-2 btnStyle ">{' '}{item}{' '}</span>) })}
+            <section ref={contentRef} className="main-body-container rounded">
+
+                {allGroup?.length !== 0 && <div className="border-bottom pb-2 d-flex flex-wrap align-item-center gap-1">
+                    <span className="fs80"> گروه کالا:</span> {allGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleSubGroupOnGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-2 btnStyle ">{' '}{item}{' '}</span>) })}
                 </div>}
-                {selectedSubGroup?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
-                    <span className="fs80"> زیرگروه کالا:</span> {selectedSubGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleCategoryOnSubGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-4 btnStyle">{item}</span>) })}
+                {allSubGroup?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
+                    <span className="fs80"> زیرگروه کالا:</span> {allSubGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleCategoryOnSubGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-4 btnStyle">{item}</span>) })}
                 </div>}
-                {selectedCategory?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
-                    <span className="fs80"> دسته کالا:</span> {selectedCategory?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleProductsOnCategory(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-1 btnStyle">{item}</span>) })}
+                {allCategory?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
+                    <span className="fs80"> دسته کالا:</span> {allCategory?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleProductsOnCategory(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-1 btnStyle">{item}</span>) })}
                 </div>}
 
                 {!compareBtn ?
@@ -141,7 +139,7 @@ export default function ComparePage() {
                         </table>
                     </section> :
                     <>
-                        <CompareLineChartBranch  compareData={lineChartData} />
+                        <CompareLineChartBranch compareData={lineChartData} />
                         <CompareBarChartBranch compareData={barChartData} />
                     </>}
             </section >

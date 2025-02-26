@@ -28,10 +28,17 @@ export default function CompareLineChartBranch({ compareData }: any) {
     return (<section className="main-body-container rounded">
       <div className="table-responsive">
         <table className="table table-striped border fs90">
-          <thead><tr ><th colSpan={compareData?.labels?.length + 2} className="text-center">{compareData?.header}</th></tr></thead>
+          <thead><tr ><th colSpan={compareData?.labels?.length + 2} className="text-end">{compareData?.header}</th></tr></thead>
           <tbody>
             <tr><td>عنوان</td><td>کل فروش</td><td>میانگین فروش</td>{compareData?.labels?.map((item: any) => <td key={nanoid()}>{item}</td>)}</tr>
-            {compareData?.datasets?.map((item: any) => <tr key={nanoid()}><td>فروش کل (ريال)</td><td>{spliteNumber(sumArray(item?.data) )}</td><td>{spliteNumber(sumArray(item?.data) / item?.data?.length)}</td>{item?.data?.map((el: any) => <td key={nanoid()}>{spliteNumber(el)}</td>)}</tr>)}
+            {compareData?.datasets?.map((item: any) => {
+                        let averageSell = item?.data?.filter((item: any) => item > 0)
+                        return (<tr key={nanoid()}>
+                          <td>فروش {item?.label} (ريال)</td>
+                          <td>{spliteNumber(sumArray(item?.data))}</td>
+                          <td>{spliteNumber(sumArray(item?.data) / averageSell?.length)}</td>{item?.data?.map((el: any) => <td key={nanoid()}>{spliteNumber(el)}</td>)}
+                        </tr>)
+                      })}
           </tbody>
         </table>
       </div>

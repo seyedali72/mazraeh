@@ -155,7 +155,7 @@ export const getChartSellerInDays = async (body: any) => {
 		})
 	}
 
-	if (dataArray.length === 0) { throw new Error("No data received from selleres."); }
+	if (dataArray?.length === 0) { throw new Error("No data received from selleres."); }
 	// درست کردن لیبل های مقایسه ای
 	let labels = allArray.flat().map((item: any, idx: number) => item.day).filter(onlyUnique).filter((unique: any) => unique !== undefined)
 	let data = { labels, datasets: dataArray }
