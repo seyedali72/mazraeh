@@ -61,9 +61,9 @@ export const getChartProduct = async (body: any) => {
 		spliteDateArray.push(value)
 	}
 	try {
-		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
-		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
-		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
+		const allProducts = await Products.find({isDeleted:false})
+		let filterByYears = allProducts?.filter((pro:any)=> pro?.year >= convertNumbersToEnglish(startYear) || pro?.year >= convertNumbersToEnglish(endYear) )
+		let combinedProducts = filterByYears?.filter((pro:any)=> pro?.month >= convertNumbersToEnglish(startMonth) || pro?.month >= convertNumbersToEnglish(endMonth) )
 		const filteredSales = combinedProducts.flatMap((item: any) =>
 			item.totalSell.filter((el: any) => el.branch === branch && el.date >= startDate && el.date <= endDate)
 		);

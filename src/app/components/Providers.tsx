@@ -1,7 +1,6 @@
 'use client'
 
-import SocketProvider from "../context/socketProvider"
-import UserProvider from "../context/UserProvider"
+ import UserProvider from "../context/UserProvider"
 
 
 

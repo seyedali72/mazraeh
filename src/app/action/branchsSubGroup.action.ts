@@ -62,10 +62,10 @@ export const getChartBranchSubGroup = async (body: any) => {
 		spliteDateArray.push(value)
 	}
 	try {
-		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
-		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
-		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
-
+		const allProducts = await Products.find({isDeleted:false})
+		let filterByYears = allProducts?.filter((pro:any)=> pro?.year >= convertNumbersToEnglish(startYear) || pro?.year >= convertNumbersToEnglish(endYear) )
+		let combinedProducts = filterByYears?.filter((pro:any)=> pro?.month >= convertNumbersToEnglish(startMonth) || pro?.month >= convertNumbersToEnglish(endMonth) )
+	
 		// محصولاتی که توی این گروه کالا قراردارند رو میکشیم بیرون
 		const allProSubGroup = combinedProducts.filter((el: any) => el.subGroup === subGroup);
 		const allcategories = allProSubGroup.map((el: any) => el.category).filter(onlyUnique);

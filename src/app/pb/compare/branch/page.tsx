@@ -29,7 +29,7 @@ export default function ComparePage() {
         let table = await getDBSs({ isDeleted: false })
         setData(table)
     }, [])
-    const branches = ['فروشگاه کهنز', 'فروشگاه معلم', 'فروشگاه کلهر', 'فروشگاه رباط کریم']
+    const branches = ['فروشگاه امیریه', 'فروشگاه معلم', 'فروشگاه کلهر', 'فروشگاه رباط کریم']
     useEffect(() => { fetchData() }, [fetchData])
     let startYear = convertToPersianDate(selectedDate, 'Y')
     let startMonth = convertToPersianDate(selectedDate, 'M')
@@ -41,6 +41,9 @@ export default function ComparePage() {
         requestData.branch = branch
         setCompareBtn(false)
         let res = await getChartProduct(requestData)
+       
+        console.log(convertToPersianDate(1741636800000 ,'YYMDHMSS'))
+        console.log(convertToPersianDate(requestData?.startDate ,'YYMDHMSS'))
         setLineChartData(res?.lineChart)
         setBarChartData(res?.barChart)
         setAllGroup(res?.allGroups)
@@ -84,7 +87,7 @@ export default function ComparePage() {
                 dates={(e: any) => console.log(e)} viewTotalCMP={() => console.log(true)}
                 viewChart={() => setCompareBtn(true)} branch={(e: any) => setSelectedBranch(e)}
                 resetCompare={() => { setAllCategory([]), setAllGroup([]), setAllSubGroup([]), setCompareBtn(false) }}
-                selectSellers={(e: any) => console.log(e)}  
+                selectSellers={(e: any) => console.log(e)}    productsList={(e: any) => console.log(e)}  
                 values={(e: any) => console.log(e)} searchType={(e: any) => console.log(e)}
             />
             <nav aria-label="breadcrumb">

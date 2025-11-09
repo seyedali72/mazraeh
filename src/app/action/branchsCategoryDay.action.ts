@@ -43,8 +43,13 @@ export const getChartBranchCategoriesForDay = async (body: any) => {
 			pointHoverBorderColor: colors[i].borderColor,
 		};
 	});
+	const converted = (days: any) => {
+		let result: any = []
+		for (const day of days) { result.push(convertToPersianDate(day, 'YMD')) }
+		return result
+	}
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let categoryChart = { labels, datasets }
+	let categoryChart = { labels, datasets , title: `نمودار فروش ${branchs} در تاریخ های ${converted(days)}`, header: `جدول فروش ${branchs} در تاریخ های ${converted(days)}`}
 	// حلقه زدن برروی اطلاعات دریافتی جهت اماده سازی اطلاعات در نمایش نمودار رادار
 	const datasetBar = dataArray.map((branchData, i) => {
 		const findData = branchData.map((dayData: any) => dayData.barChart.data);
@@ -62,7 +67,7 @@ export const getChartBranchCategoriesForDay = async (body: any) => {
 		};
 	});
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let productChart = { labels: allproducts, datasets: datasetBar }
+	let productChart = { labels: allproducts, datasets: datasetBar , title: `نمودار فروش ${branchs} در تاریخ های ${converted(days)}`, header: `جدول فروش ${branchs} در تاریخ های ${converted(days)}`}
 
 	return ({ productChart, categoryChart, allproducts })
 }

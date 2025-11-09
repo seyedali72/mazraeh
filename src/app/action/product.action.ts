@@ -23,6 +23,18 @@ export const getProducts = async (search?: any) => {
 		return { error: 'خطا در دریافت فروشندهان' }
 	}
 }
+export const getProductsName = async (search?: any) => {
+	await connect()
+
+	try {
+		const allProducts = await Products.find(buildQuery(search)).select('name').lean()
+		let res = allProducts.map((product: any) => product.name).filter(onlyUnique)
+		return JSON.parse(JSON.stringify(res))
+	} catch (error) {
+		console.log(error)
+		return { error: 'خطا در دریافت فروشندهان' }
+	}
+}
 
 export const getSingleProduct = async (id: string) => {
 	await connect()
@@ -58,7 +70,7 @@ export const createProduct = async (body: any, week: any) => {
 					year: englishYear,
 					month: englishMonth,
 					week: englishWeek,
-					totalSell: [{   branch: data.branch, sell: data.sell, return: data.return, date: data.date, day: data.day }],
+					totalSell: [{ branch: data.branch, sell: data.sell, return: data.return, date: data.date, day: data.day }],
 				};
 
 				return {

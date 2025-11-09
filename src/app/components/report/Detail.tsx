@@ -19,13 +19,12 @@ export default function DetailReport() {
     const [loading, setLoading] = useState<boolean>(false);
 
     const uploadDetails = async (data: any) => {
-        console.log(convertToPersianDate(Date.now(), 'YYMDHMSS'))
-        setLoading(true)
+         setLoading(true)
         try {
             let fd = new FormData();
             fd.append('file', data);
             const res = await convertExcelDetailsToJson(fd);
-            await handleCompare(res);
+            // await handleCompare(res);
             await handleCreateProduct(res);
             setFile(null);
         } catch (error) { console.error('Error uploading details:', error); toast.error('خطا در بارگذاری جزئیات'); }

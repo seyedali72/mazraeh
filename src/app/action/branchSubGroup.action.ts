@@ -17,10 +17,10 @@ export const getChartBranchSubGroup = async (body: any) => {
 		spliteDateArray.push(value)
 	}
 	try {
-		const productsInStartMonth = await Products.find({ year: convertNumbersToEnglish(startYear), month: convertNumbersToEnglish(startMonth) })
-		const productsInEndMonth = (startYear !== endYear || startMonth !== endMonth) ? await Products.find({ year: convertNumbersToEnglish(endYear), month: convertNumbersToEnglish(endMonth) }) : []
-		let combinedProducts = productsInStartMonth.concat(productsInEndMonth)
-		const findGroup = combinedProducts.filter((el: any) => el.subGroup == subGroup)
+		const allProducts = await Products.find({isDeleted:false})
+		let filterByYears = allProducts?.filter((pro:any)=> pro?.year >= convertNumbersToEnglish(startYear) || pro?.year >= convertNumbersToEnglish(endYear) )
+		let combinedProducts = filterByYears?.filter((pro:any)=> pro?.month >= convertNumbersToEnglish(startMonth) || pro?.month >= convertNumbersToEnglish(endMonth) )
+	const findGroup = combinedProducts.filter((el: any) => el.subGroup == subGroup)
 		const allcategoies = findGroup.map((el: any) => el.category).filter(onlyUnique);
 		// محصولاتی که توی این گروه کالا قراردارند رو میکشیم بیرون
 		const filteredSales = findGroup.flatMap((item: any) =>

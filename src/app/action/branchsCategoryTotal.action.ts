@@ -53,8 +53,9 @@ export const getChartBranchCategoriesForTotal = async (body: any) => {
 			pointHoverBorderColor: colors[i].borderColor,
 		};
 	});
+	
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let categoryChart = { labels, datasets }
+	let categoryChart = { labels, datasets , title: `نمودار فروش ${branchs} در ${typeSearch} های ${valueArray}`, header: `جدول فروش ${branchs} در ${typeSearch} های ${valueArray}`}
 	// حلقه زدن برروی اطلاعات دریافتی جهت اماده سازی اطلاعات در نمایش نمودار رادار
 	const datasetBar = dataArray.map((branchData, i: number) => {
 		const findData = branchData.map((dayData: any) => dayData.barChart.data);
@@ -72,7 +73,7 @@ export const getChartBranchCategoriesForTotal = async (body: any) => {
 		};
 	});
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let productChart = { labels: allproducts, datasets: datasetBar }
+	let productChart = { labels: allproducts, datasets: datasetBar , title: `نمودار فروش ${branchs} در ${typeSearch} های ${valueArray}`, header: `جدول فروش ${branchs} در ${typeSearch} های ${valueArray}`}
 
 	return ({ productChart, categoryChart, allproducts })
 }

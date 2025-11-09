@@ -32,7 +32,7 @@ export default function ComparePage() {
     const requestData = { branchs: selectedBranchs, group: selectedGroup, subGroup: selectedSubGroup, category: selectedCategory, valueArray: selectedDates, typeSearch: type }
 
     const types = ['سال', 'ماه', 'هفته',]
-    const branches = ['فروشگاه کهنز', 'فروشگاه معلم', 'فروشگاه کلهر', 'فروشگاه رباط کریم']
+    const branches = ['فروشگاه امیریه', 'فروشگاه معلم', 'فروشگاه کلهر', 'فروشگاه رباط کریم']
     const renderItems = (items: string[], label: string, onClick: (item: string) => void, bgColor: string) => {
         if (items?.length === 0) return null;
 

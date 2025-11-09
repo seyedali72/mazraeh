@@ -27,7 +27,11 @@ export const getChartProductsForDay = async (body: any) => {
 	for (const data of dataArray.flat()) { for (let i = 0; i < data.allGroups.length; i++) { uniqueGroup.push(data.allGroups[i]) } }
 	let allGroups: any = (uniqueGroup).filter(onlyUnique)
 	// درست کردن لیبل های مقایسه ای
-	let labels = dataArray.map((name: any, idx: number) => name[idx]?.newName[0]).filter(onlyUnique).filter((unique: any) => unique !== undefined)
+	let findLabel = dataArray.map((name: any, idx: number) => {
+		let res = name.map((ddd: any) => ddd?.newName).filter(onlyUnique)
+		return res.flat()
+	})
+	let labels = findLabel[0]
 	// حلقه زدن برروی اطلاعات دریافتی جهت اماده سازی اطلاعات در نمایش نمودار رادار
 	const datasets = dataArray.map((branchData, i) => {
 		const data = branchData.map((dayData: any) => dayData.radarChart.data[0]);
@@ -43,8 +47,13 @@ export const getChartProductsForDay = async (body: any) => {
 			pointHoverBorderColor: colors[i].borderColor,
 		};
 	});
+	const converted = (days: any) => {
+		let result: any = []
+		for (const day of days) { result.push(convertToPersianDate(day, 'YMD')) }
+		return result
+	}
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let RadarData = { labels, datasets }
+	let RadarData = { labels, datasets, title: `نمودار فروش ${branchs} در تاریخ های ${converted(days)}`, header: `جدول فروش ${branchs} در تاریخ های ${converted(days)}` }
 	// حلقه زدن برروی اطلاعات دریافتی جهت اماده سازی اطلاعات در نمایش نمودار رادار
 	const datasetBar = dataArray.map((branchData, i: number) => {
 		const findData = branchData.map((dayData: any) => dayData.barChart.data);
@@ -62,7 +71,7 @@ export const getChartProductsForDay = async (body: any) => {
 		};
 	});
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let BarData = { labels: allGroups, datasets: datasetBar }
+	let BarData = { labels: allGroups, datasets: datasetBar , title: `نمودار فروش ${branchs} در تاریخ های ${converted(days)}`, header: `جدول فروش ${branchs} در تاریخ های ${converted(days)}` }
 
 	return { RadarData, allGroups, BarData }
 }

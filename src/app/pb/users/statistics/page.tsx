@@ -37,7 +37,7 @@ export default function ComparePage() {
             <HeaderPage type={!toggle ? 'sellerDuration' : 'sellerDays'} sellers={sellers} sellerChartType={true}
                 print={() => reactToPrintFn()} branchs={(e: any) => console.log(e)}
                 startDate={(e: any) => setSelectedStartDate(e)} endDate={(e: any) => setSelectedEndDate(e)}
-                viewBranchAnaltics={(e: any) => console.log(e)}
+                viewBranchAnaltics={(e: any) => console.log(e)}  productsList={(e: any) => console.log('e')}
                 dates={(e: any) => setSelectedDays(e)} viewTotalCMP={() => console.log(true)}
                 viewChart={() => (setViewChart(true), setViewDurationChart(true))} branch={(e: any) => console.log(e)}
                 resetCompare={() => { setSelectedSellers([]), setViewChart(false), setViewDurationChart(false) }}

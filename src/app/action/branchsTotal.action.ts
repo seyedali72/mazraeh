@@ -55,7 +55,7 @@ export const getChartProductsForTotal = async (body: any) => {
 		};
 	});
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let RadarData = { labels, datasets }
+	let RadarData = { labels, datasets, title: `نمودار فروش ${branchs} در ${typeSearch} های ${valueArray}`, header: `جدول فروش ${branchs} در ${typeSearch} های ${valueArray}` }
 	// حلقه زدن برروی اطلاعات دریافتی جهت اماده سازی اطلاعات در نمایش نمودار رادار
 	const datasetBar = dataArray.map((branchData, i: number) => {
 		const findData = branchData.map((dayData: any) => dayData.barChart.data);
@@ -73,7 +73,7 @@ export const getChartProductsForTotal = async (body: any) => {
 		};
 	});
 	// اماده سازی اطلاعات نمایش نمودار جهت خروجی اصلی 
-	let BarData = { labels: allGroups, datasets: datasetBar }
+	let BarData = { labels: allGroups, datasets: datasetBar, title: `نمودار فروش ${branchs} در ${typeSearch} های ${valueArray}`, header: `جدول فروش ${branchs} در ${typeSearch} های ${valueArray}` }
 
 	return { RadarData, allGroups, BarData }
 }

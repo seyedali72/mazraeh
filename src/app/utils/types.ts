@@ -10,8 +10,7 @@ interface ISeller {
 	deletedAt?: Date
 }
 interface IProducts {
-	date: Date
-	name: String 
+ 	name: String 
 	year: String 
 	month: String 
 	week: String 

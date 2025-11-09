@@ -50,7 +50,7 @@ export default function DaliyListPage() {
                         <input type="text" className="form-control form-control-sm" onChange={(e: any) => setSelectedSeller(e.target.value)} placeholder="نام فروشنده را وارد کنید" />
                         <select className="form-control form-control-sm" onChange={(e: any) => { setSelectedBranch(e.target.value), setSelectedDate(null) }}>
                             {selectedBranch ? <option hidden value=''>{selectedBranch}</option> : <option hidden value=''>فروشگاه را انتخاب کنید</option>}
-                            <option value="فروشگاه کهنز">فروشگاه کهنز</option>
+                            <option value="فروشگاه امیریه">فروشگاه امیریه</option>
                             <option value="فروشگاه رباط کریم">فروشگاه رباط کریم</option>
                             <option value="فروشگاه کلهر">فروشگاه کلهر</option>
                             <option value="فروشگاه معلم">فروشگاه معلم</option>

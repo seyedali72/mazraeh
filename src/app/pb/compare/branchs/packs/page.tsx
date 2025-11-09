@@ -47,7 +47,7 @@ export default function ComparePage() {
                 dates={(e: any) => console.log(e)} viewTotalCMP={() => setViewTotalCMP(true)}
                 viewChart={() => setViewChart(true)} branch={(e: any) => console.log(e)}
                 resetCompare={() => { setAllCategory([]), setAllProduct([]), setAllGroup([]), setAllSubGroup([]), setViewCategoryCMP(false), setViewGroupCMP(false), setViewSubGroupCMP(false), setViewTotalCMP(false), setViewChart(false) }}
-                selectSellers={(e: any) => console.log(e)}  
+                selectSellers={(e: any) => console.log(e)}    productsList={(e: any) => console.log(e)}  
                 values={(e: any) => setSelectedValues(e)} searchType={(e: any) => setType(e)}
             />
             <nav aria-label="breadcrumb">
