@@ -63,8 +63,7 @@ export const createsellerReport = async (body: any) => {
     await connect()
     body.map(async (data: any) => {
         let miladiDate = moment.from(data.date, 'fa', 'YYYY/MM/DD').format('YYYY/MM/DD');
-        console.log(data.date, typeof (miladiDate), miladiDate)
-        data.date = Date.parse(miladiDate)
+         data.date = Date.parse(miladiDate)
         let find = await DBS.findOne({ branch: data.branch, date: data.date, isDeleted: false })
         if (find == undefined) {
             let pack = { branch: data.branch, date: data.date, sellers: [{ seller: data.seller, totalSell: data.totalSell }] }
@@ -87,8 +86,7 @@ export const createDailyReport = async (body: any) => {
     await connect()
     body.map(async (data: any) => {
         let miladiDate = moment.from(data.date, 'fa', 'YYYY/MM/DD').format('YYYY/MM/DD');
-        console.log(data.date, typeof (miladiDate), miladiDate)
-        data.date = Date.parse(miladiDate)
+         data.date = Date.parse(miladiDate)
         let find = await DBS.findOne({ branch: data.branch, date: data.date, isDeleted: false })
         if (find == undefined) {
             try {

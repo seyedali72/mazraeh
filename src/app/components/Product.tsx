@@ -18,8 +18,7 @@ export default function ProductChartCmp({ requestData, allGroup }: any) {
         setLoader(true);
         requestData.type = type
         let res = await getChartProductsDuration(requestData)
-        console.log(res)
-        setRadarChartData(res?.RadarData)
+         setRadarChartData(res?.RadarData)
         // setBarChartData(res?.BarData)
         // allGroup(res?.allGroups)
         setLoader(false);

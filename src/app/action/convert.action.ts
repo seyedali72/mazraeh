@@ -168,3 +168,24 @@ export async function getChartSingleBranch(jsonData: any) {
         throw new Error('خطا در دریافت یا فیلتر کردن داده‌ها');
     }
 }
+
+export async function convertExcelMaterialToJson(formData: FormData) {
+    const file = formData.get('file') as File;
+
+    if (!file) {
+        throw new Error('No file uploaded');
+    }
+
+    // خواندن فایل اکسل
+    const data = await file.arrayBuffer();
+    const workbook = XLSX.read(data, { type: 'array' });
+    const sheetName = workbook.SheetNames[0]; // نام اولین شیت
+    const worksheet = workbook.Sheets[sheetName];
+
+    // تبدیل شیت به JSON
+    const jsonData: any = XLSX.utils.sheet_to_json(worksheet);
+    let filter = jsonData?.filter((item:any)=>item.barcode !== '' && item.price !== '')
+    return JSON.parse(JSON.stringify(filter))
+
+
+}

@@ -24,8 +24,8 @@ export default function HeaderPanel() {
     return (
       <header>
         <div className="header">
-          <section className="sidebar-header bg-darkPurple d-flex align-item-center">
-            <section className="d-flex justify-content-md-center justify-content-between flex1 px-2 align-item-center">
+          <section className="sidebar-header bg-darkPurple d-flex align-items-center">
+            <section className="d-flex justify-content-md-center justify-content-between flex1 px-2 align-items-center">
               {!sidebarToggle ? <span onClick={() => setSidebarToggle(!sidebarToggle)} id="sidebar-toggle-show" className="d-md-none py-2 px-1 d-inline"><i className="fa fa-align-justify pointer"></i></span>
                 : <span onClick={() => setSidebarToggle(!sidebarToggle)} id="sidebar-toggle-hide" className="d-md-none py-2 px-1 d-inline"><i className="fa fa-align-right pointer"></i></span>}
               { <span><Image src={logo} alt="logo" width={150} height={50} className="h-auto" priority /></span>}
@@ -36,7 +36,7 @@ export default function HeaderPanel() {
             {user?._id !== undefined &&
               <section className="d-flex justify-content-between px-3">
                 {/* right  */}
-                <section className=" d-flex align-item-center"> </section>
+                <section className=" d-flex align-items-center"> </section>
                 {/* left  */}
                 <section>
                   <span id="account-toggle" className="ml-3 ml-md-5 position-relative pointer">

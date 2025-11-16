@@ -63,7 +63,7 @@ export default function LoginForm() {
     setState(res)
   }, [res])
   return (
-    <div className='d-flex flex-column gap-3 py-5 px-5 justify-content-center align-item-center loginBackground' >
+    <div className='d-flex flex-column gap-3 py-5 px-5 justify-content-center align-items-center loginBackground' >
       {state !== 'signup' ?
         <div className={` w-50 p-4 rounded-2 bg-white `}>
           <div > <h5 className='mb-4 bg-custom-1 p-2 text-center rounded'>ورود به حساب کاربری</h5> </div>

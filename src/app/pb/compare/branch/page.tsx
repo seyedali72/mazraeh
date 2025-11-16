@@ -98,13 +98,13 @@ export default function ComparePage() {
             </nav>
             <section ref={contentRef} className="main-body-container rounded">
 
-                {allGroup?.length !== 0 && <div className="border-bottom pb-2 d-flex flex-wrap align-item-center gap-1">
+                {allGroup?.length !== 0 && <div className="border-bottom pb-2 d-flex flex-wrap align-items-center gap-1">
                     <span className="fs80"> گروه کالا:</span> {allGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleSubGroupOnGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-2 btnStyle ">{' '}{item}{' '}</span>) })}
                 </div>}
-                {allSubGroup?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
+                {allSubGroup?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-items-center gap-1">
                     <span className="fs80"> زیرگروه کالا:</span> {allSubGroup?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleCategoryOnSubGroup(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-4 btnStyle">{item}</span>) })}
                 </div>}
-                {allCategory?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
+                {allCategory?.length !== 0 && <div className="border-bottom py-2 d-flex flex-wrap align-items-center gap-1">
                     <span className="fs80"> دسته کالا:</span> {allCategory?.map((item: any) => { return (<span key={nanoid()} onClick={() => { handleProductsOnCategory(item) }} className="p-1 fs75 cursorPointer rounded bg-custom-1 btnStyle">{item}</span>) })}
                 </div>}
 

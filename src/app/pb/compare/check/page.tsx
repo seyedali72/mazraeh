@@ -36,7 +36,7 @@ export default function ComparePage() {
     const renderItems = (items: string[], label: string, onClick: (item: string) => void, bgColor: string) => {
         if (items?.length === 0) return null;
 
-        return (<div className="border-bottom py-2 d-flex flex-wrap align-item-center gap-1">
+        return (<div className="border-bottom py-2 d-flex flex-wrap align-items-center gap-1">
             <span className="fs80">{label}:</span>
             {items.map((item) => (<span key={nanoid()} onClick={() => onClick(item)} className={`p-1 fs75 cursorPointer rounded ${bgColor} btnStyle`} > {item} </span>))}
         </div>);
