@@ -40,11 +40,8 @@ export const getSinglePackage = async (id: string) => {
 export const createPackage = async (body: any) => {
 	await connect();
 	try {
-		let found = await Material.findOne({ isDeleted: false, barcode: body.barcode })
-		if (found?._id !== undefined) { return { error: 'متاسفانه این بارکد قبلا استفاده شده است' } }
-		else {
-			await Material.create(body)
-		}
+		await Material.create(body)
+		
 		return { success: true }
 	} catch (error) {
 		return { error: 'خطا در ساخت محصول' };

@@ -28,7 +28,6 @@ export default function CreatePackagePage() {
   const { handleSubmit, register, reset, setValue } = useForm<FormValues1>()
   const [mutated, setMutated] = useState(false)
   const [materials, setMaterils] = useState<any>([])
-  const [typeProduct, setTypeProduct] = useState<any>()
   const router = useRouter()
   const [items, setItems] = useState<any>([])
   const [categories, setCategories] = useState<any>([])
@@ -44,7 +43,7 @@ export default function CreatePackagePage() {
 
   const handleCreatePackage = async (obj: any) => {
     if (items?.length < 2) { toast.warning('برای تعریف محصول حداقل دو قلم محصول باید انتخاب شود'); return }
-    if (typeProduct == undefined) { toast.warning('نوع محصول را مشخص نکرده اید'); return }
+    // if (typeProduct == undefined) { toast.warning('نوع محصول را مشخص نکرده اید'); return }
     obj.categoryId = category?._id
     let findCat: any = categories?.find((el: any) => el?._id?.toString() == obj.categoryId)
     let cloneSerial = obj.coding
@@ -52,7 +51,7 @@ export default function CreatePackagePage() {
     obj.items = items
     obj.price = lastPrice
     obj.price_over = ((lastPriceOver * ((parseFloat(obj.over) + 100) / 100)))
-    obj.type = typeProduct
+    obj.type = 'package'
     obj.level = newLevel
     obj.lastCostUpdate = new Date()
 
@@ -103,45 +102,45 @@ export default function CreatePackagePage() {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link href="/pb/">خانه</Link></li>
-          <li className="breadcrumb-item"> <Link href="/pb/package"> لیست محصولات نهایی</Link> </li>
-          <li className="breadcrumb-item active" aria-current="page"> تعریف محصول جدید </li>
+          <li className="breadcrumb-item"> <Link href="/pb/package"> لیست بسته بندی ها</Link> </li>
+          <li className="breadcrumb-item active" aria-current="page"> تعریف بسته بندی جدید </li>
         </ol>
       </nav>
       <form action="post" onSubmit={handleSubmit(handleCreatePackage)} method='Post'>
         <section className="main-body-container rounded">
           <section className="row px-2">
-            <div className="col-12  col-md-3  mb-2 px-1">
+            {/* <div className="col-12  col-md-3  mb-2 px-1">
               <label className='my-1' htmlFor="">نوع محصول </label>
               <select className="form-control form-control-sm" value={typeProduct} onChange={(e: any) => { setTypeProduct(e?.target?.value) }}  >
                 <option value="" hidden>این محصول نهایی است یا بسته بندی</option>
                 <option value="final">محصول نهایی</option>
                 <option value="package">بسته بندی</option>
               </select>
-            </div>
-            <div className="col-12 col-md-3  mb-2 px-1">
+            </div> */}
+            <div className="col-12 col-md-4  mb-2 px-1">
               <label className='my-1' htmlFor="">دسته بندی </label>
               {category?._id !== undefined ?
                 <div className="d-flex gap-1 align-items-center"><input className="form-control form-control-sm" type="text" disabled value={category?.name} />
                   <span className='btn btn-sm d-flex bg-custom-3 align-items-center' onClick={() => setCategory({})}><i className="fa fa-trash"></i></span></div>
                 : <SearchCategoryComponent data={categories} forward={(e: any) => { setCategory(e), setCreateBarcode(`62662865${e.serial}`), setValue('barcode', `62662865${e.serial}`) }} />}
             </div>
-            <div className="col-12 col-md-3 px-1 mb-2">
+            <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">واحد اندازه گیری </label>
               <input type="text" placeholder='واحد اندازه گیری' className="form-control form-control-sm" {...register('unit', { required: 'واحد محصول را وارد کنید', })} />
             </div>
-            <div className="col-12 col-md-3 px-1 mb-2">
+            <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">عنوان بسته بندی </label>
               <input type="text" placeholder='عنوان بسته بندی' className="form-control form-control-sm" {...register('name', { required: 'نام محصول را وارد کنید', })} />
             </div>
-            <div className="col-12 col-md-3 px-1 mb-2">
+            <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">سریال بسته بندی </label>
-              <input type="text" placeholder='سریال محصول' className="form-control form-control-sm" {...register('coding')} onBlur={(e: any) => { setValue('barcode', `${createBarcode}${e.target.value}`), setCreateBarcode(`${createBarcode}${e.target.value}`) }} />
+              <input type="text" placeholder='سریال بسته بندی' className="form-control form-control-sm" {...register('coding')} onBlur={(e: any) => { setValue('barcode', `${createBarcode}${e.target.value}`), setCreateBarcode(`${createBarcode}${e.target.value}`) }} />
             </div>
-            <div className="col-12 col-md-3 px-1 mb-2">
+            <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">بارکد بسته بندی </label>
               <input type="text" placeholder='بارکد بسته بندی' className="form-control form-control-sm" {...register('barcode', { required: 'بارکد بسته بندی را وارد کنید', })} />
             </div>
-            <div className="col-12 col-md-3 px-1 mb-2">
+            <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">درصد سربار بسته بندی </label>
               <input type="text" placeholder='درصد سربار بسته بندی' className="form-control form-control-sm" {...register('over', { required: 'درصد سربار بسته بندی را وارد کنید', })} />
             </div>
@@ -186,7 +185,7 @@ export default function CreatePackagePage() {
             <input type="text" disabled placeholder="نام کالا بعد از انتخاب درج می شود" value={selecteds?.name || ''} className="form-control form-control-sm" />
           </div>
           <div className="col-12 col-md-3 px-1">
-            <label className='my-1' htmlFor=""> وزن مصرفی kg </label>
+            <label className='my-1' htmlFor=""> مقدار/تعداد مصرفی  </label>
             {/* float input */}
             <input
               type="text"
@@ -244,7 +243,7 @@ export default function CreatePackagePage() {
                   <td>{item?.percent}</td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
                   <td>{spliteNumber(parseInt((parseFloat(find.price_over) * parseFloat(item?.percent)).toFixed()))}</td>
-                  <td>{find.type == 'material' ? 'مواد اولیه' : find.type == 'middle' ? 'محصول میانی' : find.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
+                  <td>{find.type == 'material' ? 'مواد اولیه' : find.type == 'middle' ? 'محصول بازرگانی' : find.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
 
                   <td className="text-center">
                     <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(item?.uniCode)} />, { autoClose: false, })}>

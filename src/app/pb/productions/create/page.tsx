@@ -40,10 +40,12 @@ export default function CreateProductPage() {
   const [newLevel, setNewLevel] = useState<number>(1)
   const [createBarcode, setCreateBarcode] = useState<string>('0')
   const [weight, setWeight] = useState<number>(1)
+  const [totalWeight, setTotalWeight] = useState<number>(0)
+  const [edited, setEdited] = useState<boolean>(false)
 
   const handleCreateProduct = async (obj: any) => {
     if (items?.length < 2) { toast.warning('برای تعریف محصول حداقل دو ماده اولیه باید انتخاب شود'); return }
-    if (!obj.coding?.includes('/')) { toast.warning('برای محصولات میانی باید شمارنده را، انتها شماره سریال، بعد از / اضافه کنید'); return }
+    if (!obj.coding?.includes('/')) { toast.warning('برای محصولات بازرگانی باید شمارنده را، انتها شماره سریال، بعد از / اضافه کنید'); return }
     if (percents < 99.8) { toast.warning('مجموع درصد ترکیبات محصول باید برابر با 100 درصد باشد'); return }
     obj.categoryId = category?._id
     let findCat: any = categories?.find((el: any) => el?._id?.toString() == obj.categoryId)
@@ -79,8 +81,16 @@ export default function CreateProductPage() {
   const handleDelete = async (code: any) => {
     let filter = items.filter((el: any) => el.uniCode !== code)
     let find = items.find((el: any) => el.uniCode == code)
+    let converToPercent: any = ((parseFloat(find?.percent))).toFixed(2)
     let minus = parseFloat(percents.toFixed(3)) - parseFloat(find.percent.toFixed(3))
     setPercents(minus)
+    let price = find?.material.price * (parseFloat(converToPercent) / 100)
+    setLastPrice(lastPrice - price)
+    let price_over = find?.material.price_over * (parseFloat(converToPercent) / 100)
+    setLastPriceOver(lastPriceOver - price_over)
+    let minusWeight = parseFloat(totalWeight.toFixed(3)) - parseFloat(find.itemWeight.toFixed(3))
+    setTotalWeight(minusWeight)
+
     setItems(filter)
   }
 
@@ -89,27 +99,122 @@ export default function CreateProductPage() {
     if (dup !== undefined) { toast.warning('این محصول را قبلا انتخاب کرده اید'); return }
     let uniCode = Date.now()
     let converToPercent: any = ((parseFloat(percent) / weight) * 100).toFixed(2)
-    let data = { material: selecteds?._id, percent: parseFloat(converToPercent), uniCode }
+
+    let data = { material: selecteds?._id, percent: parseFloat(converToPercent), uniCode, totalWeight: weight, itemWeight: percent }
     setItems([...items, data])
+
     selecteds?.level >= 0 ? newLevel >= selecteds?.level + 1 ? setNewLevel(newLevel) : setNewLevel(selecteds?.level + 1) : setNewLevel(selecteds?.level + 1)
     let price = selecteds.price * (parseFloat(converToPercent) / 100)
     setLastPrice(price + lastPrice)
     let price_over = selecteds.price_over * (parseFloat(converToPercent) / 100)
     setLastPriceOver(price_over + lastPriceOver)
-    let plus = parseFloat(percents) + parseFloat(converToPercent)
-    setPercents(plus)
+
+    let plusWeight = (totalWeight) + parseFloat(percent)
+    setTotalWeight(plusWeight)
+
+    let plusPercent = parseFloat(percents) + parseFloat(converToPercent)
+    setPercents(plusPercent)
+    setEdited(false)
     setPercent('0'); setSelecteds(null)
   }
 
+  const handleEdited = (code: any) => {
+    let filter = items.filter((el: any) => el.uniCode !== code)
+    let find = items.find((el: any) => el.uniCode == code)
+    let findMaterial = materials.find((el: any) => el._id.toString() == find?.material)
+    let minus = parseFloat(percents.toFixed(3)) - parseFloat(find.percent)
+    setPercents(minus)
+
+    let minusWeight = parseFloat(totalWeight.toFixed(3)) - parseFloat(find.itemWeight)
+    setTotalWeight(minusWeight)
+    setSelecteds(findMaterial)
+    setEdited(true)
+    setPercent(parseFloat(find?.itemWeight).toFixed(5))
+    setItems(filter)
+  }
+  const changeWeight = (weight: any) => {
+    setWeight(weight)
+    if ((weight) == '') { return }
+    items?.map((item: any) => {
+      item.itemWeight = ((parseFloat(item.itemWeight) / parseFloat(item.totalWeight))) * parseFloat(weight)
+      item.totalWeight = parseFloat(weight)
+      item.percent = (parseFloat(item.itemWeight) / parseFloat(item.totalWeight)) * 100
+    })
+    setTotalWeight((percents / 100) * weight)
+  }
   return (
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link href="/pb/">خانه</Link></li>
-          <li className="breadcrumb-item"> <Link href="/pb/productions"> لیست محصولات میانی</Link> </li>
-          <li className="breadcrumb-item active" aria-current="page"> تعریف محصول میانی جدید </li>
+          <li className="breadcrumb-item"> <Link href="/pb/productions"> لیست محصولات بازرگانی</Link> </li>
+          <li className="breadcrumb-item active" aria-current="page"> تعریف محصول بازرگانی جدید </li>
         </ol>
       </nav>
+      {edited &&
+        <div className="popupCustom">
+          <section className="main-body-container rounded w-50 mx-auto">
+            <div className="d-flex justify-content-between border-bottom pb-1">
+              <p className="mb-0 fs-6 fw-bold borderright">ویرایش آیتم </p>
+              <button onClick={() => { setEdited(false) }} className="btn btn-sm" type="button"><i className="fa fa-times"></i></button>
+            </div>
+            <section className="d-fle flex-column">
+
+              <div className="col-12 px-1">
+                <label className='my-1' htmlFor="">کد کالا  </label>
+                <input type="text" disabled placeholder="بارکد کالا بعد از انتخاب درج می شود" value={selecteds?.barcode || ''} className="form-control form-control-sm" />
+              </div>
+              <div className="col-12 px-1">
+                <label className='my-1' htmlFor="">نام کالا  </label>
+                <input type="text" disabled placeholder="نام کالا بعد از انتخاب درج می شود" value={selecteds?.name || ''} className="form-control form-control-sm" />
+              </div>
+              <div className="col-12 px-1">
+                <label className='my-1' htmlFor=""> وزن مصرفی kg </label>
+                {/* float input */}
+                <input type="text" inputMode="decimal" value={percent} className="form-control form-control-sm"
+                  onChange={(e) => {
+                    let v: any = e.target.value.replace(',', '.');
+                    if (/^\d*\.?\d*$/.test(v)) {
+                      if (v.split('.').length > 2) return;
+                      setPercent(v);
+                      if (v !== '' && v !== '.' && !isNaN(v) && v !== '0.') {
+                        let value = parseFloat(v);
+                        const maxVal = (weight - ((parseFloat(percents) / 100) * weight));
+                        const maxValue = parseFloat(maxVal.toFixed(2))
+                        if (value > maxValue) {
+                          toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${maxValue} کیلو گرم`);
+
+                          setPercent(maxValue.toString());
+                        }
+                      }
+                    }
+                  }}
+                  onBlur={() => {
+                    if (percent && !isNaN(parseFloat(percent))) {
+                      const num = parseFloat(percent);
+                      const maxVal = (weight - ((parseFloat(percents) / 100) * weight));
+                      const maxValue = parseFloat(maxVal.toFixed(2))
+                      if (num > maxValue) {
+                        setPercent(maxValue.toFixed(3));
+                        toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${maxValue} کیلو گرم`);
+                      } else {
+                        setPercent(num.toString());
+                      }
+                    } else if (percent === '' || percent === '.') {
+                      setPercent('0');
+                    }
+                  }}
+                />
+              </div>
+
+
+              <div className="col-12 mt-2 px-1">
+                <button type='button' onClick={() => { if (selecteds == null || parseFloat(percent) == 0) { return toast.error('انتخاب محصول و درصد مصرف الزامیست') } else { addToItems() } }} className="btn bg-custom-1 btn-sm">افزودن به لیست</button>
+              </div>
+            </section>
+          </section>
+        </div>
+      }
       <form action="post" onSubmit={handleSubmit(handleCreateProduct)} method='Post'>
         <section className="main-body-container rounded">
           <section className="row px-2">
@@ -127,7 +232,9 @@ export default function CreateProductPage() {
             </div>
             <div className="col-12 col-md-3 px-1 mb-2">
               <label className='my-1' htmlFor="">وزن ( پیش فرض 1 کیلوگرم) </label>
-              <input type="text" placeholder='مقدار پیش فرض 1 کیلوگرم است' value={weight} className="form-control form-control-sm" onChange={(e: any) => setWeight(e.target.value)} />
+              <input type="text" placeholder='مقدار پیش فرض 1 کیلوگرم است' min={1} value={weight} className="form-control form-control-sm" onChange={(e: any) => changeWeight(e.target.value)} />
+            </div>
+            <div className="col-12 col-md-3 px-1 mb-2">
             </div>
             <div className="col-12 col-md-3 px-1 mb-2">
               <label className='my-1' htmlFor="">نام محصول </label>
@@ -171,6 +278,7 @@ export default function CreateProductPage() {
         </section>
       </form>
       <section className="main-body-container rounded">
+
         <section className="row">
           <p className=' my-2 py-1 bg-custom-2 rounded'>تعریف مواد تشکیل دهنده</p>
           <div className="col-12 col-md-3 px-1">
@@ -185,7 +293,7 @@ export default function CreateProductPage() {
             <label className='my-1' htmlFor="">نام کالا  </label>
             <input type="text" disabled placeholder="نام کالا بعد از انتخاب درج می شود" value={selecteds?.name || ''} className="form-control form-control-sm" />
           </div>
-          <div className="col-12 col-md-3 px-1">
+          <div className="col-12 col-md-2 px-1">
             <label className='my-1' htmlFor=""> وزن مصرفی kg </label>
             {/* float input */}
             <input
@@ -228,10 +336,12 @@ export default function CreateProductPage() {
           </div>
 
 
-          <div className="col-12 my-2 px-1">
-            <button type='button' onClick={() => { if (selecteds == null || parseFloat(percent) == 0) { return toast.error('انتخاب محصول و درصد مصرف الزامیست') } else { addToItems() } }} className="btn bg-custom-1 btn-sm">افزودن به لیست</button>
+          <div className="col-12 col-md-1 px-1">
+            <label className='my-1 fs90' htmlFor="">افزودن به لیست</label>
+            <button type='button' onClick={() => { if (selecteds == null || parseFloat(percent) == 0) { return toast.error('انتخاب محصول و درصد مصرف الزامیست') } else { addToItems() } }} className="btn bg-custom-1 btn-sm">افزودن</button>
           </div>
         </section>
+
 
         <section className="d-flex justify-content-between align-items-center   my-3 " >
           <section className="main-body-title">
@@ -245,6 +355,7 @@ export default function CreateProductPage() {
                 <th className="text-center">#</th>
                 <th>نام کالا</th>
                 <th>بارکد</th>
+                <th>وزن مصرفی</th>
                 <th>درصد مصرف</th>
                 <th>قیمت به ریال</th>
                 <th>قیمت مصرفی</th>
@@ -261,12 +372,17 @@ export default function CreateProductPage() {
                   <td className="text-center">{idx + 1}</td>
                   <td>{find?.name}</td>
                   <td>{find?.barcode}</td>
+                  <td>{parseFloat(item?.itemWeight).toFixed(2)} kg</td>
                   <td>{item?.percent.toFixed(2)} %</td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
                   <td>{spliteNumber(find?.price_over * ((item?.percent / 100)))}</td>
                   <td>{find?.type == 'material' ? 'مواد اولیه' : find?.type == 'middle' ? 'محصول میانی' : find?.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
 
                   <td className="text-center">
+                    <button type="button" className="btn btn-sm bg-custom-4 ms-1" onClick={() => toast(<Confirmation type='ویرایش' onDelete={() => handleEdited(item?.uniCode)} />, { autoClose: false })}>
+                      <i className="fa fa-edit px-1"></i> ویرایش
+                    </button>
+
                     <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(item?.uniCode)} />, { autoClose: false, })}>
                       <i className="fa fa-trash px-1"></i>حذف از لیست
                     </button>
@@ -274,6 +390,11 @@ export default function CreateProductPage() {
                 </tr>)
               })}
             </tbody>
+            <tfoot><tr>
+              <td colSpan={5}></td>
+              <th>وزن کل تعریفی</th><td>{totalWeight.toFixed(3)}kg</td>
+              <th>درصد کل تعریفی</th><td>{percents.toFixed(3)}%</td>
+            </tr></tfoot>
           </table>
         </section>
 

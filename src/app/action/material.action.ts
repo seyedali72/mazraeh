@@ -179,7 +179,7 @@ export const getFinalList = async (search?: any) => {
 
 export const getProductsList = async (search?: any) => {
 	await connect()
-	search.type = { $nin: ['material', 'package'] }
+	// search.type = { $nin: ['material', 'package'] }
 	try {
 		const allMaterials = await Material.find(buildQuery(search)).populate({ path: 'categoryId', select: '_id name parent', model: Category })
 			.skip(search?.skip ? search?.skip : 0)

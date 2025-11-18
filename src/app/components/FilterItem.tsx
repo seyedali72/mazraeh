@@ -99,7 +99,7 @@ const ProductionList = ({ productions, categories, filtered, type }: {
                 <td>{item.name}</td>
                 <td>{item.categoryId?.name}</td>
                 <td>{item?.barcode}</td>
-                <td>{item?.type == 'material' ? 'مواد اولیه' : item?.type == 'middle' ? 'محصول میانی' : item?.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
+                <td>{item?.type == 'material' ? 'مواد اولیه' : item?.type == 'middle' ? 'محصول بازرگانی' : item?.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
                 <td>{spliteNumber(parseInt(item?.price_over))}</td>
                 {percents.map(({ key }) => (calc(item, item?.price_over, key)))}
 

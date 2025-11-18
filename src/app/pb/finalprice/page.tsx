@@ -45,7 +45,7 @@ export default function FinalPrice() {
             <div className="col-12 col-md-4 px-1">
               <select className="form-control form-control-sm" value={selectType} onChange={(e: any) => { setSelectType(e.target.value) }}>
                 <option value='' > فیلتر براساس نوع کالا</option>
-                <option value='middle' > محصول میانی</option>
+                <option value='middle' > محصول بازرگانی</option>
                 <option value='final' > محصول نهایی</option>
                 <option value='package' > بسته بندی</option>
               </select>

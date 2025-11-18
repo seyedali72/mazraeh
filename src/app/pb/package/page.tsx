@@ -47,7 +47,7 @@ export default function PackageList() {
           </div>
           <div className="d-flex gap-1">
             <Link href="/pb/package/create" className="btn bg-success text-white btn-sm" >
-              تعریف محصول جدید
+              تعریف بسته بندی جدید
             </Link>
             <button type="button" onClick={async () => { await update() }} className="btn btn-sm bg-custom-1">بروزرسانی قیمت محصولات</button>
           </div>

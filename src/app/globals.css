@@ -79,7 +79,9 @@ body {
   border-right: 4px solid rgb(221 55 55);
   padding-right: 5px;
 }
-
+.wid-14rem {
+  width: calc(100% - 14rem) !important;
+}
 .fs100 {
   font-size: 1rem;
 }

@@ -27,7 +27,7 @@ const ExportToExcelButton = ({ filteredItems }: any) => {
       item.MNPercentFee = overPrice * ((item.MNPercent + 100) / 100)
       item.MHPercentFee = overPrice * ((item.MHPercent + 100) / 100)
       item.MCPercentFee = overPrice * ((item.MCPercent + 100) / 100)
-      item.farsiType = item?.type == 'material' ? 'مواد اولیه' : item?.type == 'middle' ? 'محصول میانی' : item?.type == 'package' ? 'بسته بندی' : 'محصول نهایی'
+      item.farsiType = item?.type == 'material' ? 'مواد اولیه' : item?.type == 'middle' ? 'محصول بازرگانی' : item?.type == 'package' ? 'بسته بندی' : 'محصول نهایی'
 
       return {
         'ردیف': idx + 1,

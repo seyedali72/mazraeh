@@ -216,7 +216,7 @@ export default function EditPackage() {
             <input type="text" disabled placeholder="نام کالا بعد از انتخاب درج می شود" value={selecteds?.name || ''} className="form-control form-control-sm" />
           </div>
           <div className="col-12 col-md-3 px-1">
-            <label className='my-1' htmlFor=""> مقدار/تعداد مصرفی در بسته  </label>
+            <label className='my-1' htmlFor=""> مقدار مصرفی در بسته  </label>
             {/* float input */}
             <input
               type="text"
