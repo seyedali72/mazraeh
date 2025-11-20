@@ -42,7 +42,7 @@ export default function CreateConvertPage() {
   const [createBarcode, setCreateBarcode] = useState<string>('0')
 
   const handleCreateConvert = async (obj: any) => {
-    // if (items?.length < 2) { toast.warning('برای تعریف محصول حداقل دو قلم محصول باید انتخاب شود'); return }
+    if (items?.length < 1) { toast.warning('برای تعریف محصول حداقل یک قلم محصول باید انتخاب شود'); return }
     // if (typeProduct == undefined) { toast.warning('نوع محصول را مشخص نکرده اید'); return }
     obj.categoryId = category?._id
     let findCat: any = categories?.find((el: any) => el?._id?.toString() == obj.categoryId)

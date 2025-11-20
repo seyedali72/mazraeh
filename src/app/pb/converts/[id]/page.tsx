@@ -80,7 +80,7 @@ export default function EditConvert() {
 
   const handleEditPackage = async (obj: any) => {
     // if (typeProduct == undefined) { toast.warning('نوع محصول را مشخص نکرده اید'); return }
-    // if (items?.length < 2) { toast.warning('برای تعریف بسته بندی حداقل دو قلم محصول باید انتخاب شود'); return }
+    if (items?.length < 1) { toast.warning('برای تعریف محصول حداقل یک قلم محصول باید انتخاب شود'); return }
     obj.items = items
     obj.categoryId = category?._id
     obj.price = lastPrice
