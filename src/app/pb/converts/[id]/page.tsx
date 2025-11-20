@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { Confirmation } from '@/app/components/Confirmation'
-import { getMaterialsForCreateFianl } from '@/app/action/material.action'
+import { getMaterialsForCreateConvert } from '@/app/action/material.action'
 import SearchMaterialComponent from '@/app/components/SearchMaterialComponent'
 import { getCategories } from '@/app/action/category.action'
 import SearchCategoryComponent from '@/app/components/SearchCategory'
@@ -24,7 +24,7 @@ interface FormValues1 {
   MHPercent: number
   MCPercent: number
 }
-export default function EditPackage() {
+export default function EditConvert() {
   const [mutated, setMutated] = useState(false)
   const [materials, setMaterils] = useState<any>([])
   const router = useRouter()
@@ -39,13 +39,13 @@ export default function EditPackage() {
   const [lastPrice, setLastPrice] = useState<any>(0)
   const [lastPriceOver, setLastPriceOver] = useState<any>(0)
   const [newLevel, setNewLevel] = useState<number>(1)
-
   const [createBarcode, setCreateBarcode] = useState<string>('0')
+
   const fetchData = useCallback(async () => {
     let single = await getSinglePackage(id)
     setSingle(single)
     setItems(single?.items)
-    let res = await getMaterialsForCreateFianl({ isDeleted: false, _id: { $ne: id } })
+    let res = await getMaterialsForCreateConvert({ isDeleted: false, _id: { $ne: id } })
     setMaterils(res)
     let cats = await getCategories({ isDeleted: false })
     setCategories(cats)
@@ -80,7 +80,7 @@ export default function EditPackage() {
 
   const handleEditPackage = async (obj: any) => {
     // if (typeProduct == undefined) { toast.warning('نوع محصول را مشخص نکرده اید'); return }
-    if (items?.length < 2) { toast.warning('برای تعریف بسته بندی حداقل دو قلم محصول باید انتخاب شود'); return }
+    // if (items?.length < 2) { toast.warning('برای تعریف بسته بندی حداقل دو قلم محصول باید انتخاب شود'); return }
     obj.items = items
     obj.categoryId = category?._id
     obj.price = lastPrice
@@ -132,7 +132,7 @@ export default function EditPackage() {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link href="/pb/">خانه</Link></li>
-          <li className="breadcrumb-item"> <Link href="/pb/package"> لیست محصولات نهایی</Link> </li>
+          <li className="breadcrumb-item"> <Link href="/pb/package"> لیست محصولات تبدیلی</Link> </li>
           <li className="breadcrumb-item active" aria-current="page"> ویرایش محصول </li>
         </ol>
       </nav>

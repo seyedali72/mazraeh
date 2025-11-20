@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { Confirmation } from '@/app/components/Confirmation'
-import { getMaterials } from '@/app/action/material.action'
+import { getMaterialsForCreateFianl } from '@/app/action/material.action'
 import SearchMaterialComponent from '@/app/components/SearchMaterialComponent'
 import { getCategories } from '@/app/action/category.action'
 import SearchCategoryComponent from '@/app/components/SearchCategory'
@@ -66,7 +66,7 @@ export default function CreatePackagePage() {
     }
   }
   const fetchData = useCallback(async () => {
-    let res = await getMaterials({ isDeleted: false })
+    let res = await getMaterialsForCreateFianl({ isDeleted: false })
     setMaterils(res)
     let cats = await getCategories({ isDeleted: false, level: 3 })
     setCategories(cats)
@@ -112,8 +112,8 @@ export default function CreatePackagePage() {
             {/* <div className="col-12  col-md-3  mb-2 px-1">
               <label className='my-1' htmlFor="">نوع محصول </label>
               <select className="form-control form-control-sm" value={typeProduct} onChange={(e: any) => { setTypeProduct(e?.target?.value) }}  >
-                <option value="" hidden>این محصول نهایی است یا بسته بندی</option>
-                <option value="final">محصول نهایی</option>
+                <option value="" hidden>این محصول بازرگانی است یا بسته بندی</option>
+                <option value="final">محصول بازرگانی</option>
                 <option value="package">بسته بندی</option>
               </select>
             </div> */}
@@ -243,7 +243,7 @@ export default function CreatePackagePage() {
                   <td>{item?.percent}</td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
                   <td>{spliteNumber(parseInt((parseFloat(find.price_over) * parseFloat(item?.percent)).toFixed()))}</td>
-                  <td>{find.type == 'material' ? 'مواد اولیه' : find.type == 'middle' ? 'محصول بازرگانی' : find.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
+                  <td>{find.type == 'material' ? 'مواد اولیه' : find.type == 'middle' ? 'محصول میانی' : find.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
 
                   <td className="text-center">
                     <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(item?.uniCode)} />, { autoClose: false, })}>

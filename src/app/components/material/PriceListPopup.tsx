@@ -54,7 +54,7 @@ export default function PriceListPopup({ id, close }: any) {
                             <tr >
                                 <td>{single.name}</td>
                                 <td>{single?.barcode}</td>
-                                <td>{single.type == 'material' ? 'مواد اولیه' : single.type == 'middle' ? 'محصول بازرگانی' : single.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
+                                <td>{single.type == 'material' ? 'مواد اولیه' : single.type == 'middle' ? 'محصول میانی' : single.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
                                 <td>{single.categoryId?.name}</td>
                                 <td>{single?.coding}</td>
                                 <td>{single?.unit}</td>
@@ -104,7 +104,7 @@ export default function PriceListPopup({ id, close }: any) {
                                     <td className="text-center">{idx + 1}</td>
                                     <td>{item?.material.name}</td>
                                     <td>{item?.material.categoryId?.name}</td>
-                                    <td>{item?.material.type == 'material' ? 'مواد اولیه' : item?.material.type == 'middle' ? 'محصول بازرگانی' : item?.material.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
+                                    <td>{item?.material.type == 'material' ? 'مواد اولیه' : item?.material.type == 'middle' ? 'محصول میانی' : item?.material.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
                                     <td>{item?.material?.barcode}</td>
                                     <td>{spliteNumber((parseInt(item?.material?.price_over)))} ریال</td>
                                     <td>{item?.percent} %</td>

@@ -207,3 +207,55 @@ export const getSingleProduct = async (id: string) => {
 		return { error: 'خطا در دریافت اطلاعات' }
 	}
 }
+
+export const getMaterialsForCreateFianl = async (search?: any) => {
+	await connect()
+	search.type = { $nin: ['package','final'] }
+
+	try {
+		const allMaterials = await Material.find(buildQuery(search)).populate({ path: 'categoryId', select: '_id name serial', model: Category })
+			.skip(search?.skip ? search?.skip : 0)
+			.limit(search?.limit ? search?.limit : 0)
+			.sort({ createdAt: -1 })
+			.lean()
+
+		return JSON.parse(JSON.stringify(allMaterials))
+	} catch (error) {
+		console.log(error)
+		return { error: 'خطا در دریافت اطلاعات' }
+	}
+}
+export const getMaterialsForCreateMiddle = async (search?: any) => {
+	await connect()
+	search.type = { $nin: ['package','final'] }
+
+	try {
+		const allMaterials = await Material.find(buildQuery(search)).populate({ path: 'categoryId', select: '_id name serial', model: Category })
+			.skip(search?.skip ? search?.skip : 0)
+			.limit(search?.limit ? search?.limit : 0)
+			.sort({ createdAt: -1 })
+			.lean()
+
+		return JSON.parse(JSON.stringify(allMaterials))
+	} catch (error) {
+		console.log(error)
+		return { error: 'خطا در دریافت اطلاعات' }
+	}
+}
+export const getMaterialsForCreateConvert = async (search?: any) => {
+	await connect()
+	search.type = { $nin: ['package','final'] }
+
+	try {
+		const allMaterials = await Material.find(buildQuery(search)).populate({ path: 'categoryId', select: '_id name serial', model: Category })
+			.skip(search?.skip ? search?.skip : 0)
+			.limit(search?.limit ? search?.limit : 0)
+			.sort({ createdAt: -1 })
+			.lean()
+
+		return JSON.parse(JSON.stringify(allMaterials))
+	} catch (error) {
+		console.log(error)
+		return { error: 'خطا در دریافت اطلاعات' }
+	}
+}

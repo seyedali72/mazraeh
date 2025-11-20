@@ -142,8 +142,8 @@ export default function EditPackage() {
             {/* <div className="col-12  col-md-3  mb-2 px-1">
               <label className='my-1' htmlFor="">نوع محصول </label>
               <select className="form-control form-control-sm" value={typeProduct} onChange={(e: any) => { setTypeProduct(e?.target?.value) }}  >
-                <option value="" hidden>این محصول بازرگانی است یا نهایی</option>
-                <option value="final">محصول نهایی</option>
+                <option value="" hidden>این محصول میانی است یا نهایی</option>
+                <option value="final">محصول بازرگانی</option>
                 <option value="package">بسته بندی</option>
               </select>
             </div> */}
@@ -274,7 +274,7 @@ export default function EditPackage() {
                   <td>{item?.percent.toFixed(2)} </td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
                   <td>{spliteNumber(parseInt((find?.price_over * (parseFloat(item?.percent))).toFixed()))}</td>
-                  <td>{find?.type == 'material' ? 'مواد اولیه' : find?.type == 'middle' ? 'محصول بازرگانی' : find?.type == 'package' ? 'بسته بندی' : 'محصول نهایی'}</td>
+                  <td>{find?.type == 'material' ? 'مواد اولیه' : find?.type == 'middle' ? 'محصول میانی' : find?.type == 'convert' ? 'محصول تبدیلی' : find?.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
 
                   <td className="text-center">
                     <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(item?.uniCode)} />, { autoClose: false, })}>

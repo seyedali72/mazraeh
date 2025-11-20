@@ -66,8 +66,9 @@ export default function SideBar({ size }: any) {
                         <section className="sidebar-dropdown">
                             <Link href="/pb/category" className="sidebar-dropdown-link"><span>دسته بندی</span></Link>
                             <Link href="/pb/materials" className="sidebar-dropdown-link"><span>مواد اولیه</span></Link>
-                            <Link href="/pb/productions" className="sidebar-dropdown-link"><span>محصول بازرگانی</span></Link>
-                            <Link href="/pb/final" className="sidebar-dropdown-link"><span>محصول نهایی</span></Link>
+                            <Link href="/pb/productions" className="sidebar-dropdown-link"><span>محصول میانی</span></Link>
+                            <Link href="/pb/final" className="sidebar-dropdown-link"><span>محصول بازرگانی</span></Link>
+                            <Link href="/pb/converts" className="sidebar-dropdown-link"><span>کالای تبدیلی</span></Link>
                             <Link href="/pb/package" className="sidebar-dropdown-link"><span>بسته بندی</span></Link>
                             <Link href="/pb/finalprice" className="sidebar-dropdown-link"><span>قیمت نهایی</span></Link>
                         </section>

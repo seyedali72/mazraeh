@@ -12,13 +12,13 @@ export const signinAll = async (body: any) => {
 	await connect()
 	try {
 		const found = await User.findOne({ isDeleted: false, user_name: body.user_name, password: body.password, })
-		if (found?.userType == 'client') {
-			const forCoockie = { name: found.name, mobile_number: found.mobile_number, user_name: found.user_name, clientName: found.clientName, _id: found._id, role: found.role, isDeleted: false }
-			if (forCoockie) {
-				cookies().set('user', JSON.stringify(forCoockie))
-				return JSON.parse(JSON.stringify(forCoockie))
-			}
+		if (found == null) { return { error: 'نام کاربری یا رمز عبور اشتباه است' } }
+		const forCoockie = { name: found.name, mobile_number: found.mobile_number, user_name: found.user_name, clientName: found.clientName, _id: found._id, role: found.role, isDeleted: false }
+		if (forCoockie) {
+			cookies().set('user', JSON.stringify(forCoockie))
+			return JSON.parse(JSON.stringify(forCoockie))
 		}
+
 	} catch (error) {
 		console.log(error)
 		return { error: 'خطا در ورود کاربر' }
@@ -54,11 +54,11 @@ export const signupUser = async (body: any) => {
 		return { error: 'خطا در ثبت نام کاربر' }
 	}
 }
- 
+
 export const signupClient = async (body: any) => {
 	let clientId = customAlphabet('1234567890', 6)()
 	await connect()
-	 
+
 	try {
 		const newUser = await Client.create({ user_name: body.user_name, clientName: body.clientName, name: nanoid(6), password: body.password, mobile_number: body.mobile_number, role: body.role, clientId })
 		cookies().set('user', JSON.stringify(newUser))
