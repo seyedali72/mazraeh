@@ -26,6 +26,7 @@ interface FormValues1 {
 }
 export default function EditPackage() {
   const [mutated, setMutated] = useState(false)
+  const [edited, setEdited] = useState(false)
   const [materials, setMaterils] = useState<any>([])
   const router = useRouter()
   const { id }: any = useParams()
@@ -110,6 +111,18 @@ export default function EditPackage() {
     setItems(filter)
   }
 
+  const handleEdited = (code: any) => {
+    let filter = items.filter((el: any) => el.uniCode !== code)
+    let find = items.find((el: any) => el.uniCode == code)
+    let id = (find?.material?._id !== undefined ? find?.material?._id : find?.material)
+    let findMaterial = materials.find((el: any) => el._id.toString() == id)
+    let minus = parseFloat(percents.toFixed(3)) - parseFloat(find.percent)
+    setPercents(minus)
+    setSelecteds(findMaterial)
+    setEdited(true)
+    setPercent(parseFloat(find?.percent).toFixed(5))
+    setItems(filter)
+  }
   const addToItems = () => {
     let dup = items.find((item: any) => item?.material == selecteds?._id)
     if (dup !== undefined) { toast.warning('این آیتم را قبلا انتخاب کرده اید'); return }
@@ -121,6 +134,7 @@ export default function EditPackage() {
     setLastPrice(price + lastPrice)
     let price_over = selecteds.price_over * (parseFloat(percent))
     setLastPriceOver(price_over + lastPriceOver)
+    setEdited(false)
 
     let plus = parseFloat(percents) + parseFloat(percent)
     setPercents(plus)
@@ -136,6 +150,68 @@ export default function EditPackage() {
           <li className="breadcrumb-item active" aria-current="page"> ویرایش محصول </li>
         </ol>
       </nav>
+      {edited &&
+        <div className="popupCustom">
+          <section className="main-body-container rounded w-50 mx-auto">
+            <div className="d-flex justify-content-between border-bottom pb-1">
+              <p className="mb-0 fs-6 fw-bold borderright">ویرایش آیتم </p>
+              <button onClick={() => { setEdited(false) }} className="btn btn-sm" type="button"><i className="fa fa-times"></i></button>
+            </div>
+            <section className="d-fle flex-column">
+
+              <div className="col-12 px-1">
+                <label className='my-1' htmlFor="">کد کالا  </label>
+                <input type="text" disabled placeholder="بارکد کالا بعد از انتخاب درج می شود" value={selecteds?.barcode || ''} className="form-control form-control-sm" />
+              </div>
+              <div className="col-12 px-1">
+                <label className='my-1' htmlFor="">نام کالا  </label>
+                <input type="text" disabled placeholder="نام کالا بعد از انتخاب درج می شود" value={selecteds?.name || ''} className="form-control form-control-sm" />
+              </div>
+              <div className="col-12 px-1">
+                <label className='my-1' htmlFor=""> مقدار یا وزن مصرفی </label>
+                {/* float input */}
+                <input type="text" inputMode="decimal" value={percent} className="form-control form-control-sm"
+                  onChange={(e) => {
+                    let v: any = e.target.value.replace(',', '.');
+                    if (/^\d*\.?\d*$/.test(v)) {
+                      if (v.split('.').length > 2) return;
+                      setPercent(v);
+                      if (v !== '' && v !== '.' && !isNaN(v) && v !== '0.') {
+                        let value = parseFloat(v);
+
+                        if (value > 9999100.222) {
+                          toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${9999100.222} کیلو گرم`);
+
+                          setPercent(9999100.222.toString());
+                        }
+                      }
+                    }
+                  }}
+                  onBlur={() => {
+                    if (percent && !isNaN(parseFloat(percent))) {
+                      const num = parseFloat(percent);
+
+                      if (num > 9999100.22) {
+                        setPercent(9999100.22.toFixed(3));
+                        toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${9999100.22} کیلو گرم`);
+                      } else {
+                        setPercent(num.toString());
+                      }
+                    } else if (percent === '' || percent === '.') {
+                      setPercent('0');
+                    }
+                  }}
+                />
+              </div>
+
+
+              <div className="col-12 mt-2 px-1">
+                <button type='button' onClick={() => { if (selecteds == null || parseFloat(percent) == 0) { return toast.error('انتخاب محصول و درصد مصرف الزامیست') } else { addToItems() } }} className="btn bg-custom-1 btn-sm">افزودن به لیست</button>
+              </div>
+            </section>
+          </section>
+        </div>
+      }
       <form action="post" onSubmit={handleSubmit(handleEditPackage)} method='Post'>
         <section className="main-body-container rounded">
           <section className="row px-2">
@@ -218,10 +294,7 @@ export default function EditPackage() {
           <div className="col-12 col-md-3 px-1">
             <label className='my-1' htmlFor=""> مقدار/تعداد مصرفی در بسته  </label>
             {/* float input */}
-            <input
-              type="text"
-              inputMode="decimal"
-              value={percent} className="form-control form-control-sm"
+            <input type="text" inputMode="decimal" value={percent} className="form-control form-control-sm"
               onChange={(e) => {
                 let v: any = e.target.value.replace(',', '.');
                 if (/^\d*\.?\d*$/.test(v)) {
@@ -229,8 +302,27 @@ export default function EditPackage() {
                   setPercent(v);
                   if (v !== '' && v !== '.' && !isNaN(v) && v !== '0.') {
                     let value = parseFloat(v);
-                    setPercent(value)
+
+                    if (value > 9999100.222) {
+                      toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${9999100.222} کیلو گرم`);
+
+                      setPercent(9999100.222.toString());
+                    }
                   }
+                }
+              }}
+              onBlur={() => {
+                if (percent && !isNaN(parseFloat(percent))) {
+                  const num = parseFloat(percent);
+
+                  if (num > 9999100.22) {
+                    setPercent(9999100.22.toFixed(3));
+                    toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${9999100.22} کیلو گرم`);
+                  } else {
+                    setPercent(num.toString());
+                  }
+                } else if (percent === '' || percent === '.') {
+                  setPercent('0');
                 }
               }}
             />
@@ -277,6 +369,9 @@ export default function EditPackage() {
                   <td>{find?.type == 'material' ? 'مواد اولیه' : find?.type == 'middle' ? 'محصول میانی' : find?.type == 'convert' ? 'محصول تبدیلی' : find?.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
 
                   <td className="text-center">
+                    <button type="button" className="btn btn-sm bg-custom-4 ms-1" onClick={() => toast(<Confirmation type='ویرایش' onDelete={() => handleEdited(item?.uniCode)} />, { autoClose: false })}>
+                      <i className="fa fa-edit px-1"></i> ویرایش
+                    </button>
                     <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(item?.uniCode)} />, { autoClose: false, })}>
                       <i className="fa fa-trash px-1"></i>حذف از لیست
                     </button>
