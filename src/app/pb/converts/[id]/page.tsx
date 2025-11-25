@@ -92,7 +92,7 @@ export default function EditConvert() {
       toast.success('انجام شده')
       setMutated(!mutated)
       reset()
-      router.replace('/pb/package')
+      router.replace('/pb/converts')
     } else {
       toast.error(res.error)
     }
@@ -146,7 +146,7 @@ export default function EditConvert() {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link href="/pb/">خانه</Link></li>
-          <li className="breadcrumb-item"> <Link href="/pb/package"> لیست محصولات تبدیلی</Link> </li>
+          <li className="breadcrumb-item"> <Link href="/pb/converts"> لیست محصولات تبدیلی</Link> </li>
           <li className="breadcrumb-item active" aria-current="page"> ویرایش محصول </li>
         </ol>
       </nav>

@@ -61,7 +61,7 @@ export default function CreatePackagePage() {
       toast.success('انجام شده')
       setMutated(!mutated)
       reset()
-      router.replace('/pb/package')
+      router.replace('/pb/final')
     } else {
       toast.error(res.error)
     }
@@ -115,7 +115,7 @@ export default function CreatePackagePage() {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link href="/pb/">خانه</Link></li>
-          <li className="breadcrumb-item"> <Link href="/pb/package"> لیست محصولات نهایی</Link> </li>
+          <li className="breadcrumb-item"> <Link href="/pb/final"> لیست محصولات نهایی</Link> </li>
           <li className="breadcrumb-item active" aria-current="page"> تعریف محصول جدید </li>
         </ol>
       </nav>
