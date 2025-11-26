@@ -79,9 +79,15 @@ body {
   border-right: 4px solid rgb(221 55 55);
   padding-right: 5px;
 }
+
+.textShadow {
+  text-shadow: 1px 1px 1px #000;
+}
+
 .wid-14rem {
   width: calc(100% - 14rem) !important;
 }
+
 .fs100 {
   font-size: 1rem;
 }
@@ -145,7 +151,8 @@ table {
 .bg-custom-0 {
   background: white;
 }
-.bg-mz{
+
+.bg-mz {
   background-color: #134232;
 }
 
