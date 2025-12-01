@@ -27,7 +27,7 @@ export default function SearchMaterialComponent({ data, forward }: any) {
 											return (
 												<tr className='cursorPointer' onClick={() => { forward(el); setSearch('') }} key={nanoid()}   >
 													<td>{el?.name}</td><td>{el?.barcode}</td><td>{el?.price}</td>
-													<td>{el.type == 'material' ? 'مواد اولیه' : el.type == 'middle' ? 'محصول میانی' : el.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
+													<td>{el.type == 'material' ? 'مواد اولیه' : el.type == 'middle' ? 'محصول میانی' : el.type == 'convert' ? 'محصول تبدیلی': el.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
 
 												</tr>
 											)

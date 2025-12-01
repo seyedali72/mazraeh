@@ -333,7 +333,7 @@ export default function CreateConvertPage() {
                   <td>{item?.percent}</td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
                   <td>{spliteNumber(parseInt((parseFloat(find.price_over) * parseFloat(item?.percent)).toFixed()))}</td>
-                  <td>{find.type == 'material' ? 'مواد اولیه' : find.type == 'middle' ? 'محصول میانی' : find.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
+                  <td>{find.type == 'material' ? 'مواد اولیه' : find.type == 'middle' ? 'محصول میانی' : find.type == 'convert' ? 'محصول تبدیلی': find.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
 
                   <td className="text-center">
                     <button type="button" className="btn btn-sm bg-custom-4 ms-1" onClick={() => toast(<Confirmation type='ویرایش' onDelete={() => handleEdited(item?.uniCode)} />, { autoClose: false })}>
