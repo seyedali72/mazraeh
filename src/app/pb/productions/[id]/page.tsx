@@ -388,7 +388,7 @@ export default function EditProduct() {
                 <th className="text-center">#</th>
                 <th>نام کالا</th>
                 <th>بارکد</th>
-                <th>وزن مصرفی</th>
+                <th>وزن مصرفی kg</th>
                 <th>درصد مصرف</th>
                 <th>قیمت به ریال</th>
                 <th>قیمت مصرفی</th>
@@ -406,7 +406,7 @@ export default function EditProduct() {
                   <td className="text-center">{idx + 1}</td>
                   <td>{find?.name}</td>
                   <td>{find?.barcode}</td>
-                  <td>{parseFloat(item?.itemWeight).toFixed(5)} kg</td>
+                  <td>{parseFloat(item?.itemWeight).toFixed(5)} </td>
                   <td>{item?.percent.toFixed(5)} %</td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
                   <td>{spliteNumber(parseInt((find?.price_over * ((item?.percent / 100))).toFixed(5)))}</td>
