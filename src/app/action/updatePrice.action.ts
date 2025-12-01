@@ -27,8 +27,8 @@ export async function updateAllCosts() {
             await Material.updateOne(
                 { _id: product._id },
                 {
-                    price: Number(totalPrice.toFixed(2)),
-                    price_over: Number((totalPrice_over * ((product.over + 100) / 100)).toFixed(2)),
+                    price: Number(totalPrice.toFixed(5)),
+                    price_over: Number((totalPrice_over * ((product.over + 100) / 100)).toFixed(5)),
                     lastCostUpdate: new Date(),
                 }
             );

@@ -116,14 +116,14 @@ export default function EditProduct() {
   const handleDelete = async (code: any) => {
     let filter = items.filter((el: any) => el.uniCode !== code)
     let find = items.find((el: any) => el.uniCode == code)
-    let converToPercent: any = ((parseFloat(find?.percent))).toFixed(2)
-    let minus = parseFloat(percents.toFixed(3)) - parseFloat(find.percent.toFixed(3))
+    let converToPercent: any = ((parseFloat(find?.percent))).toFixed(5)
+    let minus = parseFloat(percents.toFixed(5)) - parseFloat(find.percent.toFixed(5))
     setPercents(minus)
     let price = find?.material.price * (parseFloat(converToPercent) / 100)
     setLastPrice(lastPrice - price)
     let price_over = find?.material.price_over * (parseFloat(converToPercent) / 100)
     setLastPriceOver(lastPriceOver - price_over)
-    let minusWeight = parseFloat(totalWeight.toFixed(3)) - parseFloat(find.itemWeight.toFixed(3))
+    let minusWeight = parseFloat(totalWeight.toFixed(5)) - parseFloat(find.itemWeight.toFixed(5))
     setTotalWeight(minusWeight)
 
     setItems(filter)
@@ -133,7 +133,7 @@ export default function EditProduct() {
     let dup = items.find((item: any) => item?.material == selecteds?._id)
     if (dup !== undefined) { toast.warning('این محصول را قبلا انتخاب کرده اید'); return }
     let uniCode = Date.now()
-    let converToPercent: any = ((parseFloat(percent) / weight) * 100).toFixed(2)
+    let converToPercent: any = ((parseFloat(percent) / weight) * 100).toFixed(5)
 
     let data = { material: selecteds?._id, percent: parseFloat(converToPercent), uniCode, totalWeight: weight, itemWeight: percent }
     setItems([...items, data])
@@ -157,10 +157,10 @@ export default function EditProduct() {
     let filter = items.filter((el: any) => el.uniCode !== code)
     let find = items.find((el: any) => el.uniCode == code)
     let findMaterial = materials.find((el: any) => el._id.toString() == find?.material)
-    let minus = parseFloat(percents.toFixed(3)) - parseFloat(find.percent)
+    let minus = parseFloat(percents.toFixed(5)) - parseFloat(find.percent)
     setPercents(minus)
 
-    let minusWeight = parseFloat(totalWeight.toFixed(3)) - parseFloat(find.itemWeight)
+    let minusWeight = parseFloat(totalWeight.toFixed(5)) - parseFloat(find.itemWeight)
     setTotalWeight(minusWeight)
     setSelecteds(findMaterial == undefined ? find?.material : findMaterial)
     setEdited(true)
@@ -215,7 +215,7 @@ export default function EditProduct() {
                       if (v !== '' && v !== '.' && !isNaN(v) && v !== '0.') {
                         let value = parseFloat(v);
                         const maxVal = (weight - ((parseFloat(percents) / 100) * weight));
-                        const maxValue = parseFloat(maxVal.toFixed(2))
+                        const maxValue = parseFloat(maxVal.toFixed(5))
                         if (value > maxValue) {
                           toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${maxValue} کیلو گرم`);
 
@@ -228,9 +228,9 @@ export default function EditProduct() {
                     if (percent && !isNaN(parseFloat(percent))) {
                       const num = parseFloat(percent);
                       const maxVal = (weight - ((parseFloat(percents) / 100) * weight));
-                      const maxValue = parseFloat(maxVal.toFixed(2))
+                      const maxValue = parseFloat(maxVal.toFixed(5))
                       if (num > maxValue) {
-                        setPercent(maxValue.toFixed(3));
+                        setPercent(maxValue.toFixed(5));
                         toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${maxValue} کیلو گرم`);
                       } else {
                         setPercent(num.toString());
@@ -342,7 +342,7 @@ export default function EditProduct() {
                   if (v !== '' && v !== '.' && !isNaN(v) && v !== '0.') {
                     let value = parseFloat(v);
                     const maxVal = (weight - ((parseFloat(percents) / 100) * weight));
-                    const maxValue = parseFloat(maxVal.toFixed(2))
+                    const maxValue = parseFloat(maxVal.toFixed(5))
                     if (value > maxValue) {
                       toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${maxValue} کیلو گرم`);
 
@@ -355,9 +355,9 @@ export default function EditProduct() {
                 if (percent && !isNaN(parseFloat(percent))) {
                   const num = parseFloat(percent);
                   const maxVal = (weight - ((parseFloat(percents) / 100) * weight));
-                  const maxValue = parseFloat(maxVal.toFixed(2))
+                  const maxValue = parseFloat(maxVal.toFixed(5))
                   if (num > maxValue) {
-                    setPercent(maxValue.toFixed(3));
+                    setPercent(maxValue.toFixed(5));
                     toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${maxValue} کیلو گرم`);
                   } else {
                     setPercent(num.toString());
@@ -406,10 +406,10 @@ export default function EditProduct() {
                   <td className="text-center">{idx + 1}</td>
                   <td>{find?.name}</td>
                   <td>{find?.barcode}</td>
-                  <td>{parseFloat(item?.itemWeight).toFixed(2)} kg</td>
-                  <td>{item?.percent.toFixed(2)} %</td>
+                  <td>{parseFloat(item?.itemWeight).toFixed(5)} kg</td>
+                  <td>{item?.percent.toFixed(5)} %</td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
-                  <td>{spliteNumber(parseInt((find?.price_over * ((item?.percent / 100))).toFixed()))}</td>
+                  <td>{spliteNumber(parseInt((find?.price_over * ((item?.percent / 100))).toFixed(5)))}</td>
                   <td>{find?.type == 'material' ? 'مواد اولیه' : find?.type == 'middle' ? 'محصول میانی' : find?.type == 'convert' ? 'محصول تبدیلی' : find?.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
 
                   <td className="text-center">
@@ -426,8 +426,8 @@ export default function EditProduct() {
             </tbody>
             <tfoot><tr>
               <td colSpan={5}></td>
-              <th>وزن کل تعریفی</th><td>{totalWeight.toFixed(3)}kg</td>
-              <th>درصد کل تعریفی</th><td>{percents.toFixed(3)}%</td>
+              <th>وزن کل تعریفی</th><td>{totalWeight.toFixed(5)}kg</td>
+              <th>درصد کل تعریفی</th><td>{percents.toFixed(5)}%</td>
             </tr></tfoot>
           </table>
         </section>

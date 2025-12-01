@@ -40,7 +40,7 @@ const ProductionList = ({ productions, categories, filtered, type }: {
   const calc = (single: any, price: number, percentKey: string) => {
     let rrr = price * ((single?.[percentKey] + 100) / 100);
     spliteNumber(parseFloat(rrr.toFixed(1)))
-    return <Fragment key={percentKey}><td> {spliteNumber(parseFloat(rrr.toFixed(0)))}</td><td>{single?.[percentKey]}%</td></Fragment>
+    return <Fragment key={percentKey}><td> {spliteNumber(parseFloat(rrr.toFixed(5)))}</td><td>{single?.[percentKey]}%</td></Fragment>
   }
   interface ProductionItem {
     name?: string;

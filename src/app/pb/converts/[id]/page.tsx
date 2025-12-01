@@ -116,7 +116,7 @@ export default function EditConvert() {
     let find = items.find((el: any) => el.uniCode == code)
     let id = (find?.material?._id !== undefined ? find?.material?._id : find?.material)
     let findMaterial = materials.find((el: any) => el._id.toString() == id)
-    let minus = parseFloat(percents.toFixed(3)) - parseFloat(find.percent)
+    let minus = parseFloat(percents.toFixed(5)) - parseFloat(find.percent)
     setPercents(minus)
     setSelecteds(findMaterial)
     setEdited(true)
@@ -192,7 +192,7 @@ export default function EditConvert() {
                       const num = parseFloat(percent);
 
                       if (num > 9999100.22) {
-                        setPercent(9999100.22.toFixed(3));
+                        setPercent(9999100.22.toFixed(5));
                         toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${9999100.22} کیلو گرم`);
                       } else {
                         setPercent(num.toString());
@@ -316,7 +316,7 @@ export default function EditConvert() {
                   const num = parseFloat(percent);
 
                   if (num > 9999100.22) {
-                    setPercent(9999100.22.toFixed(3));
+                    setPercent(9999100.22.toFixed(5));
                     toast.warning(`میزان وزن باقی مانده جهت استفاده در ترکیب ${9999100.22} کیلو گرم`);
                   } else {
                     setPercent(num.toString());
@@ -363,9 +363,9 @@ export default function EditConvert() {
                   <td className="text-center">{idx + 1}</td>
                   <td>{find?.name}</td>
                   <td>{find?.barcode}</td>
-                  <td>{item?.percent.toFixed(2)} </td>
+                  <td>{item?.percent.toFixed(5)} </td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
-                  <td>{spliteNumber(parseInt((find?.price_over * (parseFloat(item?.percent))).toFixed()))}</td>
+                  <td>{spliteNumber(parseInt((find?.price_over * (parseFloat(item?.percent))).toFixed(5)))}</td>
                   <td>{find?.type == 'material' ? 'مواد اولیه' : find?.type == 'middle' ? 'محصول میانی' : find?.type == 'convert' ? 'محصول تبدیلی': find?.type == 'convert' ? 'محصول تبدیلی' : find?.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
 
                   <td className="text-center">

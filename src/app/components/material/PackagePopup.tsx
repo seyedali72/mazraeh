@@ -27,7 +27,7 @@ export default function PackagePopup({ id, close }: any) {
     ];
     const calc = (price: number, percentKey: string) => {
         let rrr = price * ((single?.[percentKey] + 100) / 100);
-        return spliteNumber(parseFloat(rrr.toFixed(0)))
+        return spliteNumber(parseFloat(rrr.toFixed(5)))
     }
     useEffect(() => { fetchData() }, [fetchData])
     if (loader) { return <Spinner /> }
@@ -109,7 +109,7 @@ export default function PackagePopup({ id, close }: any) {
                                     <td>{item?.material?.barcode}</td>
                                     <td>{spliteNumber((parseInt(item?.material?.price_over)))} ریال</td>
                                     <td>{item?.percent} </td>
-                                    <td>{spliteNumber(parseInt((parseFloat(item?.material?.price_over) * parseFloat(item?.percent)).toFixed()))} ریال</td>
+                                    <td>{spliteNumber(parseInt((parseFloat(item?.material?.price_over) * parseFloat(item?.percent)).toFixed(5)))} ریال</td>
                                 </tr>)
                             })}
                         </tbody>
