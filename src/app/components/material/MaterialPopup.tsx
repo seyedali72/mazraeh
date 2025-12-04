@@ -27,7 +27,7 @@ export default function UplaodMaterial({ close }: any) {
         toast.info('در حال بروزرسانی قیمت محصولات و بسته بندی ها')
         setLoader2(true)
         let update = await updateAllCosts()
-        if (update.success) {
+        if (update?.success) {
             toast.success('قیمت ها بروزرسانی شد')
             setDailyFile(null)
             setJsonData(null)

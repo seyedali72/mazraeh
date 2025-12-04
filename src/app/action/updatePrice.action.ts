@@ -18,17 +18,17 @@ export async function updateAllCosts() {
             for (const item of product.items) {
                 const parent = await Material.findById(item.material);
                 if (!parent) continue;
-
-                totalPrice = product?.type !== 'middle' ? totalPrice + parent.price * (item.percent) : totalPrice + parent.price * (item.percent / 100);
+// console.log(product?.type,parent.price )
+                totalPrice =      product?.type !== 'middle' ? totalPrice +      parent.price *      (item.percent) : totalPrice +      parent.price *      (item.percent / 100);
                 totalPrice_over = product?.type !== 'middle' ? totalPrice_over + parent.price_over * (item.percent) : totalPrice_over + parent.price_over * (item.percent / 100);
             }
-
-
+            console.log(product?.name,totalPrice_over)
+return
             await Material.updateOne(
                 { _id: product._id },
                 {
-                    price: Number(totalPrice.toFixed(5)),
-                    price_over: Number((totalPrice_over * ((product.over + 100) / 100)).toFixed(5)),
+                    price: Number(totalPrice.toFixed(2)),
+                    price_over: Number((totalPrice_over * ((product.over + 100) / 100)).toFixed(2)),
                     lastCostUpdate: new Date(),
                 }
             );

@@ -29,7 +29,7 @@ export default function RequestsList() {
   let update = async () => {
     setLoader(true)
     let res = await updateAllCosts()
-    if (res.success) { setLoader(false); toast.success('بروزرسانی با موفقیت انجام شد') }
+    if (res?.success) { setLoader(false); toast.success('بروزرسانی با موفقیت انجام شد') }
   }
   if (loader) { return <Spinner /> }
   return (

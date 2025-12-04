@@ -162,7 +162,7 @@ export const getFinalList = async (search?: any) => {
 
 		{ $sort: { createdAt: -1 } },
 		{ $skip: query.skip ?? 0 },
-		{ $limit: query.limit && query.limit > 0 ? query.limit : 20 },
+		// { $limit: query.limit && query.limit > 0 ? query.limit : 20 },
 	]
 
 	try {
