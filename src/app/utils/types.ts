@@ -48,6 +48,7 @@ interface IMaterial {
 	coding: String
 	unit: String
 	type: String
+	counterUnit: String
 	qty: Number
 	price: Number
 	level: Number

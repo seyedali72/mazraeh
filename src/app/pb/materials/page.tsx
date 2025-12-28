@@ -9,12 +9,14 @@ import { toast } from 'react-toastify'
 import { spliteNumber } from '@/app/utils/helpers'
 import { updateAllCosts } from '@/app/action/updatePrice.action'
 import SearchCategoryComponent from '@/app/components/SearchCategory'
+import Spinner from '@/app/components/Spinner'
 
 export default function MaterialList() {
   const [materialList, setMaterialList] = useState([])
   const [categories, setCategories] = useState([])
   const [material, setMaterial] = useState<any>()
   const [price_over, setPrice_over] = useState('')
+  const [loader, setLoader] = useState<boolean>(false)
   const [name, setName] = useState('')
   const [category, setCategory] = useState<any>()
   const [barcode, setBarcode] = useState('')
@@ -43,7 +45,7 @@ export default function MaterialList() {
   }, [fetchList, mutated])
 
   const handleEditMaterial = async () => {
-    let data = { categoryId: category?._id, barcode, coding, price, over, price_over, unit }
+    let data = { categoryId: category?._id, barcode, coding, price, over, price_over, unit, name }
     let res = await editMaterial(material?._id, data)
     if (!res?.error) { toast.success('تغییرات با موفقیت ثبت شد'); setEdited(false), setMutated((perv) => !perv) }
   }
@@ -54,9 +56,15 @@ export default function MaterialList() {
   }
   const selectMaterial = (item: any) => {
     setMaterial(item)
-    setCategory(item.categoryId); setBarcode(item.barcode); setCoding(item.coding);setName(item.name);
+    setCategory(item.categoryId); setBarcode(item.barcode); setCoding(item.coding); setName(item.name);
     setPrice(item.price.toFixed()); setOver(item.over); setUnit(item.unit); setPrice_over(item?.price_over.toFixed(0))
   }
+  let update = async () => {
+    setLoader(true)
+    let res = await updateAllCosts()
+    if (res?.success) { setLoader(false); toast.success('بروزرسانی با موفقیت انجام شد') }
+  }
+  if (loader) { return <Spinner /> }
   return (
     <>
       <nav aria-label="breadcrumb">
@@ -68,11 +76,11 @@ export default function MaterialList() {
       <section className="main-body-container rounded">
         <section className="d-flex justify-content-between align-items-center mt-1  mb-3 border-bottom pb-3" >
           <div className="col-md-6">
-            <input type="text" onChange={(e: any) => setFilter(e.target.value)} placeholder='فیلتر براساس نام کالا، بارکد یا دسته بندی ' className="form-control form-control-sm" />
+            <input type="text" onChange={(e: any) => setFilter(e.target.value)} placeholder='فیلتر براساس نام کالا، بارکد یا زیرگروه کالا ' className="form-control form-control-sm" />
           </div>
           <div className='d-flex gap-1'>
             <button type="button" onClick={() => { setUploaded(true) }} className="btn btn-sm bg-custom-2">بارگذاری لیست قیمت جدید</button>
-            <button type="button" onClick={async () => await updateAllCosts()} className="btn btn-sm bg-custom-1">بروزرسانی قیمت محصولات</button>
+            <button type="button" onClick={async () => await update()} className="btn btn-sm bg-custom-1">بروزرسانی قیمت کالا</button>
             <button type="button" onClick={() => { setCreatePopup(true) }} className="btn btn-sm bg-custom-4">تعریف مواد اولیه جدید</button>
 
           </div>
@@ -111,7 +119,7 @@ export default function MaterialList() {
                   <input type="text" placeholder="واحد اندازه گیری را وارد کنید" value={unit} className="form-control form-control-sm" onChange={(e: any) => setUnit(e.target.value)} />
                 </div>
                 <div className="col-12 col-lg-6">
-                  <label className='my-1' htmlFor="">دسته بندی </label>
+                  <label className='my-1' htmlFor="">زیرگروه کالا </label>
                   {category?._id !== undefined ?
                     <div className="d-flex gap-1 align-items-center"><input className="form-control form-control-sm" type="text" disabled value={`${category?.name} - شماره سریال ${category?.serial}`} />
                       <span className='btn btn-sm d-flex bg-custom-3 align-items-center' onClick={() => setCategory({})}><i className="fa fa-trash"></i></span></div>
@@ -133,7 +141,7 @@ export default function MaterialList() {
                 <button onClick={() => { setEdited(false) }} className="btn btn-sm" type="button"><i className="fa fa-times"></i></button>
               </div>
               <div className="row">
-                    <div className="col-12">
+                <div className="col-12">
                   <label className='my-1' htmlFor="">نام کالا </label>
                   <input type="text" placeholder="نام کالا را وارد کنید" value={name} className="form-control form-control-sm" onChange={(e: any) => setName(e.target.value)} />
                 </div>
@@ -158,7 +166,7 @@ export default function MaterialList() {
                   <input type="text" placeholder="واحد اندازه گیری را وارد کنید" value={unit} className="form-control form-control-sm" onChange={(e: any) => setUnit(e.target.value)} />
                 </div>
                 <div className="col-12 col-lg-6">
-                  <label className='my-1' htmlFor="">دسته بندی </label>
+                  <label className='my-1' htmlFor="">زیرگروه کالا </label>
                   {category?._id !== undefined ?
                     <div className="d-flex gap-1 align-items-center"><input className="form-control form-control-sm" type="text" disabled value={`${category?.name} - شماره سریال ${category?.serial}`} />
                       <span className='btn btn-sm d-flex bg-custom-3 align-items-center' onClick={() => setCategory({})}><i className="fa fa-trash"></i></span></div>
@@ -177,10 +185,10 @@ export default function MaterialList() {
             <thead>
               <tr>
                 <th className="text-center">#</th>
-                <th>نام محصول</th>
+                <th>نام کالا</th>
                 <th>بارکد</th>
                 <th>قیمت به ریال</th>
-                <th>دسته بندی</th>
+                <th>زیرگروه کالا</th>
                 <th className=" text-center">ویرایش </th>
               </tr>
             </thead>
@@ -189,10 +197,10 @@ export default function MaterialList() {
                 if (item.name.includes(filter) || item.barcode.includes(filter)) {
                   return (<tr key={idx}>
                     <td className='text-center'>{idx + 1}</td>
-                    <td >{item.name} </td>
-                    <td>{item.barcode}</td>
-                    <td>{spliteNumber(item.price.toFixed())}</td>
-                    <td>{item.categoryId?.name}</td>
+                    <td className='text-end' >{item.name} </td>
+                    <td className='text-start'>{item.barcode}</td>
+                    <td className='text-start'>{spliteNumber(item.price.toFixed())}</td>
+                    <td className='text-end'>{item.categoryId?.name}</td>
                     <td> <button type="button" className="btn btn-sm bg-custom-4 ms-1" onClick={() => { selectMaterial(item); setEdited(true) }}> <i className="fa fa-edit px-1"></i>ویرایش </button></td>
                   </tr>)
                 }

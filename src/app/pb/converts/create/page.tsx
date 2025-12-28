@@ -43,8 +43,8 @@ export default function CreateConvertPage() {
   const [createBarcode, setCreateBarcode] = useState<string>('0')
 
   const handleCreateConvert = async (obj: any) => {
-    if (items?.length < 1) { toast.warning('برای تعریف محصول حداقل یک قلم محصول باید انتخاب شود'); return }
-    // if (typeProduct == undefined) { toast.warning('نوع محصول را مشخص نکرده اید'); return }
+    if (items?.length < 1) { toast.warning('برای تعریف کالا حداقل یک قلم کالا باید انتخاب شود'); return }
+    // if (typeProduct == undefined) { toast.warning('نوع کالا را مشخص نکرده اید'); return }
     obj.categoryId = category?._id
     let findCat: any = categories?.find((el: any) => el?._id?.toString() == obj.categoryId)
     let cloneSerial = obj.coding
@@ -95,7 +95,7 @@ export default function CreateConvertPage() {
 
   const addToItems = () => {
     let dup = items.find((item: any) => item?.material == selecteds?._id)
-    if (dup !== undefined) { toast.warning('این محصول را قبلا انتخاب کرده اید'); return }
+    if (dup !== undefined) { toast.warning('این کالا را قبلا انتخاب کرده اید'); return }
     let uniCode = Date.now()
     let data = { material: selecteds?._id, percent: parseFloat(percent), uniCode }
     setItems([...items, data])
@@ -115,8 +115,8 @@ export default function CreateConvertPage() {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link href="/pb/">خانه</Link></li>
-          <li className="breadcrumb-item"> <Link href="/pb/converts"> لیست محصولات تبدیلی</Link> </li>
-          <li className="breadcrumb-item active" aria-current="page"> تعریف محصول جدید </li>
+          <li className="breadcrumb-item"> <Link href="/pb/converts"> لیست کالای تبدیلی</Link> </li>
+          <li className="breadcrumb-item active" aria-current="page"> تعریف کالا جدید </li>
         </ol>
       </nav>
       {edited &&
@@ -175,7 +175,7 @@ export default function CreateConvertPage() {
 
 
               <div className="col-12 mt-2 px-1">
-                <button type='button' onClick={() => { if (selecteds == null || parseFloat(percent) == 0) { return toast.error('انتخاب محصول و درصد مصرف الزامیست') } else { addToItems() } }} className="btn bg-custom-1 btn-sm">افزودن به لیست</button>
+                <button type='button' onClick={() => { if (selecteds == null || parseFloat(percent) == 0) { return toast.error('انتخاب کالا و درصد مصرف الزامیست') } else { addToItems() } }} className="btn bg-custom-1 btn-sm">افزودن به لیست</button>
               </div>
             </section>
           </section>
@@ -185,15 +185,15 @@ export default function CreateConvertPage() {
         <section className="main-body-container rounded">
           <section className="row px-2">
             {/* <div className="col-12  col-md-3  mb-2 px-1">
-              <label className='my-1' htmlFor="">نوع محصول </label>
+              <label className='my-1' htmlFor="">نوع کالا </label>
               <select className="form-control form-control-sm" value={typeProduct} onChange={(e: any) => { setTypeProduct(e?.target?.value) }}  >
-                <option value="" hidden>این محصول بازرگانی است یا بسته بندی</option>
-                <option value="final">محصول بازرگانی</option>
+                <option value="" hidden>این کالای بازرگانی است یا بسته بندی</option>
+                <option value="final">کالای بازرگانی</option>
                 <option value="package">بسته بندی</option>
               </select>
             </div> */}
             <div className="col-12 col-md-4  mb-2 px-1">
-              <label className='my-1' htmlFor="">دسته بندی </label>
+              <label className='my-1' htmlFor="">زیرگروه کالا </label>
               {category?._id !== undefined ?
                 <div className="d-flex gap-1 align-items-center"><input className="form-control form-control-sm" type="text" disabled value={category?.name} />
                   <span className='btn btn-sm d-flex bg-custom-3 align-items-center' onClick={() => setCategory({})}><i className="fa fa-trash"></i></span></div>
@@ -201,15 +201,15 @@ export default function CreateConvertPage() {
             </div>
             <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">واحد اندازه گیری </label>
-              <input type="text" placeholder='واحد اندازه گیری' className="form-control form-control-sm" {...register('unit', { required: 'واحد محصول را وارد کنید', })} />
+              <input type="text" placeholder='واحد اندازه گیری' className="form-control form-control-sm" {...register('unit', { required: 'واحد کالا را وارد کنید', })} />
             </div>
             <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">عنوان بسته بندی </label>
-              <input type="text" placeholder='عنوان بسته بندی' className="form-control form-control-sm" {...register('name', { required: 'نام محصول را وارد کنید', })} />
+              <input type="text" placeholder='عنوان بسته بندی' className="form-control form-control-sm" {...register('name', { required: 'نام کالا را وارد کنید', })} />
             </div>
             <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">سریال بسته بندی </label>
-              <input type="text" placeholder='سریال محصول' className="form-control form-control-sm" {...register('coding')} onBlur={(e: any) => { setValue('barcode', `${createBarcode}${e.target.value}`), setCreateBarcode(`${createBarcode}${e.target.value}`) }} />
+              <input type="text" placeholder='سریال کالا' className="form-control form-control-sm" {...register('coding')} onBlur={(e: any) => { setValue('barcode', `${createBarcode}${e.target.value}`), setCreateBarcode(`${createBarcode}${e.target.value}`) }} />
             </div>
             <div className="col-12 col-md-4 px-1 mb-2">
               <label className='my-1' htmlFor="">بارکد بسته بندی </label>
@@ -225,20 +225,20 @@ export default function CreateConvertPage() {
               <input type="number" placeholder='شعب' className="form-control form-control-sm" {...register('BPercent')} />
             </div>
             <div className="col-12 col-md-2 px-1 mb-2 fs85">
-              <label className='my-1' htmlFor="">نمایندگان </label>
-              <input type="number" placeholder='نمایندگان' className="form-control form-control-sm" {...register('NPercent')} />
+              <label className='my-1' htmlFor="">نمایندگی </label>
+              <input type="number" placeholder='نمایندگی' className="form-control form-control-sm" {...register('NPercent')} />
             </div>
             <div className="col-12 col-md-2 px-1 mb-2 fs85">
-              <label className='my-1' htmlFor="">مویرگی نقد </label>
-              <input type="number" placeholder='مویرگی نقد' className="form-control form-control-sm" {...register('MNPercent')} />
+              <label className='my-1' htmlFor="">لبنیات سنتی </label>
+              <input type="number" placeholder='لبنیات سنتی' className="form-control form-control-sm" {...register('MNPercent')} />
             </div>
             <div className="col-12 col-md-2 px-1 mb-2 fs85">
-              <label className='my-1' htmlFor="">مویرگی هفتگی </label>
-              <input type="number" placeholder='مویرگی هفتگی' className="form-control form-control-sm" {...register('MHPercent')} />
+              <label className='my-1' htmlFor="">کبابی و دیزی </label>
+              <input type="number" placeholder='کبابی و دیزی' className="form-control form-control-sm" {...register('MHPercent')} />
             </div>
             <div className="col-12 col-md-2 px-1 mb-2 fs85">
-              <label className='my-1' htmlFor="">مویرگی چکی </label>
-              <input type="number" placeholder='مویرگی چکی' className="form-control form-control-sm" {...register('MCPercent')} />
+              <label className='my-1' htmlFor="">هورکا </label>
+              <input type="number" placeholder='هورکا' className="form-control form-control-sm" {...register('MCPercent')} />
             </div>
           </section>
           <button type='submit' className="btn btn-primary btn-sm px-5">ثبت</button>
@@ -298,7 +298,7 @@ export default function CreateConvertPage() {
 
 
           <div className="col-12 my-2 px-1">
-            <button type='button' onClick={() => { if (selecteds == null || parseFloat(percent) == 0) { return toast.error('انتخاب محصول و مقدار مصرف الزامیست') } else { addToItems() } }} className="btn bg-custom-1 btn-sm">افزودن به لیست</button>
+            <button type='button' onClick={() => { if (selecteds == null || parseFloat(percent) == 0) { return toast.error('انتخاب کالا و مقدار مصرف الزامیست') } else { addToItems() } }} className="btn bg-custom-1 btn-sm">افزودن به لیست</button>
           </div>
         </section>
 
@@ -314,7 +314,7 @@ export default function CreateConvertPage() {
                 <th className="text-center">#</th>
                 <th>نام کالا</th>
                 <th>بارکد</th>
-                <th>مقدار مصرف</th>
+                <th>ضریب تبدیل</th>
                 <th>قیمت</th>
                 <th>قیمت کل</th>
                 <th>نوع کالا</th>
@@ -333,7 +333,7 @@ export default function CreateConvertPage() {
                   <td>{item?.percent}</td>
                   <td>{spliteNumber(find?.price_over?.toFixed())}</td>
                   <td>{spliteNumber(parseInt((parseFloat(find.price_over) * parseFloat(item?.percent)).toFixed(5)))}</td>
-                  <td>{find.type == 'material' ? 'مواد اولیه' : find.type == 'middle' ? 'محصول میانی' : find.type == 'convert' ? 'محصول تبدیلی': find.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
+                  <td>{find.type == 'material' ? 'مواد اولیه' : find.type == 'middle' ? 'کالای میانی' : find.type == 'convert' ? 'کالای تبدیلی': find.type == 'package' ? 'بسته بندی' : 'کالای بازرگانی'}</td>
 
                   <td className="text-center">
                     <button type="button" className="btn btn-sm bg-custom-4 ms-1" onClick={() => toast(<Confirmation type='ویرایش' onDelete={() => handleEdited(item?.uniCode)} />, { autoClose: false })}>

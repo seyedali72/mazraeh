@@ -19,7 +19,7 @@ export default function SearchMaterialComponent({ data, forward }: any) {
 						{search.length > 2 && <div className={'dropdownresultbox table-responsive'}>
 							<table className="table table-sm table-bordered table-striped fs80 mb-0">
 								<thead>
-									<tr><th>نام</th><th>بارکد</th><th>قیمت</th><th>نوع محصول</th></tr>
+									<tr><th>نام</th><th>بارکد</th><th>قیمت</th><th>نوع کالا</th></tr>
 								</thead>
 								<tbody>
 									{data?.map((el: any) => {
@@ -27,7 +27,7 @@ export default function SearchMaterialComponent({ data, forward }: any) {
 											return (
 												<tr className='cursorPointer' onClick={() => { forward(el); setSearch('') }} key={nanoid()}   >
 													<td>{el?.name}</td><td>{el?.barcode}</td><td>{el?.price}</td>
-													<td>{el.type == 'material' ? 'مواد اولیه' : el.type == 'middle' ? 'محصول میانی' : el.type == 'convert' ? 'محصول تبدیلی': el.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
+													<td>{el.type == 'material' ? 'مواد اولیه' : el.type == 'middle' ? 'کالای میانی' : el.type == 'convert' ? 'کالای تبدیلی': el.type == 'package' ? 'بسته بندی' : 'کالای بازرگانی'}</td>
 
 												</tr>
 											)

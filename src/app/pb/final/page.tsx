@@ -47,9 +47,9 @@ export default function PackageList() {
           </div>
           <div className="d-flex gap-1">
             <Link href="/pb/final/create" className="btn bg-success text-white btn-sm" >
-              تعریف محصول جدید
+              تعریف کالا جدید
             </Link>
-            <button type="button" onClick={async () => { await update() }} className="btn btn-sm bg-custom-1">بروزرسانی قیمت محصولات</button>
+            <button type="button" onClick={async () => { await update() }} className="btn btn-sm bg-custom-1">بروزرسانی قیمت کالا</button>
           </div>
         </section>
         <section className="table-responsive">
@@ -57,9 +57,9 @@ export default function PackageList() {
             <thead>
               <tr>
                 <th className="text-center">#</th>
-                <th>نام بسته بندی</th>
-                <th>دسته بندی</th>
-                <th>بارکد بسته بندی</th>
+                <th>نام کالا</th>
+                <th>زیرگروه کالا</th>
+                <th>بارکد کالا</th>
                 <th>آخرین قیمت</th>
                 <th><i className="fa fa-dollar"></i> لیست قیمت</th>
                 <th className=" text-center">
@@ -72,11 +72,11 @@ export default function PackageList() {
                 if (item?.name?.includes(filter) || item?.barcode?.includes(filter) || item?.coding?.includes(filter)) {
                   return (<tr key={idx}>
                     <td className="text-center">{idx + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.categoryId?.name}</td>
-                    <td>{item?.barcode}</td>
-                    <td>{convertToPersianDate(item?.lastCostUpdate, 'YMD')}</td>
-                    <td><button type="button" onClick={() => { setPopup(true); setSelectItem(item?._id) }} className='btn btn-sm bg-custom-2'>نمایش</button></td>
+                    <td  className='text-end'>{item.name}</td>
+                    <td  className='text-end'>{item.categoryId?.name}</td>
+                    <td  className='text-start'>{item?.barcode}</td>
+                    <td  className='text-start'>{convertToPersianDate(item?.lastCostUpdate, 'YMD')}</td>
+                    <td className='text-center'><button type="button" onClick={() => { setPopup(true); setSelectItem(item?._id) }} className='btn btn-sm bg-custom-2'>نمایش</button></td>
                     <td className="text-center">
                       <Link href={`/pb/final/${item?._id}`} className="btn btn-sm bg-custom-4 ms-1" ><i className="fa fa-edit px-1"></i>ویرایش</Link>
                     </td>

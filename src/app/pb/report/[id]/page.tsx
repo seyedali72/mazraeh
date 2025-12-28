@@ -73,7 +73,7 @@ export default function ReportDetail() {
                 <div className="d-flex flex-wrap gap-3 mt-3">
                     {singleReport?.group?.length > 0 ? <button type="button" onClick={() => setGroupBox(!groupBox)} className="btn btn-sm bg-custom-2">  <i className="fa fa-cubes px-1"></i> گروه کالا ها</button> : ''}
                     {singleReport?.category?.length > 0 ? <button type="button" onClick={() => setCategoryBox(!categoryBox)} className="btn btn-sm bg-custom-4">  <i className="fa fa-folder-open px-1"></i> دسته بندی ها</button> : ''}
-                    {singleReport?.products?.length > 0 ? <button type="button" onClick={() => setProductBox(!productBox)} className="btn btn-sm bg-custom-5">  <i className="fa fa-cube px-1"></i> لیست محصولات</button> : ''}
+                    {singleReport?.products?.length > 0 ? <button type="button" onClick={() => setProductBox(!productBox)} className="btn btn-sm bg-custom-5">  <i className="fa fa-cube px-1"></i> لیست کالاها</button> : ''}
                     <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete()} />, { autoClose: false, })}>
                         <i className="fa fa-trash px-1"></i>حذف این گزارش
                     </button>

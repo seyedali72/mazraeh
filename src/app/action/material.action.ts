@@ -55,7 +55,7 @@ export const createMaterial = async (body: any) => {
 		return { success: 'بارگذاری موفقیت امیز بود' };
 	} catch (error) {
 		console.error("Error in createMaterial:", error);
-		return { error: 'خطا در پردازش کلی محصولات' };
+		return { error: 'خطا در پردازش کلی کالا' };
 	}
 };
 export const editMaterial = async (id: string, body: any) => {
@@ -96,7 +96,7 @@ export const createProduct = async (body: any) => {
 		}
 		return { success: true }
 	} catch (error) {
-		return { error: 'خطا در ساخت محصول' };
+		return { error: 'خطا در ساخت کالا' };
 	}
 }
 export const getFinalList = async (search?: any) => {

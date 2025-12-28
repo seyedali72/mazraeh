@@ -42,7 +42,7 @@ export default function DetailReport() {
             const res = await createProduct(data,selectedDate); setJsonData(null);
 
             if (res.success) { toast.success(res.success); console.log(convertToPersianDate(Date.now(), 'YYMDHMSS')); setLoading(false); setFinalData(null); } else { toast.error('خطا در افزودن جزئیات'); }
-        } catch (error) { console.error('Error creating product:', error); toast.error('خطا در ایجاد محصول'); }
+        } catch (error) { console.error('Error creating product:', error); toast.error('خطا در ایجاد کالا'); }
     }
 
     const handleAddDetail = async (data: any) => {

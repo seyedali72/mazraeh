@@ -78,7 +78,7 @@ export default function ComparePage() {
                                 <th >مقایسه براساس
                                     <button type="button" onClick={() => { setGroupList(true), setCategoryList(false), setProductList(false), setCompareList([]), setCompareIdList([]) }} className="btn btn-sm bg-gray text-nowrap">گروه کالا </button>
                                     <button type="button" onClick={() => { setCategoryList(true), setGroupList(false), setProductList(false), setCompareList([]), setCompareIdList([]) }} className="btn btn-sm bg-gray text-nowrap">دسته بندی</button>
-                                    <button type="button" onClick={() => { setGroupList(false), setCategoryList(false), setProductList(true), setCompareList([]), setCompareIdList([]) }} className="btn btn-sm bg-gray text-nowrap">محصول </button></th>
+                                    <button type="button" onClick={() => { setGroupList(false), setCategoryList(false), setProductList(true), setCompareList([]), setCompareIdList([]) }} className="btn btn-sm bg-gray text-nowrap">کالا </button></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,7 +101,7 @@ export default function ComparePage() {
                                                 : productList ?
                                                     <td className="text-center">
                                                         {compareIdList?.includes(el?._id) ? 'افزوده شده به لیست مقایسه' : <button type="button" className="btn btn-sm bg-custom-2 ms-1" onClick={() => { setCompareList([...compareList, [`${el?.branch}-${convertToPersianDate(el?.date,'YMD')}`, el?.products[0]]]), setCompareIdList([...compareIdList, el?._id]) }} >
-                                                            <i className="fa fa-cubes px-1"></i>افزودن محصولات به لیست
+                                                            <i className="fa fa-cubes px-1"></i>افزودن کالاها به لیست
                                                         </button>}
                                                     </td> : categoryList &&
                                                     <td className="text-center">

@@ -127,7 +127,7 @@ export default function Teams() {
                                 <th>جایگاه</th>
                                 <th>دسته بندی بالادستی</th>
                                 <th>سریال</th>
-                                <th>تعداد محصولات</th>
+                                <th>تعداد کالاها</th>
                                 <th className=" text-center">
                                     <i className="fa fa-cogs px-1"></i>تنظیمات
                                 </th>

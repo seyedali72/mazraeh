@@ -34,17 +34,17 @@ export default function PriceListPopup({ id, close }: any) {
         <div className="popupCustom">
             <section className="main-body-container rounded">
                 <div className="d-flex justify-content-between border-bottom pb-1">
-                    <p className="mb-0 fs-6 fw-bold borderright">جزئیات محصول {single?.name} </p>
+                    <p className="mb-0 fs-6 fw-bold borderright">جزئیات کالا {single?.name} </p>
                     <button onClick={() => { close() }} className="btn btn-sm" type="button"><i className="fa fa-times"></i></button>
                 </div>
                 <section className="table-responsive">
                     <table className="table table-bordered table-sm table-striped fs80">
                         <thead>
                             <tr>
-                                <th>نام محصول</th>
-                                <th>بارکد محصول</th>
-                                <th>نوع محصول</th>
-                                <th>دسته بندی</th>
+                                <th>نام کالا</th>
+                                <th>بارکد کالا</th>
+                                <th>نوع کالا</th>
+                                <th>زیرگروه کالا</th>
                                 <th>سریال</th>
                                 <th>واحد اندازه گیری</th>
                                 <th>درصد سربار</th>
@@ -54,7 +54,7 @@ export default function PriceListPopup({ id, close }: any) {
                             <tr >
                                 <td>{single.name}</td>
                                 <td>{single?.barcode}</td>
-                                <td>{single.type == 'material' ? 'مواد اولیه' : single.type == 'middle' ? 'محصول میانی' : single.type == 'convert' ? 'محصول تبدیلی': single.type == 'convert' ? 'محصول تبذیلی' : single.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
+                                <td>{single.type == 'material' ? 'مواد اولیه' : single.type == 'middle' ? 'کالای میانی' : single.type == 'convert' ? 'کالای تبدیلی': single.type == 'convert' ? 'کالا تبذیلی' : single.type == 'package' ? 'بسته بندی' : 'کالای بازرگانی'}</td>
                                 <td>{single.categoryId?.name}</td>
                                 <td>{single?.coding}</td>
                                 <td>{single?.unit}</td>
@@ -68,11 +68,11 @@ export default function PriceListPopup({ id, close }: any) {
                             <tr>
                                 <th>هزینه تمام شده</th>
                                 <th>قیمت تمام شده</th>
-                                <th>شعب {single?.BPercent}% </th>
-                                <th>نمایندگان {single?.NPercent}% </th>
-                                <th>مویرگی نقد {single?.MNPercent}% </th>
-                                <th>مویرگی هفتگی {single?.MHPercent}% </th>
-                                <th>مویرگی چکی {single?.MCPercent}% </th>
+                                <th>شعب {single?.BPercent?.toFixed()}% </th>
+                                <th>نمایندگی {single?.NPercent?.toFixed()}% </th>
+                                <th>لبنیات سنتی {single?.MNPercent?.toFixed()}% </th>
+                                <th>کبابی و دیزی {single?.MHPercent?.toFixed()}% </th>
+                                <th>هورکا {single?.MCPercent?.toFixed()}% </th>
                             </tr>
                         </thead>
                         <tbody> 
@@ -84,16 +84,16 @@ export default function PriceListPopup({ id, close }: any) {
                         </tbody>
 
                     </table>
-                    <p className="mb-1 fs-6 fw-bold borderright">لیست محصولات مصرفی</p>
+                    <p className="mb-1 fs-6 fw-bold borderright">لیست کالای مصرفی</p>
                     <table className="table table-bordered table-sm table-striped fs80">
                         <thead>
                             <tr>
                                 <th className="text-center">#</th>
-                                <th>نام محصول</th>
-                                <th>دسته بندی</th>
-                                <th>نوع محصول</th>
-                                <th>بارکد محصول</th>
-                                <th>مبلغ محصول</th>
+                                <th>نام کالا</th>
+                                {/* <th>زیرگروه کالا</th> */}
+                                <th>نوع کالا</th>
+                                <th>بارکد کالا</th>
+                                <th>مبلغ کالا</th>
                                 <th>درصد مصرف</th>
                                 <th>مبلغ کل</th>
                             </tr>
@@ -103,8 +103,8 @@ export default function PriceListPopup({ id, close }: any) {
                                 return (<tr key={idx}>
                                     <td className="text-center">{idx + 1}</td>
                                     <td>{item?.material.name}</td>
-                                    <td>{item?.material.categoryId?.name}</td>
-                                    <td>{item?.material.type == 'material' ? 'مواد اولیه' : item?.material.type == 'middle' ? 'محصول میانی' : item?.material?.type == 'convert' ? 'محصول تبدیلی': item?.material.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
+                                    {/* <td>{item?.material.categoryId?.name}</td> */}
+                                    <td>{item?.material.type == 'material' ? 'مواد اولیه' : item?.material.type == 'middle' ? 'کالای میانی' : item?.material?.type == 'convert' ? 'کالای تبدیلی': item?.material.type == 'package' ? 'بسته بندی' : 'کالای بازرگانی'}</td>
                                     <td>{item?.material?.barcode}</td>
                                     <td>{spliteNumber((parseInt(item?.material?.price_over)))} ریال</td>
                                     <td>{item?.percent} %</td>

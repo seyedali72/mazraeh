@@ -10,6 +10,7 @@ const baseMaterialSchema = new Schema<IMaterial, Model<IMaterial, any, any>, any
 		coding: { type: String, trim: true },
 		unit: { type: String, trim: true },
 		type: { type: String, trim: true },
+		counterUnit: { type: String, trim: true },
 		categoryId: { type: Schema.Types.ObjectId, ref: 'Category' },
 		price: { type: Number, trim: true },
 		items: [{ type: Object }],

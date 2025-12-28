@@ -15,11 +15,12 @@ interface Category {
   parent?: { _id: string; parent?: { _id: string } };
 }
 
-const ProductionList = ({ productions, categories, filtered, type }: {
+const ProductionList = ({ productions, categories, filtered, type, actives }: {
   productions?: Production[];
   categories?: Category[];
   filtered: any;
   type: string;
+  actives: any
 }) => {
   const { selectCat, selectGroup, selectSubGroup, filter } = filtered
 
@@ -40,7 +41,7 @@ const ProductionList = ({ productions, categories, filtered, type }: {
   const calc = (single: any, price: number, percentKey: string) => {
     let rrr = price * ((single?.[percentKey] + 100) / 100);
     spliteNumber(parseFloat(rrr.toFixed(1)))
-    return <Fragment key={percentKey}><td> {spliteNumber(parseFloat(rrr.toFixed(5)))}</td><td>{single?.[percentKey]}%</td></Fragment>
+    return <Fragment key={percentKey}><td className='text-start'> {spliteNumber(parseFloat(rrr.toFixed(0)))}</td><td>{single?.[percentKey]}%</td></Fragment>
   }
   interface ProductionItem {
     name?: string;
@@ -73,42 +74,29 @@ const ProductionList = ({ productions, categories, filtered, type }: {
   });
   return (
     <>
-      <ExportToExcelButton filteredItems={filteredData} />
+      {/* <ExportToExcelButton filteredItems={filteredData} /> */}
 
-      <table className="table table-bordered table-sm table-striped">
-        <thead>
-          <tr>
-            <th className="text-center">#</th>
-            <th>نام محصول</th>
-            <th>دسته بندی</th>
-            <th>بارکد محصول</th>
-            <th>نوع</th>
-            <th>قیمت به ریال</th>
-            <th colSpan={2}>شعب</th>
-            <th colSpan={2}>نمایندگان</th>
-            <th colSpan={2}>مویرگی نقد </th>
-            <th colSpan={2}>مویرگی هفتگی </th>
-            <th colSpan={2}>مویرگی چکی </th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((item: any, idx: number) => {
-            return (
-              <tr key={item?._id}>
-                <td className="text-center">{idx + 1}</td>
-                <td>{item.name}</td>
-                <td>{item.categoryId?.name}</td>
-                <td>{item?.barcode}</td>
-                <td>{item?.type == 'material' ? 'مواد اولیه' : item?.type == 'middle' ? 'محصول میانی' : item.type == 'convert' ? 'محصول تبدیلی': item?.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'}</td>
-                <td>{spliteNumber(parseInt(item?.price_over))}</td>
-                {percents.map(({ key }) => (calc(item, item?.price_over, key)))}
 
-              </tr>
-            )
-          })}
+      <tbody>
+        {filteredData.map((item: any, idx: number) => {
+          return (
+            <tr key={item?._id}>
+              <td className="text-center">{idx + 1}</td>
+              <td className='text-end'>{actives?.includes('name') ? '' : `${item.name}${item.qty>0 ? ` - ${item?.unit} ${item?.qty} ${item?.counterUnit}` :''} `}</td>
+              <td className='text-end'>{actives?.includes('subgroup') ? '' : item.categoryId?.name}</td>
+              <td className='text-end'>{actives?.includes('group') ? '' : item.categoryId?.parent?.name}</td>
+              <td className='text-end'>{actives?.includes('category') ? '' : item.categoryId?.parent?.parent?.name}</td>
+              <td className='text-start'>{actives?.includes('barcode') ? '' : item?.barcode}</td>
+              <td className='text-end'>{actives?.includes('type') ? '' : item?.type == 'material' ? 'مواد اولیه' : item?.type == 'middle' ? 'کالای میانی' : item.type == 'convert' ? 'کالای تبدیلی' : item?.type == 'package' ? 'بسته بندی' : 'کالای بازرگانی'}</td>
+              <td className='text-start'>{actives?.includes('fee') ? '' : spliteNumber(parseInt(item?.price_over))}</td>
+              {percents.map(({ key }) => (calc(item, item?.price_over, key)))}
 
-        </tbody>
-      </table>  </>
+            </tr>
+          )
+        })}
+
+      </tbody>
+    </>
   );
 };
 export default ProductionList

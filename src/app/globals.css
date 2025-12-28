@@ -12,6 +12,16 @@ a {
   font-weight: bold;
 }
 
+.mxh450 {
+  max-height: 450px;
+}
+
+.fixedTopRow {
+  position: sticky;
+  top: 0;
+  right: 0;
+}
+
 .filterBlur {
   filter: blur(5px);
 }

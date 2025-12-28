@@ -24,7 +24,7 @@ export default function UplaodMaterial({ close }: any) {
         let res = await createMaterial(data)
         setLoader(false)
         toast.success(res.success)
-        toast.info('در حال بروزرسانی قیمت محصولات و بسته بندی ها')
+        toast.info('در حال بروزرسانی قیمت کالا و بسته بندی ها')
         setLoader2(true)
         let update = await updateAllCosts()
         if (update?.success) {

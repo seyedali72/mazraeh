@@ -39,7 +39,7 @@ export default function CompareProduct() {
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item "><Link href={`/pb/dashboard`}>داشبورد</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page">آمار فروش محصول</li>
+                    <li className="breadcrumb-item active" aria-current="page">آمار فروش کالا</li>
                 </ol>
             </nav>
             <section ref={contentRef} className="main-body-container rounded">

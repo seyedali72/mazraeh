@@ -58,7 +58,7 @@ export default function HeaderPage({ sellers = [], products = [], toggle, seller
                             <b>  الی تاریخ: </b><span >{selectedEndDate !== null ? convertToPersianDate(selectedEndDate, 'YMD') : '...'}</span>
                         </div>}
                         {type == 'productInDuration' && <div className="col-11 pb-2 fs85 ">
-                            <b> مقایسه بین محصولات: </b>{selectedProducts?.length > 0 ? selectedProducts?.map((product: string) => (<span key={nanoid()}>{product} , </span>)) : '...........'}{' '}
+                            <b> مقایسه بین کالا: </b>{selectedProducts?.length > 0 ? selectedProducts?.map((product: string) => (<span key={nanoid()}>{product} , </span>)) : '...........'}{' '}
                             <b> در بین شعبات:</b> {selectedBranchs?.length > 0 ? selectedBranchs?.map((branch: string) => (<span key={nanoid()}>{branch} , </span>)) : '...........'}{' '}
                             <b> از تاریخ:</b> <span >{selectedStartDate !== null ? convertToPersianDate(selectedStartDate, 'YMD') : '...'}</span>{' '}
                             <b>  الی تاریخ: </b><span >{selectedEndDate !== null ? convertToPersianDate(selectedEndDate, 'YMD') : '...'}</span>
@@ -116,7 +116,7 @@ export default function HeaderPage({ sellers = [], products = [], toggle, seller
                             <div className="col-8 "> <SearchComponent data={sellers} forward={(e: any) => setSelectedSellers(e)} /> </div>
                         </div>}
                         {(type == 'productInDuration') && <div className="col-12 d-flex ">
-                            <div className="col-4">انتخاب محصول</div>
+                            <div className="col-4">انتخاب کالا</div>
                             <div className="col-8 "> <SearchComponent data={products} forward={(e: any) => setSelectedProducts(e)} /> </div>
                         </div>}
                     </div>

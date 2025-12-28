@@ -44,7 +44,7 @@ export const createPackage = async (body: any) => {
 		
 		return { success: true }
 	} catch (error) {
-		return { error: 'خطا در ساخت محصول' };
+		return { error: 'خطا در ساخت کالا' };
 	}
 }
 

@@ -102,7 +102,7 @@ export const createProduct = async (body: any, week: any) => {
 		return { success: 'بارگذاری موفقیت امیز بود' };
 	} catch (error) {
 		console.error("Error in createProduct:", error);
-		return { error: 'خطا در پردازش کلی محصولات' };
+		return { error: 'خطا در پردازش کلی کالا' };
 	}
 };
 

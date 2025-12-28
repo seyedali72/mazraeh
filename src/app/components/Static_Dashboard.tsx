@@ -41,7 +41,7 @@ export default function StatisticsDashboard() {
                 <section className="card  text-white  bg-custom-4">
                   <section className="card-body d-flex justify-content-between">
                     <section className="info-body-card w-100">
-                      <h5 className="card-title my-3 text-center textShadow">آمار محصول</h5>
+                      <h5 className="card-title my-3 text-center textShadow">آمار کالا</h5>
                     </section>
                   </section>
                 </section>
@@ -171,7 +171,7 @@ export default function StatisticsDashboard() {
                 <section className="card  text-white  bg-custom-2">
                   <section className="card-body d-flex justify-content-between">
                     <section className="info-body-card w-100">
-                      <h5 className="card-title my-3 text-center textShadow">محصول میانی</h5>
+                      <h5 className="card-title my-3 text-center textShadow">کالای میانی</h5>
                     </section>
                   </section>
                 </section>
@@ -184,7 +184,7 @@ export default function StatisticsDashboard() {
                 <section className="card  text-white  bg-custom-2">
                   <section className="card-body d-flex justify-content-between">
                     <section className="info-body-card w-100">
-                      <h5 className="card-title my-3 text-center textShadow">محصول بازرگانی</h5>
+                      <h5 className="card-title my-3 text-center textShadow">کالای بازرگانی</h5>
                     </section>
                   </section>
                 </section>

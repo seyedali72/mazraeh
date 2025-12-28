@@ -42,15 +42,15 @@ export const sideItems = (leadType: string) => [
 	},
 	{
 		navId: 1,
-		navHead: 'محصولات',
+		navHead: 'کالاها',
 		subNavItems: [
 			{
-				title: 'لیست محصولات',
+				title: 'لیست کالاها',
 				path: `/pishkhan/product/list`,
 				ban: [''],
 			},
 			{
-				title: 'افزودن محصول',
+				title: 'افزودن کالا',
 				path: `/pishkhan/product/add`,
 				ban: [''],
 			},
@@ -109,7 +109,7 @@ export const sideItems = (leadType: string) => [
 				ban: [''],
 			},
 			{
-				title: 'لیست دیدگاه های محصول',
+				title: 'لیست دیدگاه های کالا',
 				path: `/pishkhan/comment/product`,
 				ban: [''],
 			},
@@ -137,7 +137,7 @@ export const sideItems = (leadType: string) => [
 				ban: [''],
 			},
 			{
-				title: 'لیست دسته بندی محصولات',
+				title: 'لیست دسته بندی کالاها',
 				path: `/pishkhan/category/products`,
 				ban: [''],
 			},

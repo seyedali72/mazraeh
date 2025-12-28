@@ -27,11 +27,11 @@ const ExportToExcelButton = ({ filteredItems }: any) => {
       item.MNPercentFee = overPrice * ((item.MNPercent + 100) / 100)
       item.MHPercentFee = overPrice * ((item.MHPercent + 100) / 100)
       item.MCPercentFee = overPrice * ((item.MCPercent + 100) / 100)
-      item.farsiType = item?.type == 'material' ? 'مواد اولیه' : item?.type == 'middle' ? 'محصول میانی' : item.type == 'convert' ? 'محصول تبدیلی': item?.type == 'package' ? 'بسته بندی' : 'محصول بازرگانی'
+      item.farsiType = item?.type == 'material' ? 'مواد اولیه' : item?.type == 'middle' ? 'کالای میانی' : item.type == 'convert' ? 'کالای تبدیلی': item?.type == 'package' ? 'بسته بندی' : 'کالای بازرگانی'
 
       return {
         'ردیف': idx + 1,
-        'نام محصول': item.name,
+        'نام کالا': item.name,
         'بارکد': item.barcode || '-',
         'نوع کالا': item.farsiType || '-',
         'زیر گروه': cat?.name || '-',
@@ -41,14 +41,14 @@ const ExportToExcelButton = ({ filteredItems }: any) => {
         'قیمت تمام شده': overPrice || '0',
         'قیمت شعب': item.BPercentFee || '0',
         'درصد شعب': item.BPercent || '0',
-        'قیمت نمایندگان': item.NPercentFee || '0',
-        'درصد نمایندگان': item.NPercent || '0',
-        'قیمت مویرگی نقد': item.MNPercentFee || '0',
-        'درصد مویرگی نقد': item.MNPercent || '0',
-        'قیمت مویرگی هفتگی': item.MHPercentFee || '0',
-        'درصد مویرگی هفتگی': item.MHPercent || '0',
-        'قیمت مویرگی چکی': item.MCPercentFee || '0',
-        'درصد مویرگی چکی': item.MCPercent || '0',
+        'قیمت نمایندگی': item.NPercentFee || '0',
+        'درصد نمایندگی': item.NPercent || '0',
+        'قیمت لبنیات سنتی': item.MNPercentFee || '0',
+        'درصد لبنیات سنتی': item.MNPercent || '0',
+        'قیمت کبابی و دیزی': item.MHPercentFee || '0',
+        'درصد کبابی و دیزی': item.MHPercent || '0',
+        'قیمت هورکا': item.MCPercentFee || '0',
+        'درصد هورکا': item.MCPercent || '0',
       };
     });
 
@@ -58,7 +58,7 @@ const ExportToExcelButton = ({ filteredItems }: any) => {
     // تنظیم عرض ستون‌ها
     ws['!cols'] = [
       { wch: 6 },   // ردیف
-      { wch: 25 },  // نام محصول
+      { wch: 25 },  // نام کالا
       { wch: 15 },  // بارکد
       { wch: 12 },  // کدینگ
       { wch: 18 },  // دسته‌بندی
@@ -84,7 +84,7 @@ const ExportToExcelButton = ({ filteredItems }: any) => {
 
     // ساخت workbook
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'محصولات');
+    XLSX.utils.book_append_sheet(wb, ws, 'کالا');
 
     // تولید فایل
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });

@@ -45,7 +45,7 @@ export default function ProductListPage() {
                 <section className="d-flex justify-content-between align-items-center mt-1mb-3 border-bottom pb-3" >
                     {uploaded ? <button type="button" onClick={() => { setUploaded(false) }} className="btn btn-sm bg-custom-2">نمایش لیست گزارشات</button> : <button type="button" onClick={() => { setUploaded(true) }} className="btn btn-sm bg-custom-2">افزودن گزارش جدید</button>}
                     {!uploaded && <div className="d-flex gap-3 col-12 col-lg-6 col-md-9">
-                        <input className="form-control form-control-sm" placeholder="جستجو نام محصول" onChange={(e: any) => { setSelectedBranch(e.target.value)  }}/>
+                        <input className="form-control form-control-sm" placeholder="جستجو نام کالا" onChange={(e: any) => { setSelectedBranch(e.target.value)  }}/>
                        
                         <select className="form-control form-control-sm" onChange={(e: any) => setSelectedDate(e.target.value)}>
                             {selectedDate ? <option hidden value=''>{convertToPersianDate(selectedDate, 'YMD')}</option> : <option hidden value=''>تاریخ مورد نظر را انتخاب کنید</option>}
@@ -66,7 +66,7 @@ export default function ProductListPage() {
                         <thead>
                             <tr>
                                 <th className="text-center">#</th>
-                                <th>عنوان محصول</th>
+                                <th>عنوان کالا</th>
                                 <th>سال</th>
                                 <th>ماه</th>
                                 <th>هفته</th>

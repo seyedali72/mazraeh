@@ -42,7 +42,7 @@ export default function SideBar({ size }: any) {
                             <Link href="/pb/compare/branchs/duration" className="sidebar-dropdown-link"><span>آمار در بازه زمانی</span></Link>
                             <Link href="/pb/compare/branchs/days" className="sidebar-dropdown-link"><span>آمار در چند روز</span></Link>
                             <Link href="/pb/compare/branchs/packs" className="sidebar-dropdown-link"><span>آمار در سال/ماه/هفته</span></Link>
-                            <Link href="/pb/compare/product" className="sidebar-dropdown-link"><span>آمار محصول</span></Link>
+                            <Link href="/pb/compare/product" className="sidebar-dropdown-link"><span>آمار کالا</span></Link>
                         </section>
                     </section>
                     <section onClick={() => { setIdx(1) }} className={`sidebar-group-link ${(toggle && idx == 1) && 'sidebar-group-link-active'}`}>
@@ -66,8 +66,8 @@ export default function SideBar({ size }: any) {
                         <section className="sidebar-dropdown">
                             <Link href="/pb/category" className="sidebar-dropdown-link"><span>دسته بندی</span></Link>
                             <Link href="/pb/materials" className="sidebar-dropdown-link"><span>مواد اولیه</span></Link>
-                            <Link href="/pb/productions" className="sidebar-dropdown-link"><span>محصول میانی</span></Link>
-                            <Link href="/pb/final" className="sidebar-dropdown-link"><span>محصول بازرگانی</span></Link>
+                            <Link href="/pb/productions" className="sidebar-dropdown-link"><span>کالای میانی</span></Link>
+                            <Link href="/pb/final" className="sidebar-dropdown-link"><span>کالای بازرگانی</span></Link>
                             <Link href="/pb/converts" className="sidebar-dropdown-link"><span>کالای تبدیلی</span></Link>
                             <Link href="/pb/package" className="sidebar-dropdown-link"><span>بسته بندی</span></Link>
                             <Link href="/pb/finalprice" className="sidebar-dropdown-link"><span>قیمت نهایی</span></Link>

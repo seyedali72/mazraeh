@@ -61,7 +61,7 @@ export default function ComparePage() {
                 {renderItems(allGroup, "گروه کالا", (item) => { setViewCategoryCMP(false); setViewSubGroupCMP(false); setViewTotalCMP(false); setAllProduct([]); setAllCategory([]); setAllSubGroup([]); setSelectedGroup(item); setViewChart(!viewChart); setViewGroupCMP(true); }, "bg-custom-2")}
                 {renderItems(allSubGroup, "زیرگروه کالا", (item) => { setViewCategoryCMP(false); setViewGroupCMP(false); setViewTotalCMP(false); setAllProduct([]); setAllCategory([]); setSelectedSubGroup(item); setViewChart(!viewChart); setViewSubGroupCMP(true); }, "bg-custom-4")}
                 {renderItems(allCategory, "دسته کالا", (item) => { setViewGroupCMP(false); setViewSubGroupCMP(false); setViewTotalCMP(false); setSelectedCategory(item); setViewChart(!viewChart); setViewCategoryCMP(true); }, "bg-custom-1")}
-                {renderItems(allProduct, "عنوان محصولات", () => { }, "bg-light")}
+                {renderItems(allProduct, "عنوان کالاها", () => { }, "bg-light")}
                 {(viewChart && viewCategoryCMP) && <CategoryAndProductTotalCmp requestData={requestData} allProduct={(e: any) => setAllProduct(e)} />}
                 {(viewChart && viewSubGroupCMP) && <SubGroupAndCategoryTotalCmp requestData={requestData} allCategory={(e: any) => setAllCategory(e)} />}
                 {(viewChart && viewGroupCMP) && <GroupAndSubGroupTotalCmp requestData={requestData} allSubGroup={(e: any) => setAllSubGroup(e)} />}

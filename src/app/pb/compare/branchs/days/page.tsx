@@ -63,7 +63,7 @@ export default function ComparePage() {
 
                 {renderItems(allCategory, "دسته کالا", (item) => { setViewGroupCMP(false); setViewSubGroupCMP(false); setViewTotalCMP(false); setSelectedCategory(item); setViewChart(!viewChart); setViewCategoryCMP(true); }, "bg-custom-1")}
 
-                {renderItems(allProduct, "عنوان محصولات", () => { }, "bg-custom-3")}
+                {renderItems(allProduct, "عنوان کالاها", () => { }, "bg-custom-3")}
 
                 {(viewChart && viewCategoryCMP) && <CategoryAndProductDayCmp requestData={requestData} allProduct={(e: any) => setAllProduct(e)} />}
                 {(viewChart && viewSubGroupCMP) && <SubGroupAndCategoryDayCmp requestData={requestData} allCategory={(e: any) => setAllCategory(e)} />}
