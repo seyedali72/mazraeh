@@ -54,7 +54,13 @@ interface IMaterial {
 	level: Number
 	over: Number
 	categoryId: ObjectId
-	items: Object
+	items: [{
+		material: ObjectId,
+		percent: Number,
+		uniCode: Number,
+		totalWeight: Number,
+		itemWeight: String,
+	}],
 	price_over: Number
 	weight: Number
 	BPercent: Number

@@ -16,15 +16,17 @@ export async function updateAllCosts() {
             let totalPrice_over = 0;
 
             for (const item of product.items) {
-              let findId = item.material?._id !== undefined ? item.material?._id : item.material
+                // console.log(item.material)
+                let findId = item.material?._id !== undefined ? item.material?._id : item.material
                 const parent = await Material.findById(findId);
+                // console.log(parent.type, product?.type)
                 if (!parent) continue;
-// console.log('name',product?.name,'type',product?.type,'level',product?.level,'itemname',parent.name ,'itemlevel',parent.level,'itemtype',parent.type)
+                // console.log('name',product?.name,'type',product?.type,'level',product?.level,'itemname',parent.name ,'itemlevel',parent.level,'itemtype',parent.type)
                 totalPrice =      product?.type !== 'middle' ? totalPrice +      parent.price *      (item.percent) : totalPrice +      parent.price *      (item.percent / 100);
                 totalPrice_over = product?.type !== 'middle' ? totalPrice_over + parent.price_over * (item.percent) : totalPrice_over + parent.price_over * (item.percent / 100);
             }
             // console.log(product?.name,(totalPrice_over * ((product.over + 100) / 100)))
-// return
+            // return
             await Material.updateOne(
                 { _id: product._id },
                 {

@@ -45,7 +45,13 @@ export default function EditConvert() {
   const fetchData = useCallback(async () => {
     let single = await getSinglePackage(id)
     setSingle(single)
-    setItems(single?.items)
+    const normalizedItems = (single?.items ?? []).map((item: any) => {
+      const materialId = item?.material && typeof item.material === 'object' ? item.material._id : item.material
+      return { ...item, material: materialId, }
+    })
+
+    setItems(normalizedItems)
+
     let res = await getMaterialsForCreateConvert({ isDeleted: false, _id: { $ne: id } })
     setMaterils(res)
     let cats = await getCategories({ isDeleted: false })
@@ -356,27 +362,28 @@ export default function EditConvert() {
               </tr>
             </thead>
             <tbody>
-              {items?.map((item: any, idx: number) => {
-                let find = item?.material?._id == undefined ? materials?.find((el: any) => el?._id == item?.material) : item?.material
+              {items?.length > 0 && items?.map((item: any, idx: number) => {
+                let find = materials?.find((el: any) => el?._id == item?.material)
+                if (find !== undefined) {
+                  return (<tr key={idx}>
+                    <td className="text-center">{idx + 1}</td>
+                    <td>{find?.name}</td>
+                    <td>{find?.barcode}</td>
+                    <td>{item?.percent.toFixed(5)} </td>
+                    <td>{spliteNumber(find?.price_over?.toFixed())}</td>
+                    <td>{spliteNumber(parseInt((find?.price_over * (parseFloat(item?.percent))).toFixed(5)))}</td>
+                    <td>{find?.type == 'material' ? 'مواد اولیه' : find?.type == 'middle' ? 'کالای میانی' : find?.type == 'convert' ? 'کالای تبدیلی' : find?.type == 'convert' ? 'کالای تبدیلی' : find?.type == 'package' ? 'بسته بندی' : 'کالای بازرگانی'}</td>
 
-                return (<tr key={idx}>
-                  <td className="text-center">{idx + 1}</td>
-                  <td>{find?.name}</td>
-                  <td>{find?.barcode}</td>
-                  <td>{item?.percent.toFixed(5)} </td>
-                  <td>{spliteNumber(find?.price_over?.toFixed())}</td>
-                  <td>{spliteNumber(parseInt((find?.price_over * (parseFloat(item?.percent))).toFixed(5)))}</td>
-                  <td>{find?.type == 'material' ? 'مواد اولیه' : find?.type == 'middle' ? 'کالای میانی' : find?.type == 'convert' ? 'کالای تبدیلی': find?.type == 'convert' ? 'کالای تبدیلی' : find?.type == 'package' ? 'بسته بندی' : 'کالای بازرگانی'}</td>
-
-                  <td className="text-center">
-                    <button type="button" className="btn btn-sm bg-custom-4 ms-1" onClick={() => toast(<Confirmation type='ویرایش' onDelete={() => handleEdited(item?.uniCode)} />, { autoClose: false })}>
-                      <i className="fa fa-edit px-1"></i> ویرایش
-                    </button>
-                    <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(item?.uniCode)} />, { autoClose: false, })}>
-                      <i className="fa fa-trash px-1"></i>حذف از لیست
-                    </button>
-                  </td>
-                </tr>)
+                    <td className="text-center">
+                      <button type="button" className="btn btn-sm bg-custom-4 ms-1" onClick={() => toast(<Confirmation type='ویرایش' onDelete={() => handleEdited(item?.uniCode)} />, { autoClose: false })}>
+                        <i className="fa fa-edit px-1"></i> ویرایش
+                      </button>
+                      <button type="button" className="btn btn-sm bg-custom-3 ms-1" onClick={() => toast(<Confirmation onDelete={() => handleDelete(item?.uniCode)} />, { autoClose: false, })}>
+                        <i className="fa fa-trash px-1"></i>حذف از لیست
+                      </button>
+                    </td>
+                  </tr>)
+                }
               })}
             </tbody>
           </table>
